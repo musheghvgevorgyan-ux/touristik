@@ -1,194 +1,149 @@
-# Touristik Travel
+# Touristik - Travel Booking Platform
 
-**Live site: [touristik.am](https://touristik.am)**
+A full-featured tourism and travel booking website built with PHP, MySQL, and JavaScript. Search flights, explore destinations, and book trips — all in one place.
 
-Tourism booking website for **Touristik LLC** — a travel agency based in Yerevan, Armenia with 3 branches.
+![PHP](https://img.shields.io/badge/PHP-8.x-777BB4?logo=php&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-5.7+-4479A1?logo=mysql&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?logo=javascript&logoColor=black)
+![License](https://img.shields.io/badge/License-MIT-green)
 
 ## Features
 
-- **Tour Pages** — Dedicated pages for Ingoing Tours, Outgoing Tours, and Transfer services with filters (search, date, price range, region)
-- **Hotel Booking Flow** — Full Hotelbeds integration: Availability → CheckRate → Booking → Voucher (certification-ready)
-- **Flight Search** — Autocomplete city inputs with IATA codes, local price database
-- **Visa Support** — Invitation letters, e-visa assistance, fast processing info
-- **Multi-language** — English, Russian, Armenian — full site translation (data-t/data-tp attributes), including admin panel, bookings, confirm dialogs
-- **Currency Switcher** — USD, EUR, AMD, RUB with live exchange rates (open.er-api.com, 6h cache)
-- **Dark Mode** — Toggle with localStorage persistence, CSS custom properties theming
-- **PWA** — Installable on mobile, service worker with offline fallback page
-- **Search Filters** — Price range slider, star rating toggle, sort by price/stars
-- **FAQ Accordion** — Common questions about booking, visas, payments
-- **Breadcrumbs** — Navigation trail on all inner pages
-- **CSRF Protection** — Token-based protection on all POST forms
-- **Children Ages** — Dynamic age selection (1-17) for hotel search
-- **Email Notifications** — Booking confirmation to guest (with voucher link) + admin alert; contact form auto-reply to customer
-- **Google Analytics 4** — Enhanced measurement (page views, scrolls, outbound clicks), configurable via admin settings
+### Flight Search
+- Real-time flight search powered by **Travelpayouts API**
+- Multiple API endpoints with fallback chain (cheap, direct, latest)
+- Flight duration and stops display with visual indicators
+- Color-coded stops (green = direct, orange = layovers)
 
-## Hotel Booking (Hotelbeds API)
+### Destinations
+- Browse destinations with live flight prices
+- Detailed destination pages with hero images
+- Price caching (24h) for optimal performance
 
-The booking flow follows Hotelbeds certification requirements:
+### Multi-Language Support
+- Full translation in **English**, **Russian**, and **Armenian**
+- Language preference persists across pages via localStorage
+- Covers all UI elements including admin dashboard
 
-1. **Availability** (`/hotels`) — Geolocation search with GZIP, filters, children ages as paxes
-2. **CheckRate** (`/checkrates`) — Only called when `rateType = RECHECK`
-3. **Booking** (`/bookings`) — 60s timeout, holder + pax details, client reference
-4. **Cancellation** (`DELETE /bookings`) — Cancel from admin panel with confirmation + email notification
-5. **Voucher** — Printable confirmation with all mandatory fields:
-   - Hotel name, category, address, destination, phone
-   - Booking reference + agency reference
-   - Check-in/out dates, room type, board type
-   - Guest names, cancellation policies, rate comments
-   - Payment text: "Payable through [Supplier], acting as agent..."
+### Multi-Currency Support
+- Real-time exchange rates from open.er-api.com
+- Supports **USD**, **EUR**, **AMD**, **RUB**
+- Rates cached for 6 hours
+- All prices convert instantly on currency switch
 
-**Certification compliance:**
-- Opaque/packaging rates filtered out (`packaging: true` skipped)
-- Selling rates displayed when `hotelMandatory` is true
-- Rate comments shown before booking confirmation
-- API environment configurable (`test` / `live`) via `config/hotelbeds.json`
+### Booking System
+- "Book Now" opens a confirmation modal
+- Translated booking confirmations in all 3 languages
+- Contact form with email notification support
 
-## Animations
-
-- Card hover: lift up + shadow + image zoom with brightness/saturation boost
-- Hero typing effect with floating clouds and planes
-- Tours section with Armenian church background and glassmorphism cards
-- Lazy loading with shimmer placeholder animation
-- Morphing blob backgrounds on key sections
-- 3D card tilt with shine overlay
-- Page transitions with back-button fix
-- Scroll reveal, stats counter, partners infinite scroll
-
-## Security
-
-- `.htaccess` — HTTPS redirect, directory protection (config/, cache/, includes/, templates/), security headers (X-Frame-Options, CSP, HSTS), no directory listing
-- Session hardening — httponly, SameSite=Lax, strict mode, session regeneration on login
-- Rate limiting — 5 login attempts max, 15-minute lockout
-- CSRF tokens on all POST forms
-- Admin settings whitelist — only allowed keys can be updated
-- Password hashing (PASSWORD_DEFAULT)
-- Prepared statements (PDO) for all database queries
-- SSL verification on all external API calls
-- Output escaping with htmlspecialchars
-
-## SEO & Performance
-
-- JSON-LD structured data (TravelAgency schema)
-- Dynamic XML sitemap (`sitemap.php`)
-- Preconnect & dns-prefetch hints for external resources
-- WebP image format for Unsplash images
-- CSS/JS minification (auto-detected via `file_exists`)
-- Lazy background images with IntersectionObserver
-- Google Analytics 4 integrated (GA4 with enhanced measurement — page views, scrolls, outbound clicks)
-- Google Search Console verified, sitemap submitted
-- GZIP compression (mod_deflate) for all text-based assets
-- Browser caching headers (CSS/JS: 1 month, images: 1 year)
-- Hero image optimized (405KB → 252KB) with WebP alternative (184KB)
-- robots.txt configured
-
-## Accessibility
-
-- Skip-to-content link
-- `focus-visible` outlines on all interactive elements
-- ARIA labels on navigation, FAQ, breadcrumbs
-- `prefers-reduced-motion` support — disables all animations
-- Semantic HTML with `<main>`, `<nav>`, `<header>`, `<footer>`
+### Admin Dashboard
+- Manage destinations (add/delete)
+- View contact messages
+- Update site settings
+- Secure login authentication
+- Fully translated admin interface
 
 ## Tech Stack
 
-- **Backend:** PHP 8+ (vanilla, no framework)
-- **Frontend:** Vanilla CSS & JavaScript (no dependencies)
-- **Database:** MySQL via PDO (auto-creates tables on first run)
-- **Server:** Apache (XAMPP locally, Internet.am hosting for production)
-- **APIs:** Hotelbeds Hotel API, open.er-api.com (currency rates)
-- **Build:** `terser` for JS minification
+| Component | Technology |
+|-----------|-----------|
+| Backend | PHP 8.x |
+| Database | MySQL 5.7+ |
+| Frontend | HTML5, CSS3, JavaScript (ES6) |
+| Flight Data | Travelpayouts API |
+| Currency Rates | open.er-api.com |
+| Server | Apache (XAMPP) |
 
 ## Project Structure
 
 ```
 touristik/
-├── api/                  # API endpoints (get_price, get_rates)
-├── cache/                # Hotel search & currency cache (gitignored)
-├── config/               # Credentials (gitignored except routes.json)
-│   ├── .htaccess           # Deny all access
-│   ├── database.json
-│   ├── hotelbeds.json
-│   └── routes.json
+├── api/                  # API endpoints
+│   ├── get_price.php     # Flight price API
+│   └── get_rates.php     # Currency rates API
+├── config/
+│   ├── routes.json       # URL routing config
+│   ├── database.json     # DB credentials (gitignored)
+│   └── travelpayouts.json # API key (gitignored)
 ├── css/
-│   ├── styles.css
-│   └── styles.min.css
-├── img/                  # Hero image, PWA icons
+│   └── styles.css        # All styles, responsive design
 ├── includes/
-│   ├── .htaccess           # Deny all access
-│   ├── currency.php        # Exchange rate fetching + caching
-│   ├── db.php              # Database setup + schema
-│   ├── flight_prices.php   # Local flight price lookup
-│   ├── functions.php       # Helpers, CSRF, rate limiting
-│   ├── hotelbeds.php       # Hotelbeds API (CheckRate, Book, Cancel)
-│   └── router.php          # JSON-based route resolver
+│   ├── db.php            # Database connection
+│   ├── functions.php     # Core functions (CRUD, auth, settings)
+│   ├── router.php        # URL routing engine
+│   ├── currency.php      # Live currency rate fetching & caching
+│   └── flight_prices.php # Travelpayouts API integration
 ├── js/
-│   ├── script.js
-│   └── script.min.js
+│   └── script.js         # Frontend logic, translations, currency conversion
 ├── pages/
-│   ├── home.php            # Hero, search, tours, visa, stats, destinations
-│   ├── ingoing-tours.php   # Armenia tours with filters
-│   ├── outgoing-tours.php  # International tours with filters
-│   ├── transfer.php        # Transfer services with filters
-│   ├── destinations.php    # All destinations grid
-│   ├── destination.php     # Single destination detail
-│   ├── search.php          # Flight + hotel search results
-│   ├── booking.php         # Hotel booking flow
-│   ├── about.php           # Why travel with us
-│   ├── contact.php         # Contact form + branch info
-│   ├── admin.php           # Dashboard (destinations, messages, settings)
-│   ├── login.php           # Admin authentication
-│   ├── logout.php          # Session termination
-│   └── 404.php             # Error page
+│   ├── home.php          # Homepage with featured destinations
+│   ├── destinations.php  # All destinations grid
+│   ├── destination.php   # Single destination detail
+│   ├── search.php        # Flight search & results
+│   ├── about.php         # About page
+│   ├── contact.php       # Contact form
+│   ├── admin.php         # Admin dashboard
+│   ├── login.php         # Admin login
+│   ├── logout.php        # Logout handler
+│   └── 404.php           # Not found page
 ├── templates/
-│   ├── header.php          # Nav, dark mode, currency, language, SEO meta
-│   └── footer.php          # Footer, WhatsApp, back-to-top, cookies
-├── .htaccess               # HTTPS, security headers, directory protection
-├── index.php               # Entry point / router
-├── manifest.json           # PWA manifest
-├── sw.js                   # Service worker
-├── offline.html            # Offline fallback
-├── sitemap.php             # Dynamic XML sitemap
-└── robots.txt
+│   ├── header.php        # Header with nav, language & currency switchers
+│   └── footer.php        # Footer with booking modal
+├── index.php             # Entry point & router
+└── .gitignore
 ```
 
-## Deployment
+## Setup
 
-The site is deployed to **touristik.am** via Internet.am hosting (cPanel).
+### Prerequisites
+- XAMPP (Apache + MySQL + PHP)
+- Travelpayouts API token
 
-**Local development:**
-1. Clone into `htdocs/tourism/`
-2. Create `config/database.json` with MySQL credentials
-3. Create `config/hotelbeds.json` with API keys
-4. Visit `http://localhost/tourism/`
+### Installation
 
-**Production deployment:**
-1. ZIP the project files
-2. Upload to `public_html` via cPanel File Manager
-3. Extract and configure `config/database.json` for the server
-4. Tables auto-create on first visit
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/musheghvgevorgyan-ux/touristik.git
+   ```
 
-## Admin Panel
+2. Move to your XAMPP htdocs:
+   ```bash
+   cp -r touristik /xampp/htdocs/tourism
+   ```
 
-Access via `/index.php?page=admin` after logging in:
+3. Create the database config (`config/database.json`):
+   ```json
+   {
+     "host": "localhost",
+     "name": "tourism",
+     "user": "root",
+     "pass": ""
+   }
+   ```
 
-- **Destinations** — Add/delete travel destinations with images
-- **Bookings** — View all hotel bookings (reference, guest, hotel, dates, price, status) with stats — fully translated
-- **Messages** — View contact form submissions
-- **Settings** — Edit site name, tagline, hero text, footer, GA tracking ID
-- **Performance** — Health score, server info, file sizes, database stats, cache status, SEO/PWA checks
+4. Create the API config (`config/travelpayouts.json`):
+   ```json
+   {
+     "token": "YOUR_TRAVELPAYOUTS_TOKEN"
+   }
+   ```
 
-## Deployment Notes
+5. Import the database schema and start Apache + MySQL in XAMPP.
 
-**Important:** The `config/` folder on production has **different credentials** than local. Never overwrite these files on the server:
-- `config/database.json` — production DB credentials (`touristi_TouristikLLC`)
-- `config/hotelbeds.json` — API keys
-- `config/travelpayouts.json` — API token
+6. Open `http://localhost/tourism` in your browser.
 
-When deploying, only upload code files. If `config/` files are missing on production, create them manually with production credentials via cPanel File Manager.
+### Admin Access
+- URL: `http://localhost/tourism/?page=login`
+- Default credentials are configured in the database
 
-## Contact
+## Screenshots
 
-- **Website:** [touristik.am](https://touristik.am)
-- **Email:** info@touristik.am | touristik.visadepartment@gmail.com
-- **Phone:** +374 33 060 609
-- **Branches:** Komitas 38 | Mashtots 7/6 | Yerevan Mall (2nd floor)
+> Add screenshots of your running application here
+
+## License
+
+MIT License - feel free to use this project for learning and development.
+
+## Author
+
+**Mushegh Gevorgyan** - [GitHub](https://github.com/musheghvgevorgyan-ux)
