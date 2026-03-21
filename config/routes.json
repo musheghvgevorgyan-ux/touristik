@@ -1,0 +1,57 @@
+{
+    "routes": {
+        "home": {
+            "file": "pages/home.php",
+            "title": "Home - Wanderlust",
+            "auth": false
+        },
+        "destinations": {
+            "file": "pages/destinations.php",
+            "title": "Destinations - Wanderlust",
+            "auth": false
+        },
+        "destination": {
+            "file": "pages/destination.php",
+            "title": "Destination - Wanderlust",
+            "auth": false
+        },
+        "about": {
+            "file": "pages/about.php",
+            "title": "About - Wanderlust",
+            "auth": false
+        },
+        "contact": {
+            "file": "pages/contact.php",
+            "title": "Contact - Wanderlust",
+            "auth": false
+        },
+        "login": {
+            "file": "pages/login.php",
+            "title": "Admin Login - Wanderlust",
+            "auth": false
+        },
+        "admin": {
+            "file": "pages/admin.php",
+            "title": "Admin Dashboard - Wanderlust",
+            "auth": true
+        },
+        "logout": {
+            "file": "pages/logout.php",
+            "title": "Logout",
+            "auth": true
+        },
+        "search": {
+            "file": "pages/search.php",
+            "title": "Search Results - Touristik",
+            "auth": false
+        },
+        "404": {
+            "file": "pages/404.php",
+            "title": "Page Not Found - Wanderlust",
+            "auth": false
+        }
+    },
+    "default_route": "home",
+    "error_route": "404",
+    "auth_redirect": "login"
+}

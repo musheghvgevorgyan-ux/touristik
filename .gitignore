@@ -1,0 +1,4 @@
+cache/
+config/travelpayouts.json
+config/database.json
+.claude/
