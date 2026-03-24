@@ -209,6 +209,179 @@ $heroSubtitle = getSetting($pdo, 'hero_subtitle', 'Discover breathtaking destina
     </div>
 </section>
 
+<section id="incoming-tours" class="incoming-tours">
+    <h2 data-t="incoming_title">Incoming Tourism Programs</h2>
+    <p class="section-subtitle" data-t="incoming_subtitle">Discover the beauty of Armenia with our curated tour packages</p>
+    <div class="tour-slider-wrapper">
+        <button class="tour-slider-btn tour-prev">&#10094;</button>
+        <div class="tour-slider">
+            <div class="tour-slider-track">
+
+                <div class="tour-slide">
+                    <div class="tour-card-fancy">
+                        <div class="tour-card-img" style="background-image: url('https://images.unsplash.com/photo-1668717096562-5a14dbf9454e?w=1200&q=80');">
+                            <div class="tour-card-overlay">
+                                <span class="tour-duration-badge">3 Days</span>
+                                <div class="tour-card-info">
+                                    <h3 data-t="tour_name_1">Classic Yerevan</h3>
+                                    <p data-t="tour_desc_1">Explore the Pink City: Republic Square, Cascade Complex, Matenadaran, and the vibrant nightlife of Northern Avenue.</p>
+                                    <div class="tour-tags">
+                                        <span>&#127963; City Tour</span>
+                                        <span>&#127860; Food & Wine</span>
+                                        <span>&#127751; Nightlife</span>
+                                    </div>
+                                    <div class="tour-card-bottom">
+                                        <span class="tour-price-tag">From <strong>$199</strong> /person</span>
+                                        <a href="<?= url('contact') ?>" class="btn btn-sm btn-tour">Inquire &#8594;</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tour-slide">
+                    <div class="tour-card-fancy">
+                        <div class="tour-card-img" style="background-image: url('https://images.unsplash.com/photo-1695571803214-9e6820bffce7?w=1200&q=80');">
+                            <div class="tour-card-overlay">
+                                <span class="tour-duration-badge">5 Days</span>
+                                <div class="tour-card-info">
+                                    <h3 data-t="tour_name_2">Ancient Temples & Monasteries</h3>
+                                    <p data-t="tour_desc_2">Visit Garni Temple, Geghard Monastery, Tatev, Noravank, and Khor Virap with breathtaking views of Mount Ararat.</p>
+                                    <div class="tour-tags">
+                                        <span>&#9968; Cultural</span>
+                                        <span>&#127956; UNESCO Sites</span>
+                                        <span>&#9968; Historical</span>
+                                    </div>
+                                    <div class="tour-card-bottom">
+                                        <span class="tour-price-tag">From <strong>$349</strong> /person</span>
+                                        <a href="<?= url('contact') ?>" class="btn btn-sm btn-tour">Inquire &#8594;</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tour-slide">
+                    <div class="tour-card-fancy">
+                        <div class="tour-card-img" style="background-image: url('https://plus.unsplash.com/premium_photo-1670552850982-abe0e83c4391?w=1200&q=80');">
+                            <div class="tour-card-overlay">
+                                <span class="tour-duration-badge">7 Days</span>
+                                <div class="tour-card-info">
+                                    <h3 data-t="tour_name_3">Grand Armenia Tour</h3>
+                                    <p data-t="tour_desc_3">The ultimate Armenian experience: Lake Sevan, Dilijan, Jermuk, wine tasting in Areni, and the Silk Road trails.</p>
+                                    <div class="tour-tags">
+                                        <span>&#127863; Wine Tasting</span>
+                                        <span>&#127956; Nature</span>
+                                        <span>&#128507; Scenic</span>
+                                    </div>
+                                    <div class="tour-card-bottom">
+                                        <span class="tour-price-tag">From <strong>$599</strong> /person</span>
+                                        <a href="<?= url('contact') ?>" class="btn btn-sm btn-tour">Inquire &#8594;</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tour-slide">
+                    <div class="tour-card-fancy">
+                        <div class="tour-card-img" style="background-image: url('https://images.unsplash.com/photo-1624357485917-fbb18b951125?w=1200&q=80');">
+                            <div class="tour-card-overlay">
+                                <span class="tour-duration-badge">4 Days</span>
+                                <div class="tour-card-info">
+                                    <h3 data-t="tour_name_4">Adventure & Hiking</h3>
+                                    <p data-t="tour_desc_4">Trek through the stunning landscapes of Dilijan National Park, Aragats summit, and the Lastiver caves.</p>
+                                    <div class="tour-tags">
+                                        <span>&#127699; Hiking</span>
+                                        <span>&#9968; Adventure</span>
+                                        <span>&#127956; Mountains</span>
+                                    </div>
+                                    <div class="tour-card-bottom">
+                                        <span class="tour-price-tag">From <strong>$279</strong> /person</span>
+                                        <a href="<?= url('contact') ?>" class="btn btn-sm btn-tour">Inquire &#8594;</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tour-slide">
+                    <div class="tour-card-fancy">
+                        <div class="tour-card-img" style="background-image: url('https://images.unsplash.com/photo-1743366500405-6689bb916fd2?w=1200&q=80');">
+                            <div class="tour-card-overlay">
+                                <span class="tour-duration-badge">6 Days</span>
+                                <div class="tour-card-info">
+                                    <h3 data-t="tour_name_5">Wine & Gastronomy Trail</h3>
+                                    <p data-t="tour_desc_5">Taste the world's oldest wine tradition in Areni, savor Armenian BBQ, lavash baking, and brandy tasting at Ararat factory.</p>
+                                    <div class="tour-tags">
+                                        <span>&#127863; Wine</span>
+                                        <span>&#127860; Gastronomy</span>
+                                        <span>&#127943; Brandy</span>
+                                    </div>
+                                    <div class="tour-card-bottom">
+                                        <span class="tour-price-tag">From <strong>$449</strong> /person</span>
+                                        <a href="<?= url('contact') ?>" class="btn btn-sm btn-tour">Inquire &#8594;</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <button class="tour-slider-btn tour-next">&#10095;</button>
+    </div>
+    <div class="tour-dots"></div>
+</section>
+
+<section id="visa-support" class="visa-support">
+    <div class="visa-container">
+        <div class="visa-content">
+            <h2 data-t="visa_title">Visa Support for Armenia</h2>
+            <p class="visa-subtitle" data-t="visa_subtitle">We handle all the paperwork so you can focus on your trip</p>
+            <div class="visa-features">
+                <div class="visa-feature">
+                    <span class="visa-icon">&#128196;</span>
+                    <div>
+                        <h4 data-t="visa_feat1_title">Invitation Letter</h4>
+                        <p data-t="visa_feat1_desc">Official invitation letters for visa applications to Armenian consulates worldwide.</p>
+                    </div>
+                </div>
+                <div class="visa-feature">
+                    <span class="visa-icon">&#9201;</span>
+                    <div>
+                        <h4 data-t="visa_feat2_title">Fast Processing</h4>
+                        <p data-t="visa_feat2_desc">Standard processing in 5-7 business days, express option available in 2-3 days.</p>
+                    </div>
+                </div>
+                <div class="visa-feature">
+                    <span class="visa-icon">&#127758;</span>
+                    <div>
+                        <h4 data-t="visa_feat3_title">E-Visa Assistance</h4>
+                        <p data-t="visa_feat3_desc">Full guidance through the Armenian e-visa application process for eligible countries.</p>
+                    </div>
+                </div>
+                <div class="visa-feature">
+                    <span class="visa-icon">&#128222;</span>
+                    <div>
+                        <h4 data-t="visa_feat4_title">24/7 Consultation</h4>
+                        <p data-t="visa_feat4_desc">Our visa specialists are available around the clock to answer your questions.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="visa-info-box">
+                <p data-t="visa_info">&#128712; Citizens of 60+ countries can enter Armenia visa-free for up to 180 days. Not sure about your country? Contact us for a free consultation.</p>
+            </div>
+            <a href="<?= url('contact') ?>" class="btn btn-visa" data-t="visa_cta">Request Visa Support &#8594;</a>
+        </div>
+    </div>
+</section>
+
 <section id="destinations" class="destinations">
     <h2 data-t="popular">Popular Destinations</h2>
     <div class="card-grid">

@@ -159,7 +159,7 @@ if ($fromCode && $toCode) {
     }
 
     // Sort all by price (cheapest first)
-    usort($flights, function($a, $b) { return $a['price'] - $b['price']; });
+    usort($flights, function($a, $b) { return ($a['duration'] ?? 0) - ($b['duration'] ?? 0); });
 
     if (empty($flights)) {
         $error = 'No flights found for this route. Try different dates or destinations.';
@@ -285,9 +285,17 @@ $totalPassengers = $adults + $children;
                             <?php endif; ?>
                         </div>
                         <?php
-                            $depDate = $flight['departure_at'] ? date('dm', strtotime($flight['departure_at'])) : '';
-                            $retDate = ($flight['return_at'] && $tripType !== 'oneway') ? date('dm', strtotime($flight['return_at'])) : '';
-                            $bookingUrl = "https://www.aviasales.com/search/{$fromCode}{$depDate}{$toCode}{$retDate}{$adults}{$children}0";
+                            $depTs = strtotime($flight['departure_at']);
+                            $retTs = ($flight['return_at'] && $tripType !== 'oneway') ? strtotime($flight['return_at']) : false;
+                            $depDate = $depTs ? date('dm', $depTs) : '';
+                            // Only include return if it's after departure
+                            $retDate = ($retTs && $retTs > $depTs) ? date('dm', $retTs) : '';
+                            $paxStr = "{$adults}{$children}0";
+                            if ($retDate) {
+                                $bookingUrl = "https://www.aviasales.com/search/{$fromCode}{$depDate}{$toCode}{$retDate}{$paxStr}";
+                            } else {
+                                $bookingUrl = "https://www.aviasales.com/search/{$fromCode}{$depDate}{$toCode}{$paxStr}";
+                            }
                         ?>
                         <a href="<?= htmlspecialchars($bookingUrl) ?>" target="_blank" rel="noopener" class="btn btn-sm btn-book">Book Now &#8594;</a>
                     </div>
