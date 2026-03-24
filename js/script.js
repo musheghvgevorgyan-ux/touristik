@@ -628,36 +628,3 @@ document.querySelectorAll('.card, .feature').forEach(el => {
     observer.observe(el);
 });
 
-// Booking modal
-(function () {
-    const modal = document.getElementById('bookingModal');
-    if (!modal) return;
-    const closeBtn = modal.querySelector('.booking-modal-close');
-    const okBtn = modal.querySelector('.booking-modal-ok');
-
-    function openModal() {
-        modal.classList.add('active');
-        // Apply translations to modal
-        const lang = localStorage.getItem('selectedLang') || 'en';
-        const t = translations[lang] || translations['en'] || {};
-        modal.querySelectorAll('[data-t]').forEach(el => {
-            const key = el.getAttribute('data-t');
-            if (t[key]) el.textContent = t[key];
-        });
-    }
-    function closeModal() {
-        modal.classList.remove('active');
-    }
-
-    document.addEventListener('click', function (e) {
-        if (e.target.closest('.book-trigger')) {
-            e.preventDefault();
-            openModal();
-        }
-    });
-    if (closeBtn) closeBtn.addEventListener('click', closeModal);
-    if (okBtn) okBtn.addEventListener('click', closeModal);
-    modal.addEventListener('click', function (e) {
-        if (e.target === modal) closeModal();
-    });
-})();

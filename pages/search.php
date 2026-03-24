@@ -284,7 +284,12 @@ $totalPassengers = $adults + $children;
                                 ?>
                             <?php endif; ?>
                         </div>
-                        <button class="btn btn-sm btn-book book-trigger" data-t="book_now_arrow">Book Now &#8594;</button>
+                        <?php
+                            $depDate = $flight['departure_at'] ? date('dm', strtotime($flight['departure_at'])) : '';
+                            $retDate = ($flight['return_at'] && $tripType !== 'oneway') ? date('dm', strtotime($flight['return_at'])) : '';
+                            $bookingUrl = "https://www.aviasales.com/search/{$fromCode}{$depDate}{$toCode}{$retDate}{$adults}{$children}0";
+                        ?>
+                        <a href="<?= htmlspecialchars($bookingUrl) ?>" target="_blank" rel="noopener" class="btn btn-sm btn-book">Book Now &#8594;</a>
                     </div>
                 </div>
                 <?php endforeach; ?>
