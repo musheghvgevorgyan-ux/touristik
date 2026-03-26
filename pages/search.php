@@ -296,6 +296,12 @@ if ($coords && $depart && $returnDate && $returnDate > $depart) {
 }
 ?>
 
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+    <a href="<?= url('home') ?>" data-t="breadcrumb_home">Home</a>
+    <span class="breadcrumb-sep">&#8250;</span>
+    <span class="breadcrumb-current" data-t="search">Search</span>
+</nav>
+
 <section class="search-results">
     <div class="search-hero-banner">
         <div class="search-hero-overlay">
@@ -415,9 +421,38 @@ if ($coords && $depart && $returnDate && $returnDate > $depart) {
             <?php elseif (empty($hotels)): ?>
                 <div class="alert info">No hotels found for this destination and dates.</div>
             <?php else: ?>
+                <?php
+                    $maxHotelPrice = 0;
+                    foreach ($hotels as $h) { if ($h['price'] > $maxHotelPrice) $maxHotelPrice = $h['price']; }
+                    $maxHotelPrice = ceil($maxHotelPrice / 100) * 100;
+                ?>
+                <div class="search-filters">
+                    <div class="filter-group">
+                        <label>Max Price</label>
+                        <div style="display:flex;align-items:center;gap:0.5rem;">
+                            <input type="range" id="filterPrice" min="0" max="<?= $maxHotelPrice ?>" value="<?= $maxHotelPrice ?>" step="50">
+                            <span class="filter-price-label" id="filterPriceLabel">$<?= number_format($maxHotelPrice) ?></span>
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <label>Stars</label>
+                        <div class="star-filter">
+                            <button type="button" class="star-filter-btn" data-star="3">3&#11088;</button>
+                            <button type="button" class="star-filter-btn" data-star="4">4&#11088;</button>
+                            <button type="button" class="star-filter-btn" data-star="5">5&#11088;</button>
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <label>Sort By</label>
+                        <select id="filterSort">
+                            <option value="price_low">Price: Low to High</option>
+                            <option value="price_high">Price: High to Low</option>
+                            <option value="stars">Star Rating</option>
+                        </select>
+                    </div>
+                </div>
                 <div class="results-bar">
                     <span class="results-count"><?= count($hotels) ?> hotel<?= count($hotels) !== 1 ? 's' : '' ?> found</span>
-                    <span class="results-sort">Sorted by: <strong>Lowest price</strong></span>
                 </div>
                 <div class="hotel-list">
                     <?php foreach ($hotels as $i => $hotel): ?>

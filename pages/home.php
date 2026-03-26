@@ -5,9 +5,17 @@ $heroSubtitle = getSetting($pdo, 'hero_subtitle', 'Discover breathtaking destina
 ?>
 
 <section id="home" class="hero">
+    <div class="hero-floating" aria-hidden="true">
+        <span class="hero-float hero-cloud hero-cloud-1">&#9729;</span>
+        <span class="hero-float hero-cloud hero-cloud-2">&#9729;</span>
+        <span class="hero-float hero-cloud hero-cloud-3">&#9729;</span>
+        <span class="hero-float hero-plane hero-plane-1">&#9992;</span>
+        <span class="hero-float hero-plane hero-plane-2">&#9992;</span>
+        <span class="hero-float hero-globe">&#127758;</span>
+    </div>
     <div class="hero-content">
-        <h1 data-t="hero_title"><?= htmlspecialchars($heroTitle) ?></h1>
-        <p data-t="hero_subtitle"><?= htmlspecialchars($heroSubtitle) ?></p>
+        <h1 class="hero-typed" data-t="hero_title"><?= htmlspecialchars($heroTitle) ?></h1>
+        <p class="hero-subtitle-fade" data-t="hero_subtitle"><?= htmlspecialchars($heroSubtitle) ?></p>
         <div class="trip-toggle">
             <button type="button" class="trip-btn active" data-type="roundtrip" data-t="roundtrip">Round Trip</button>
             <button type="button" class="trip-btn" data-type="oneway" data-t="oneway">One Way</button>
@@ -18,157 +26,30 @@ $heroSubtitle = getSetting($pdo, 'hero_subtitle', 'Discover breathtaking destina
             <input type="hidden" name="trip" id="trip-type" value="roundtrip">
             <div class="search-field flight-field">
                 <label data-t="from">From</label>
-                <select name="from">
-                    <optgroup label="Armenia">
-                        <option value="Yerevan" selected>Yerevan</option>
-                    </optgroup>
-                    <optgroup label="Egypt">
-                        <option value="Cairo">Cairo</option>
-                        <option value="El Alamein">El Alamein</option>
-                        <option value="Sharm El Sheikh">Sharm El Sheikh</option>
-                        <option value="Hurghada">Hurghada</option>
-                    </optgroup>
-                    <optgroup label="France">
-                        <option value="Paris">Paris</option>
-                    </optgroup>
-                    <optgroup label="Georgia">
-                        <option value="Tbilisi">Tbilisi</option>
-                    </optgroup>
-                    <optgroup label="Germany">
-                        <option value="Berlin">Berlin</option>
-                        <option value="Frankfurt">Frankfurt</option>
-                        <option value="Munich">Munich</option>
-                    </optgroup>
-                    <optgroup label="Greece">
-                        <option value="Athens">Athens</option>
-                        <option value="Halkidiki">Halkidiki</option>
-                        <option value="Crete">Crete</option>
-                    </optgroup>
-                    <optgroup label="Italy">
-                        <option value="Rome">Rome</option>
-                        <option value="Milan">Milan</option>
-                    </optgroup>
-                    <optgroup label="Montenegro">
-                        <option value="Tivat">Tivat</option>
-                    </optgroup>
-                    <optgroup label="Russia">
-                        <option value="Moscow">Moscow</option>
-                        <option value="Sochi">Sochi</option>
-                    </optgroup>
-                    <optgroup label="Spain">
-                        <option value="Barcelona">Barcelona</option>
-                        <option value="Madrid">Madrid</option>
-                    </optgroup>
-                    <optgroup label="Thailand">
-                        <option value="Bangkok">Bangkok</option>
-                        <option value="Phuket">Phuket</option>
-                    </optgroup>
-                    <optgroup label="Turkey">
-                        <option value="Istanbul">Istanbul</option>
-                        <option value="Antalya">Antalya</option>
-                    </optgroup>
-                    <optgroup label="UAE">
-                        <option value="Dubai">Dubai</option>
-                    </optgroup>
-                    <optgroup label="UK">
-                        <option value="London">London</option>
-                    </optgroup>
-                    <optgroup label="USA">
-                        <option value="New York">New York</option>
-                        <option value="Los Angeles">Los Angeles</option>
-                        <option value="Miami">Miami</option>
-                    </optgroup>
-                </select>
+                <div class="city-autocomplete">
+                    <input type="text" name="from" class="city-input" id="cityFrom" value="Yerevan" autocomplete="off" data-tp="type_city">
+                    <div class="city-dropdown" id="dropdownFrom"></div>
+                </div>
             </div>
             <div class="search-field flight-field">
                 <label data-t="to">To</label>
-                <select name="to">
-                    <optgroup label="Armenia">
-                        <option value="Yerevan">Yerevan</option>
-                    </optgroup>
-                    <optgroup label="Egypt">
-                        <option value="Cairo">Cairo</option>
-                        <option value="El Alamein">El Alamein</option>
-                        <option value="Sharm El Sheikh">Sharm El Sheikh</option>
-                        <option value="Hurghada">Hurghada</option>
-                    </optgroup>
-                    <optgroup label="France">
-                        <option value="Paris">Paris</option>
-                    </optgroup>
-                    <optgroup label="Georgia">
-                        <option value="Tbilisi">Tbilisi</option>
-                    </optgroup>
-                    <optgroup label="Germany">
-                        <option value="Berlin">Berlin</option>
-                        <option value="Frankfurt">Frankfurt</option>
-                        <option value="Munich">Munich</option>
-                    </optgroup>
-                    <optgroup label="Greece">
-                        <option value="Athens">Athens</option>
-                        <option value="Halkidiki">Halkidiki</option>
-                        <option value="Crete">Crete</option>
-                    </optgroup>
-                    <optgroup label="Italy">
-                        <option value="Rome">Rome</option>
-                        <option value="Milan">Milan</option>
-                    </optgroup>
-                    <optgroup label="Montenegro">
-                        <option value="Tivat">Tivat</option>
-                    </optgroup>
-                    <optgroup label="Russia">
-                        <option value="Moscow" selected>Moscow</option>
-                        <option value="Sochi">Sochi</option>
-                    </optgroup>
-                    <optgroup label="Spain">
-                        <option value="Barcelona">Barcelona</option>
-                        <option value="Madrid">Madrid</option>
-                    </optgroup>
-                    <optgroup label="Thailand">
-                        <option value="Bangkok">Bangkok</option>
-                        <option value="Phuket">Phuket</option>
-                    </optgroup>
-                    <optgroup label="Turkey">
-                        <option value="Istanbul">Istanbul</option>
-                        <option value="Antalya">Antalya</option>
-                    </optgroup>
-                    <optgroup label="UAE">
-                        <option value="Dubai">Dubai</option>
-                    </optgroup>
-                    <optgroup label="UK">
-                        <option value="London">London</option>
-                    </optgroup>
-                    <optgroup label="USA">
-                        <option value="New York">New York</option>
-                        <option value="Los Angeles">Los Angeles</option>
-                        <option value="Miami">Miami</option>
-                    </optgroup>
-                </select>
+                <div class="city-autocomplete">
+                    <input type="text" name="to" class="city-input" id="cityTo" value="Moscow" autocomplete="off" data-tp="type_city">
+                    <div class="city-dropdown" id="dropdownTo"></div>
+                </div>
             </div>
             <div class="search-field package-field" style="display:none;">
                 <label data-t="from">From</label>
-                <select name="pkg_from">
-                    <option value="Yerevan">Yerevan</option>
-                </select>
+                <div class="city-autocomplete">
+                    <input type="text" name="pkg_from" class="city-input" value="Yerevan" autocomplete="off" readonly>
+                </div>
             </div>
             <div class="search-field package-field" style="display:none;">
                 <label data-t="to">To</label>
-                <select name="pkg_to" id="pkgCountry">
-                    <optgroup label="Egypt">
-                        <option value="El Alamein, Egypt">El Alamein</option>
-                        <option value="Sharm El Sheikh, Egypt">Sharm El Sheikh</option>
-                        <option value="Hurghada, Egypt">Hurghada</option>
-                    </optgroup>
-                    <optgroup label="Greece">
-                        <option value="Halkidiki, Greece">Halkidiki</option>
-                        <option value="Crete, Greece">Crete</option>
-                    </optgroup>
-                    <optgroup label="Montenegro">
-                        <option value="Tivat, Montenegro">Tivat</option>
-                    </optgroup>
-                    <optgroup label="Turkey">
-                        <option value="Antalya, Turkey">Antalya</option>
-                    </optgroup>
-                </select>
+                <div class="city-autocomplete">
+                    <input type="text" name="pkg_to" id="pkgCountry" class="city-input pkg-city-input" value="" autocomplete="off" data-tp="type_city">
+                    <div class="city-dropdown" id="dropdownPkg"></div>
+                </div>
             </div>
             <div class="search-field depart-field">
                 <label data-t="depart">Depart</label>
@@ -219,7 +100,7 @@ $heroSubtitle = getSetting($pdo, 'hero_subtitle', 'Discover breathtaking destina
 
                 <div class="tour-slide">
                     <div class="tour-card-fancy">
-                        <div class="tour-card-img" style="background-image: url('https://images.unsplash.com/photo-1668717096562-5a14dbf9454e?w=1200&q=80');">
+                        <div class="tour-card-img lazy-bg" data-bg="https://images.unsplash.com/photo-1668717096562-5a14dbf9454e?w=1200&q=80&fm=webp">
                             <div class="tour-card-overlay">
                                 <span class="tour-duration-badge">3 Days</span>
                                 <div class="tour-card-info">
@@ -242,7 +123,7 @@ $heroSubtitle = getSetting($pdo, 'hero_subtitle', 'Discover breathtaking destina
 
                 <div class="tour-slide">
                     <div class="tour-card-fancy">
-                        <div class="tour-card-img" style="background-image: url('https://images.unsplash.com/photo-1695571803214-9e6820bffce7?w=1200&q=80');">
+                        <div class="tour-card-img lazy-bg" data-bg="https://images.unsplash.com/photo-1695571803214-9e6820bffce7?w=1200&q=80&fm=webp">
                             <div class="tour-card-overlay">
                                 <span class="tour-duration-badge">5 Days</span>
                                 <div class="tour-card-info">
@@ -265,7 +146,7 @@ $heroSubtitle = getSetting($pdo, 'hero_subtitle', 'Discover breathtaking destina
 
                 <div class="tour-slide">
                     <div class="tour-card-fancy">
-                        <div class="tour-card-img" style="background-image: url('https://plus.unsplash.com/premium_photo-1670552850982-abe0e83c4391?w=1200&q=80');">
+                        <div class="tour-card-img lazy-bg" data-bg="https://plus.unsplash.com/premium_photo-1670552850982-abe0e83c4391?w=1200&q=80&fm=webp">
                             <div class="tour-card-overlay">
                                 <span class="tour-duration-badge">7 Days</span>
                                 <div class="tour-card-info">
@@ -288,7 +169,7 @@ $heroSubtitle = getSetting($pdo, 'hero_subtitle', 'Discover breathtaking destina
 
                 <div class="tour-slide">
                     <div class="tour-card-fancy">
-                        <div class="tour-card-img" style="background-image: url('https://images.unsplash.com/photo-1624357485917-fbb18b951125?w=1200&q=80');">
+                        <div class="tour-card-img lazy-bg" data-bg="https://images.unsplash.com/photo-1624357485917-fbb18b951125?w=1200&q=80&fm=webp">
                             <div class="tour-card-overlay">
                                 <span class="tour-duration-badge">4 Days</span>
                                 <div class="tour-card-info">
@@ -311,7 +192,7 @@ $heroSubtitle = getSetting($pdo, 'hero_subtitle', 'Discover breathtaking destina
 
                 <div class="tour-slide">
                     <div class="tour-card-fancy">
-                        <div class="tour-card-img" style="background-image: url('https://images.unsplash.com/photo-1743366500405-6689bb916fd2?w=1200&q=80');">
+                        <div class="tour-card-img lazy-bg" data-bg="https://images.unsplash.com/photo-1743366500405-6689bb916fd2?w=1200&q=80&fm=webp">
                             <div class="tour-card-overlay">
                                 <span class="tour-duration-badge">6 Days</span>
                                 <div class="tour-card-info">
@@ -339,7 +220,9 @@ $heroSubtitle = getSetting($pdo, 'hero_subtitle', 'Discover breathtaking destina
     <div class="tour-dots"></div>
 </section>
 
-<section id="visa-support" class="visa-support reveal">
+<section id="visa-support" class="visa-support reveal has-blobs">
+    <div class="blob blob-2" aria-hidden="true"></div>
+    <div class="blob blob-3" aria-hidden="true"></div>
     <div class="visa-container">
         <div class="visa-content">
             <h2 data-t="visa_title">Visa Support for Armenia</h2>
@@ -382,7 +265,30 @@ $heroSubtitle = getSetting($pdo, 'hero_subtitle', 'Discover breathtaking destina
     </div>
 </section>
 
-<section id="destinations" class="destinations reveal">
+<section class="stats-bar">
+    <div class="stats-grid">
+        <div class="stat-item">
+            <span class="stat-number" data-target="5000">0</span><span class="stat-plus">+</span>
+            <span class="stat-label" data-t="stat_travelers">Happy Travelers</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-number" data-target="29">0</span>
+            <span class="stat-label" data-t="stat_destinations">Destinations</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-number" data-target="3">0</span>
+            <span class="stat-label" data-t="stat_branches">Branches</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-number" data-target="10">0</span><span class="stat-plus">+</span>
+            <span class="stat-label" data-t="stat_years">Years Experience</span>
+        </div>
+    </div>
+</section>
+
+<section id="destinations" class="destinations reveal has-blobs">
+    <div class="blob blob-1" aria-hidden="true"></div>
+    <div class="blob blob-2" aria-hidden="true"></div>
     <h2 data-t="popular">Popular Destinations</h2>
     <p class="section-subtitle" data-t="popular_subtitle">Handpicked travel experiences from Yerevan to the world</p>
     <div class="card-grid">
@@ -390,7 +296,7 @@ $heroSubtitle = getSetting($pdo, 'hero_subtitle', 'Discover breathtaking destina
         <div class="card reveal-scale">
             <a href="<?= url('destination', ['id' => $dest['id']]) ?>">
                 <?php if (!empty($dest['image_url'])): ?>
-                <div class="card-image" style="background-image: url('<?= htmlspecialchars($dest['image_url']) ?>');"></div>
+                <div class="card-image lazy-bg" data-bg="<?= htmlspecialchars($dest['image_url']) ?>"></div>
                 <?php else: ?>
                 <div class="card-image" style="background-color: <?= htmlspecialchars($dest['color']) ?>;">
                     <span class="card-emoji"><?= htmlspecialchars($dest['emoji']) ?></span>
@@ -410,7 +316,9 @@ $heroSubtitle = getSetting($pdo, 'hero_subtitle', 'Discover breathtaking destina
     </div>
 </section>
 
-<section id="about" class="about reveal">
+<section id="about" class="about reveal has-blobs">
+    <div class="blob blob-4" aria-hidden="true"></div>
+    <div class="blob blob-5" aria-hidden="true"></div>
     <h2 data-t="why_travel">Why Travel With Us</h2>
     <div class="features">
         <div class="feature reveal" style="transition-delay: 0s;">
@@ -432,6 +340,89 @@ $heroSubtitle = getSetting($pdo, 'hero_subtitle', 'Discover breathtaking destina
             <div class="feature-icon">&#128222;</div>
             <h3 data-t="support_247">24/7 Support</h3>
             <p data-t="support_247_desc">Our team is available around the clock to assist you before, during, and after your trip.</p>
+        </div>
+    </div>
+</section>
+
+<section class="partners reveal">
+    <h2 data-t="partners_title">Our Partners</h2>
+    <p class="section-subtitle" data-t="partners_subtitle">Trusted by leading airlines and hotel chains worldwide</p>
+    <div class="partners-track">
+        <img class="partner-logo" src="https://logos-world.net/wp-content/uploads/2023/01/Turkish-Airlines-Logo.png" alt="Turkish Airlines" loading="lazy">
+        <img class="partner-logo" src="https://logos-world.net/wp-content/uploads/2023/01/FlyDubai-Logo.png" alt="FlyDubai" loading="lazy">
+        <img class="partner-logo" src="https://logos-world.net/wp-content/uploads/2023/01/Qatar-Airways-Logo.png" alt="Qatar Airways" loading="lazy">
+        <img class="partner-logo" src="https://logos-world.net/wp-content/uploads/2021/09/Emirates-Logo.png" alt="Emirates" loading="lazy">
+        <img class="partner-logo" src="https://logos-world.net/wp-content/uploads/2023/01/Lufthansa-Logo.png" alt="Lufthansa" loading="lazy">
+        <img class="partner-logo" src="https://logos-world.net/wp-content/uploads/2022/05/Booking.com-Logo.png" alt="Booking.com" loading="lazy">
+        <img class="partner-logo" src="https://logos-world.net/wp-content/uploads/2023/01/Hotelbeds-Logo.png" alt="Hotelbeds" loading="lazy">
+        <img class="partner-logo" src="https://logos-world.net/wp-content/uploads/2023/02/Airbnb-Logo.png" alt="Airbnb" loading="lazy">
+        <!-- Duplicated for seamless infinite scroll -->
+        <img class="partner-logo" src="https://logos-world.net/wp-content/uploads/2023/01/Turkish-Airlines-Logo.png" alt="Turkish Airlines" loading="lazy">
+        <img class="partner-logo" src="https://logos-world.net/wp-content/uploads/2023/01/FlyDubai-Logo.png" alt="FlyDubai" loading="lazy">
+        <img class="partner-logo" src="https://logos-world.net/wp-content/uploads/2023/01/Qatar-Airways-Logo.png" alt="Qatar Airways" loading="lazy">
+        <img class="partner-logo" src="https://logos-world.net/wp-content/uploads/2021/09/Emirates-Logo.png" alt="Emirates" loading="lazy">
+        <img class="partner-logo" src="https://logos-world.net/wp-content/uploads/2023/01/Lufthansa-Logo.png" alt="Lufthansa" loading="lazy">
+        <img class="partner-logo" src="https://logos-world.net/wp-content/uploads/2022/05/Booking.com-Logo.png" alt="Booking.com" loading="lazy">
+        <img class="partner-logo" src="https://logos-world.net/wp-content/uploads/2023/01/Hotelbeds-Logo.png" alt="Hotelbeds" loading="lazy">
+        <img class="partner-logo" src="https://logos-world.net/wp-content/uploads/2023/02/Airbnb-Logo.png" alt="Airbnb" loading="lazy">
+    </div>
+</section>
+
+<div class="recently-viewed" id="recentlyViewed" style="display:none;">
+    <h3 data-t="recently_viewed">&#128065; Recently Viewed</h3>
+    <div class="rv-strip" id="rvStrip"></div>
+</div>
+
+<section id="faq" class="faq-section reveal has-blobs">
+    <div class="blob blob-1" aria-hidden="true"></div>
+    <div class="blob blob-5" aria-hidden="true"></div>
+    <h2 data-t="faq_title">Frequently Asked Questions</h2>
+    <p class="section-subtitle" data-t="faq_subtitle">Everything you need to know before your trip</p>
+    <div class="faq-list">
+        <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+                <span data-t="faq_q1">How do I book a flight or tour package?</span>
+                <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer" role="region">
+                <p data-t="faq_a1">Simply use our search form on the homepage to find flights or packages. Select your dates, passengers, and destination, then click Search. You can also contact us directly by phone or email for personalized assistance.</p>
+            </div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+                <span data-t="faq_q2">Do you provide visa support?</span>
+                <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer" role="region">
+                <p data-t="faq_a2">Yes! We offer full visa support including invitation letters, e-visa assistance, and consultation. Standard processing takes 5-7 business days, with an express option in 2-3 days. Citizens of 60+ countries can enter Armenia visa-free.</p>
+            </div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+                <span data-t="faq_q3">What payment methods do you accept?</span>
+                <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer" role="region">
+                <p data-t="faq_a3">We accept cash (AMD, USD, EUR, RUB), bank transfers, and major credit/debit cards (Visa, MasterCard). Payment can be made at any of our three branches in Yerevan or online via bank transfer.</p>
+            </div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+                <span data-t="faq_q4">Can I cancel or modify my booking?</span>
+                <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer" role="region">
+                <p data-t="faq_a4">Cancellation and modification policies depend on the airline and hotel. Most bookings can be modified up to 48 hours before departure. Contact our 24/7 support team for assistance with changes to your reservation.</p>
+            </div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-question" aria-expanded="false">
+                <span data-t="faq_q5">Do you offer group or corporate travel?</span>
+                <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer" role="region">
+                <p data-t="faq_a5">Absolutely! We specialize in group tours, corporate travel, and MICE (Meetings, Incentives, Conferences, Events). Contact us for customized group rates and tailored itineraries for your team or organization.</p>
+            </div>
         </div>
     </div>
 </section>

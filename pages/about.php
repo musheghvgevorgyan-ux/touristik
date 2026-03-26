@@ -1,3 +1,9 @@
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+    <a href="<?= url('home') ?>" data-t="breadcrumb_home">Home</a>
+    <span class="breadcrumb-sep">&#8250;</span>
+    <span class="breadcrumb-current" data-t="about">About</span>
+</nav>
+
 <section class="about">
     <h2 data-t="why_travel">Why Travel With Us</h2>
     <div class="features">

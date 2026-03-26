@@ -14,6 +14,14 @@ if ($livePrice !== null) {
 }
 ?>
 
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+    <a href="<?= url('home') ?>" data-t="breadcrumb_home">Home</a>
+    <span class="breadcrumb-sep">&#8250;</span>
+    <a href="<?= url('destinations') ?>" data-t="all_destinations">All Destinations</a>
+    <span class="breadcrumb-sep">&#8250;</span>
+    <span class="breadcrumb-current"><?= htmlspecialchars($dest['name']) ?></span>
+</nav>
+
 <section class="destination-detail">
     <?php if (!empty($dest['image_url'])): ?>
     <div class="detail-hero" style="background-image: url('<?= htmlspecialchars($dest['image_url']) ?>');"></div>
@@ -35,3 +43,22 @@ if ($livePrice !== null) {
         <a href="<?= url('destinations') ?>" class="btn btn-outline" data-t="back_dest">Back to Destinations</a>
     </div>
 </section>
+
+<script>
+(function () {
+    var dest = {
+        id: <?= (int)$dest['id'] ?>,
+        name: <?= json_encode($dest['name']) ?>,
+        image: <?= json_encode($dest['image_url'] ?? '') ?>,
+        price: <?= (int)$dest['price'] ?>,
+        url: <?= json_encode(url('destination', ['id' => $dest['id']])) ?>
+    };
+    var key = 'recentlyViewed';
+    var items = [];
+    try { items = JSON.parse(localStorage.getItem(key)) || []; } catch (e) {}
+    items = items.filter(function (d) { return d.id !== dest.id; });
+    items.unshift(dest);
+    if (items.length > 8) items = items.slice(0, 8);
+    localStorage.setItem(key, JSON.stringify(items));
+})();
+</script>

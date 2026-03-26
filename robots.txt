@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /config/
+Disallow: /includes/
+Disallow: /api/
+Disallow: /?page=admin
+Disallow: /?page=login
+Disallow: /?page=logout
+
+Sitemap: https://touristik.am/sitemap.php

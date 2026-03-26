@@ -3,3 +3,4 @@ config/travelpayouts.json
 config/hotelbeds.json
 config/database.json
 .claude/
+*.code-workspace

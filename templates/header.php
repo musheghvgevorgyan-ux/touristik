@@ -8,15 +8,84 @@
     <meta property="og:title" content="<?= htmlspecialchars($pageTitle) ?>">
     <meta property="og:description" content="Explore the world with Touristik. Flights, hotels, Armenia tours, and visa support.">
     <meta property="og:type" content="website">
+    <?php $gaId = getSetting($pdo, 'ga_measurement_id', ''); if ($gaId): ?>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=<?= htmlspecialchars($gaId) ?>"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','<?= htmlspecialchars($gaId) ?>');</script>
+    <?php endif; ?>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9992;</text></svg>">
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0f2027">
+    <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
+    <link rel="preconnect" href="https://plus.unsplash.com" crossorigin>
+    <link rel="preconnect" href="https://photos.hotelbeds.com" crossorigin>
+    <link rel="preconnect" href="https://logos-world.net" crossorigin>
+    <link rel="dns-prefetch" href="https://images.unsplash.com">
+    <link rel="dns-prefetch" href="https://photos.hotelbeds.com">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Touristik">
+    <link rel="apple-touch-icon" href="img/icon-192.svg">
+    <link rel="stylesheet" href="css/styles<?= file_exists(__DIR__ . '/../css/styles.min.css') ? '.min' : '' ?>.css">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "TravelAgency",
+        "name": "Touristik Travel",
+        "description": "Book flights, hotels, and tour packages from Yerevan to the world. Visa support, incoming tourism programs, and 24/7 service.",
+        "url": "https://touristik.am",
+        "telephone": ["+37433060609", "+37455060609", "+37444060608", "+37495060608"],
+        "email": "touristik.visadepartment@gmail.com",
+        "address": [
+            {
+                "@type": "PostalAddress",
+                "streetAddress": "Komitas 38",
+                "addressLocality": "Yerevan",
+                "addressCountry": "AM"
+            },
+            {
+                "@type": "PostalAddress",
+                "streetAddress": "Mashtots 7/6",
+                "addressLocality": "Yerevan",
+                "addressCountry": "AM"
+            },
+            {
+                "@type": "PostalAddress",
+                "streetAddress": "Arshakunyats 34, Yerevan Mall, 2nd floor",
+                "addressLocality": "Yerevan",
+                "addressCountry": "AM"
+            }
+        ],
+        "openingHoursSpecification": [
+            {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+                "opens": "10:00",
+                "closes": "20:00"
+            },
+            {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": ["Saturday", "Sunday"],
+                "opens": "11:00",
+                "closes": "18:00"
+            }
+        ],
+        "sameAs": [
+            "https://www.instagram.com/touristik.am/",
+            "https://www.facebook.com/touristik.am",
+            "https://t.me/touristikam"
+        ],
+        "areaServed": "Worldwide",
+        "priceRange": "$$"
+    }
+    </script>
 </head>
 <body>
+    <a href="#main-content" class="skip-to-content">Skip to content</a>
     <div class="page-loader" id="pageLoader">
         <div class="loader-spinner"></div>
     </div>
     <header>
-        <nav>
+        <nav aria-label="Main navigation">
             <div class="logo"><a href="<?= url('home') ?>"><?= htmlspecialchars(getSetting($pdo, 'site_name', 'Touristik Travel
             ')) ?></a></div>
             <button class="hamburger" id="hamburger" aria-label="Menu">
@@ -35,6 +104,7 @@
                 <?php endif; ?>
             </ul>
             <div class="nav-controls">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">&#9790;</button>
                 <div class="currency-switcher">
                     <button class="lang-btn" id="currencyToggle">
                         <span class="lang-current" id="currencyCurrent">$ USD</span>
@@ -62,3 +132,4 @@
             </div>
         </nav>
     </header>
+    <main id="main-content" role="main">

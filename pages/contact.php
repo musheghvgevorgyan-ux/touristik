@@ -24,6 +24,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
 }
 ?>
 
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+    <a href="<?= url('home') ?>" data-t="breadcrumb_home">Home</a>
+    <span class="breadcrumb-sep">&#8250;</span>
+    <span class="breadcrumb-current" data-t="contact">Contact</span>
+</nav>
+
 <section class="contact">
     <h2 data-t="get_in_touch">Get In Touch</h2>
 
