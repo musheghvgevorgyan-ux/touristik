@@ -1,6 +1,64 @@
 // Forward declaration so currency code can reference it before full definition
 var translations = {};
 
+// Page loader — hide when page is ready
+window.addEventListener('load', function () {
+    var loader = document.getElementById('pageLoader');
+    if (loader) {
+        loader.classList.add('hidden');
+        setTimeout(function () { loader.style.display = 'none'; }, 400);
+    }
+});
+
+// Scroll reveal — animate elements as they enter viewport
+(function () {
+    var revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+    if (!revealEls.length) return;
+
+    var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    revealEls.forEach(function (el) { observer.observe(el); });
+})();
+
+// Hamburger mobile menu
+(function () {
+    var hamburger = document.getElementById('hamburger');
+    var navLinks = document.querySelector('.nav-links');
+    if (!hamburger || !navLinks) return;
+    hamburger.addEventListener('click', function () {
+        hamburger.classList.toggle('active');
+        navLinks.classList.toggle('open');
+    });
+    navLinks.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', function () {
+            hamburger.classList.remove('active');
+            navLinks.classList.remove('open');
+        });
+    });
+})();
+
+// Back to top button
+(function () {
+    var btn = document.getElementById('backToTop');
+    if (!btn) return;
+    window.addEventListener('scroll', function () {
+        if (window.scrollY > 400) {
+            btn.classList.add('show');
+        } else {
+            btn.classList.remove('show');
+        }
+    });
+    btn.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+})();
+
 // Smooth scrolling for navigation links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
@@ -283,6 +341,10 @@ translations = {
         best_flights_desc: 'We partner with top airlines to get you the best deals on flights worldwide.',
         top_hotels_desc: 'Hand-picked accommodations ranging from cozy boutiques to luxury resorts.',
         easy_booking_desc: 'Simple and secure booking process with flexible cancellation policies.',
+        support_247: '24/7 Support',
+        support_247_desc: 'Our team is available around the clock to assist you before, during, and after your trip.',
+        popular_subtitle: 'Handpicked travel experiences from Yerevan to the world',
+        view_all_dest: 'View All Destinations \u2192',
         // About
         about_title: 'About Touristik',
         about_p1: 'We are passionate travelers who believe that exploring the world should be accessible, enjoyable, and unforgettable. Our team hand-picks every destination, hotel, and experience to ensure you get the very best.',
@@ -398,6 +460,10 @@ translations = {
         best_flights_desc: '\u041c\u044b \u0441\u043e\u0442\u0440\u0443\u0434\u043d\u0438\u0447\u0430\u0435\u043c \u0441 \u043b\u0443\u0447\u0448\u0438\u043c\u0438 \u0430\u0432\u0438\u0430\u043a\u043e\u043c\u043f\u0430\u043d\u0438\u044f\u043c\u0438 \u0434\u043b\u044f \u0432\u044b\u0433\u043e\u0434\u043d\u044b\u0445 \u0440\u0435\u0439\u0441\u043e\u0432 \u043f\u043e \u0432\u0441\u0435\u043c\u0443 \u043c\u0438\u0440\u0443.',
         top_hotels_desc: '\u041e\u0442\u043e\u0431\u0440\u0430\u043d\u043d\u044b\u0435 \u0432\u0440\u0443\u0447\u043d\u0443\u044e \u043e\u0442\u0435\u043b\u0438 \u2014 \u043e\u0442 \u0443\u044e\u0442\u043d\u044b\u0445 \u0431\u0443\u0442\u0438\u043a-\u043e\u0442\u0435\u043b\u0435\u0439 \u0434\u043e \u0440\u043e\u0441\u043a\u043e\u0448\u043d\u044b\u0445 \u043a\u0443\u0440\u043e\u0440\u0442\u043e\u0432.',
         easy_booking_desc: '\u041f\u0440\u043e\u0441\u0442\u043e\u0439 \u0438 \u0431\u0435\u0437\u043e\u043f\u0430\u0441\u043d\u044b\u0439 \u043f\u0440\u043e\u0446\u0435\u0441\u0441 \u0431\u0440\u043e\u043d\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u044f \u0441 \u0433\u0438\u0431\u043a\u0438\u043c\u0438 \u0443\u0441\u043b\u043e\u0432\u0438\u044f\u043c\u0438 \u043e\u0442\u043c\u0435\u043d\u044b.',
+        support_247: '\u041f\u043e\u0434\u0434\u0435\u0440\u0436\u043a\u0430 24/7',
+        support_247_desc: '\u041d\u0430\u0448\u0430 \u043a\u043e\u043c\u0430\u043d\u0434\u0430 \u0434\u043e\u0441\u0442\u0443\u043f\u043d\u0430 \u043a\u0440\u0443\u0433\u043b\u043e\u0441\u0443\u0442\u043e\u0447\u043d\u043e \u0434\u043e, \u0432\u043e \u0432\u0440\u0435\u043c\u044f \u0438 \u043f\u043e\u0441\u043b\u0435 \u0432\u0430\u0448\u0435\u0433\u043e \u043f\u0443\u0442\u0435\u0448\u0435\u0441\u0442\u0432\u0438\u044f.',
+        popular_subtitle: '\u041b\u0443\u0447\u0448\u0438\u0435 \u043d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u044f \u0438\u0437 \u0415\u0440\u0435\u0432\u0430\u043d\u0430 \u0432 \u043c\u0438\u0440',
+        view_all_dest: '\u0412\u0441\u0435 \u043d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u044f \u2192',
         // About
         about_title: '\u041e Touristik',
         about_p1: '\u041c\u044b \u2014 \u0441\u0442\u0440\u0430\u0441\u0442\u043d\u044b\u0435 \u043f\u0443\u0442\u0435\u0448\u0435\u0441\u0442\u0432\u0435\u043d\u043d\u0438\u043a\u0438, \u043a\u043e\u0442\u043e\u0440\u044b\u0435 \u0432\u0435\u0440\u044f\u0442, \u0447\u0442\u043e \u0438\u0441\u0441\u043b\u0435\u0434\u043e\u0432\u0430\u043d\u0438\u0435 \u043c\u0438\u0440\u0430 \u0434\u043e\u043b\u0436\u043d\u043e \u0431\u044b\u0442\u044c \u0434\u043e\u0441\u0442\u0443\u043f\u043d\u044b\u043c, \u043f\u0440\u0438\u044f\u0442\u043d\u044b\u043c \u0438 \u043d\u0435\u0437\u0430\u0431\u044b\u0432\u0430\u0435\u043c\u044b\u043c. \u041d\u0430\u0448\u0430 \u043a\u043e\u043c\u0430\u043d\u0434\u0430 \u0442\u0449\u0430\u0442\u0435\u043b\u044c\u043d\u043e \u043f\u043e\u0434\u0431\u0438\u0440\u0430\u0435\u0442 \u043a\u0430\u0436\u0434\u043e\u0435 \u043d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435, \u043e\u0442\u0435\u043b\u044c \u0438 \u0432\u043f\u0435\u0447\u0430\u0442\u043b\u0435\u043d\u0438\u0435.',
@@ -513,6 +579,10 @@ translations = {
         best_flights_desc: '\u0544\u0565\u0576\u0584 \u0570\u0561\u0574\u0561\u0563\u0578\u0580\u056e\u0561\u056f\u0581\u0578\u0582\u0574 \u0565\u0576\u0584 \u056c\u0561\u057e\u0561\u0563\u0578\u0582\u0575\u0576 \u0561\u057e\u056b\u0561\u0568\u0576\u056f\u0565\u0580\u0578\u0582\u0569\u0575\u0578\u0582\u0576\u0576\u0565\u0580\u056b \u0570\u0565\u057f\u0589',
         top_hotels_desc: '\u0541\u0565\u057c\u0584\u0578\u057e \u0568\u0576\u057f\u0580\u057e\u0561\u056e \u0570\u0575\u0578\u0582\u0580\u0561\u0576\u0578\u0581\u0576\u0565\u0580\u055d \u0570\u0561\u0580\u0574\u0561\u0580\u0561\u057e\u0565\u057f\u056b\u0581 \u0574\u056b\u0576\u0579\u0587 \u0577\u0584\u0565\u0572 \u056f\u0578\u0582\u0580\u0578\u0580\u057f\u0576\u0565\u0580\u056b\u0576\u0589',
         easy_booking_desc: '\u054a\u0561\u0580\u0566 \u0587 \u0561\u0576\u057e\u057f\u0561\u0576\u0563 \u0561\u0574\u0580\u0561\u0563\u0580\u0574\u0561\u0576 \u0563\u0578\u0580\u056e\u0568\u0576\u0569\u0561\u0581\u055d \u0573\u056f\u0578\u0582\u0576 \u0579\u0565\u0572\u0561\u0580\u056f\u0574\u0561\u0576 \u057a\u0561\u0575\u0574\u0561\u0576\u0576\u0565\u0580\u0578\u057e\u0589',
+        support_247: '\u0531\u057b\u0561\u056f\u0581\u0578\u0582\u0569\u0575\u0578\u0582\u0576 24/7',
+        support_247_desc: '\u0544\u0565\u0580 \u0569\u056b\u0574\u0568 \u0570\u0561\u057d\u0561\u0576\u0565\u056c\u056b \u0567 \u0577\u0578\u0582\u0580\u057b\u0585\u0580\u0575\u0561\u055d \u0571\u0565\u0566 \u0585\u0563\u0576\u0565\u056c\u0578\u0582 \u0571\u0565\u0580 \u0573\u0561\u0574\u0583\u0578\u0580\u0564\u0561\u0576\u0584\u056b\u0581 \u0561\u057c\u0561\u057b, \u0568\u0576\u0569\u0561\u0581\u0584\u0578\u0582\u0574 \u0587 \u0570\u0565\u057f\u0578\u0589',
+        popular_subtitle: '\u053c\u0561\u057e\u0561\u0563\u0578\u0582\u0575\u0576 \u0573\u0561\u0574\u0583\u0578\u0580\u0564\u0561\u056f\u0561\u0576 \u0583\u0578\u0580\u0571\u0561\u057c\u0578\u0582\u0569\u0575\u0578\u0582\u0576\u0576\u0565\u0580 \u0535\u0580\u0587\u0561\u0576\u056b\u0581 \u0564\u0565\u057a\u056b \u0561\u0577\u056d\u0561\u0580\u0570',
+        view_all_dest: '\u054f\u0565\u057d\u0576\u0565\u056c \u0562\u0578\u056c\u0578\u0580 \u0578\u0582\u0572\u0572\u0578\u0582\u0569\u0575\u0578\u0582\u0576\u0576\u0565\u0580\u0568 \u2192',
         // About
         about_title: 'Touristik-\u056b \u0574\u0561\u057d\u056b\u0576',
         about_p1: '\u0544\u0565\u0580 \u057f\u0561\u0580\u0565\u0580\u0584\u0568 \u0576\u0578\u0580 \u0570\u0578\u0580\u056b\u0566\u0578\u0576\u0576\u0565\u0580\u0576 \u0565\u0576\u0589 \u0544\u0565\u0576\u0584 \u0570\u0561\u057e\u0561\u057f\u0578\u0582\u0574 \u0565\u0576\u0584, \u0578\u0580 \u0561\u0577\u056d\u0561\u0580\u0570\u056b \u0570\u0565\u057f\u0561\u0566\u0578\u057f\u0578\u0582\u0574\u0568 \u057a\u0565\u057f\u0584 \u0567 \u056c\u056b\u0576\u056b \u0570\u0561\u057d\u0561\u0576\u0565\u056c\u056b, \u0570\u0561\u0573\u0565\u056c\u056b \u0587 \u0561\u0576\u0574\u0578\u057c\u0561\u0576\u0561\u056c\u056b\u0589 \u0544\u0565\u0580 \u0569\u056b\u0574\u0568 \u056d\u0576\u0561\u0574\u0584\u0578\u057e \u0568\u0576\u057f\u0580\u0578\u0582\u0574 \u0567 \u0575\u0578\u0582\u0580\u0561\u0584\u0561\u0576\u0579\u0575\u0578\u0582\u0580 \u0578\u0582\u0572\u0572\u0578\u0582\u0569\u0575\u0578\u0582\u0576, \u0570\u0575\u0578\u0582\u0580\u0561\u0576\u0578\u0581 \u0587 \u057f\u057a\u0561\u057e\u0578\u0580\u0578\u0582\u0569\u0575\u0578\u0582\u0576\u0589',

@@ -4,13 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($pageTitle) ?></title>
+    <meta name="description" content="Touristik Travel - Book flights, hotels, and tour packages from Yerevan to the world. Visa support, incoming tourism programs, and 24/7 service.">
+    <meta property="og:title" content="<?= htmlspecialchars($pageTitle) ?>">
+    <meta property="og:description" content="Explore the world with Touristik. Flights, hotels, Armenia tours, and visa support.">
+    <meta property="og:type" content="website">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9992;</text></svg>">
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-spinner"></div>
+    </div>
     <header>
         <nav>
             <div class="logo"><a href="<?= url('home') ?>"><?= htmlspecialchars(getSetting($pdo, 'site_name', 'Touristik Travel
             ')) ?></a></div>
+            <button class="hamburger" id="hamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
             <ul class="nav-links">
                 <li><a href="<?= url('home') ?>" <?= $currentPage === 'home' ? 'class="active"' : '' ?> data-t="home">Home</a></li>
                 <li><a href="<?= url('destinations') ?>" <?= $currentPage === 'destinations' ? 'class="active"' : '' ?> data-t="destinations">Destinations</a></li>

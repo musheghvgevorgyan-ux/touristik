@@ -209,7 +209,7 @@ $heroSubtitle = getSetting($pdo, 'hero_subtitle', 'Discover breathtaking destina
     </div>
 </section>
 
-<section id="incoming-tours" class="incoming-tours">
+<section id="incoming-tours" class="incoming-tours reveal">
     <h2 data-t="incoming_title">Incoming Tourism Programs</h2>
     <p class="section-subtitle" data-t="incoming_subtitle">Discover the beauty of Armenia with our curated tour packages</p>
     <div class="tour-slider-wrapper">
@@ -339,34 +339,34 @@ $heroSubtitle = getSetting($pdo, 'hero_subtitle', 'Discover breathtaking destina
     <div class="tour-dots"></div>
 </section>
 
-<section id="visa-support" class="visa-support">
+<section id="visa-support" class="visa-support reveal">
     <div class="visa-container">
         <div class="visa-content">
             <h2 data-t="visa_title">Visa Support for Armenia</h2>
             <p class="visa-subtitle" data-t="visa_subtitle">We handle all the paperwork so you can focus on your trip</p>
             <div class="visa-features">
-                <div class="visa-feature">
+                <div class="visa-feature reveal-left">
                     <span class="visa-icon">&#128196;</span>
                     <div>
                         <h4 data-t="visa_feat1_title">Invitation Letter</h4>
                         <p data-t="visa_feat1_desc">Official invitation letters for visa applications to Armenian consulates worldwide.</p>
                     </div>
                 </div>
-                <div class="visa-feature">
+                <div class="visa-feature reveal-left">
                     <span class="visa-icon">&#9201;</span>
                     <div>
                         <h4 data-t="visa_feat2_title">Fast Processing</h4>
                         <p data-t="visa_feat2_desc">Standard processing in 5-7 business days, express option available in 2-3 days.</p>
                     </div>
                 </div>
-                <div class="visa-feature">
+                <div class="visa-feature reveal-left">
                     <span class="visa-icon">&#127758;</span>
                     <div>
                         <h4 data-t="visa_feat3_title">E-Visa Assistance</h4>
                         <p data-t="visa_feat3_desc">Full guidance through the Armenian e-visa application process for eligible countries.</p>
                     </div>
                 </div>
-                <div class="visa-feature">
+                <div class="visa-feature reveal-left">
                     <span class="visa-icon">&#128222;</span>
                     <div>
                         <h4 data-t="visa_feat4_title">24/7 Consultation</h4>
@@ -382,11 +382,12 @@ $heroSubtitle = getSetting($pdo, 'hero_subtitle', 'Discover breathtaking destina
     </div>
 </section>
 
-<section id="destinations" class="destinations">
+<section id="destinations" class="destinations reveal">
     <h2 data-t="popular">Popular Destinations</h2>
+    <p class="section-subtitle" data-t="popular_subtitle">Handpicked travel experiences from Yerevan to the world</p>
     <div class="card-grid">
         <?php foreach (array_slice($destinations, 0, 6) as $dest): ?>
-        <div class="card">
+        <div class="card reveal-scale">
             <a href="<?= url('destination', ['id' => $dest['id']]) ?>">
                 <?php if (!empty($dest['image_url'])): ?>
                 <div class="card-image" style="background-image: url('<?= htmlspecialchars($dest['image_url']) ?>');"></div>
@@ -404,25 +405,33 @@ $heroSubtitle = getSetting($pdo, 'hero_subtitle', 'Discover breathtaking destina
         </div>
         <?php endforeach; ?>
     </div>
+    <div class="section-cta">
+        <a href="<?= url('destinations') ?>" class="btn btn-outline-dark" data-t="view_all_dest">View All Destinations &#8594;</a>
+    </div>
 </section>
 
-<section id="about" class="about">
+<section id="about" class="about reveal">
     <h2 data-t="why_travel">Why Travel With Us</h2>
     <div class="features">
-        <div class="feature">
+        <div class="feature reveal" style="transition-delay: 0s;">
             <div class="feature-icon">&#9992;</div>
             <h3 data-t="best_flights">Best Flights</h3>
             <p data-t="best_flights_desc">We partner with top airlines to get you the best deals on flights worldwide.</p>
         </div>
-        <div class="feature">
+        <div class="feature reveal" style="transition-delay: 0.15s;">
             <div class="feature-icon">&#127960;</div>
             <h3 data-t="top_hotels">Top Hotels</h3>
             <p data-t="top_hotels_desc">Hand-picked accommodations ranging from cozy boutiques to luxury resorts.</p>
         </div>
-        <div class="feature">
+        <div class="feature reveal" style="transition-delay: 0.3s;">
             <div class="feature-icon">&#128230;</div>
             <h3 data-t="easy_booking">Easy Booking</h3>
             <p data-t="easy_booking_desc">Simple and secure booking process with flexible cancellation policies.</p>
+        </div>
+        <div class="feature reveal" style="transition-delay: 0.45s;">
+            <div class="feature-icon">&#128222;</div>
+            <h3 data-t="support_247">24/7 Support</h3>
+            <p data-t="support_247_desc">Our team is available around the clock to assist you before, during, and after your trip.</p>
         </div>
     </div>
 </section>
