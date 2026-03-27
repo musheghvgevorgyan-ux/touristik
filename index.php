@@ -5,6 +5,7 @@ require_once 'includes/functions.php';
 require_once 'includes/router.php';
 require_once 'includes/currency.php';
 require_once 'includes/flight_prices.php';
+require_once 'includes/hotelbeds.php';
 
 // Route the request
 $router = new Router();

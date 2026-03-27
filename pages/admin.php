@@ -3,7 +3,7 @@ $activeTab = isset($_GET['tab']) ? $_GET['tab'] : 'destinations';
 $adminMessage = '';
 
 // Handle destination actions
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && verifyCsrf()) {
     if (isset($_POST['add_destination'])) {
         $name = htmlspecialchars(trim($_POST['name']));
         $description = htmlspecialchars(trim($_POST['description']));
@@ -52,6 +52,7 @@ $settings = getAllSettings($pdo);
     <div class="admin-panel">
         <h3 data-t="add_new_dest">Add New Destination</h3>
         <form class="admin-form" method="POST" action="<?= url('admin', ['tab' => 'destinations']) ?>">
+            <?= csrfField() ?>
             <input type="text" name="name" data-tp="dest_name_ph" placeholder="Destination Name" required>
             <textarea name="description" data-tp="description_ph" placeholder="Description" rows="3" required></textarea>
             <input type="number" name="price" data-tp="price_ph" placeholder="Price" step="0.01" min="0" required>
@@ -78,6 +79,7 @@ $settings = getAllSettings($pdo);
                     <td>$<?= number_format($dest['price'], 2) ?></td>
                     <td>
                         <form method="POST" action="<?= url('admin', ['tab' => 'destinations']) ?>" style="display:inline">
+                            <?= csrfField() ?>
                             <input type="hidden" name="destination_id" value="<?= $dest['id'] ?>">
                             <button type="submit" name="delete_destination" class="btn btn-danger" data-t="delete_btn" onclick="return confirm('Delete this destination?')">Delete</button>
                         </form>
@@ -121,6 +123,7 @@ $settings = getAllSettings($pdo);
     <div class="admin-panel">
         <h3 data-t="site_settings">Site Settings</h3>
         <form class="admin-form" method="POST" action="<?= url('admin', ['tab' => 'settings']) ?>">
+            <?= csrfField() ?>
             <?php foreach ($settings as $setting): ?>
             <div class="setting-row">
                 <label for="setting_<?= htmlspecialchars($setting['setting_key']) ?>">

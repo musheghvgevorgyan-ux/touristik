@@ -45,6 +45,11 @@
             "title": "Search Results - Touristik",
             "auth": false
         },
+        "booking": {
+            "file": "pages/booking.php",
+            "title": "Hotel Booking - Touristik",
+            "auth": false
+        },
         "404": {
             "file": "pages/404.php",
             "title": "Page Not Found - Wanderlust",

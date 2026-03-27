@@ -5,6 +5,7 @@ $depart = isset($_GET['date']) ? $_GET['date'] : '';
 $returnDate = isset($_GET['return_date']) ? $_GET['return_date'] : '';
 $adults = isset($_GET['adults']) ? (int)$_GET['adults'] : 1;
 $children = isset($_GET['children']) ? (int)$_GET['children'] : 0;
+$childAges = isset($_GET['child_age']) ? array_map('intval', (array)$_GET['child_age']) : [];
 
 // Determine from/to based on trip type
 if ($tripType === 'packages') {
@@ -111,33 +112,30 @@ if ($coords && $depart && $returnDate && $returnDate > $depart) {
 
             $signature = hash('sha256', $apiKey . $apiSecret . time());
 
-            // Build occupancy
-            $occupancies = [];
-            $occ = ['rooms' => 1, 'adults' => $adults, 'children' => $children];
-            if ($children > 0) {
-                $childAges = [];
-                for ($c = 0; $c < $children; $c++) {
-                    $childAges[] = 8; // default age
-                }
-                $occ['childrenAges'] = implode(',', $childAges);
-            }
-            $occupancies[] = $occ;
-
             $nights = (int)((strtotime($returnDate) - strtotime($depart)) / 86400);
             if ($nights < 1) $nights = 1;
+
+            // Build occupancy with proper children ages
+            $occupancy = [
+                'rooms' => 1,
+                'adults' => $adults,
+                'children' => $children,
+            ];
+            if ($children > 0) {
+                $paxes = [];
+                for ($c = 0; $c < $children; $c++) {
+                    $age = isset($childAges[$c]) ? max(1, min(17, $childAges[$c])) : 6;
+                    $paxes[] = ['type' => 'CH', 'age' => $age];
+                }
+                $occupancy['paxes'] = $paxes;
+            }
 
             $requestBody = [
                 'stay' => [
                     'checkIn' => $depart,
                     'checkOut' => $returnDate,
                 ],
-                'occupancies' => [
-                    [
-                        'rooms' => 1,
-                        'adults' => $adults,
-                        'children' => $children,
-                    ]
-                ],
+                'occupancies' => [$occupancy],
                 'geolocation' => [
                     'latitude' => $coords[0],
                     'longitude' => $coords[1],
@@ -145,18 +143,10 @@ if ($coords && $depart && $returnDate && $returnDate > $depart) {
                     'unit' => 'km'
                 ],
                 'filter' => [
-                    'maxHotels' => 15
+                    'maxHotels' => 50,
+                    'maxRatesPerRoom' => 3,
                 ]
             ];
-
-            // Add children ages if needed
-            if ($children > 0) {
-                $childAges = [];
-                for ($c = 0; $c < $children; $c++) {
-                    $childAges[] = 8;
-                }
-                $requestBody['occupancies'][0]['childrenAges'] = implode(',', $childAges);
-            }
 
             $ch = curl_init('https://api.test.hotelbeds.com/hotel-api/1.0/hotels');
             curl_setopt_array($ch, [
@@ -165,10 +155,12 @@ if ($coords && $depart && $returnDate && $returnDate > $depart) {
                 CURLOPT_POSTFIELDS => json_encode($requestBody),
                 CURLOPT_HTTPHEADER => [
                     'Accept: application/json',
+                    'Accept-Encoding: gzip',
                     'Content-Type: application/json',
                     'Api-key: ' . $apiKey,
                     'X-Signature: ' . $signature,
                 ],
+                CURLOPT_ENCODING => 'gzip',
                 CURLOPT_TIMEOUT => 15,
             ]);
 
@@ -183,17 +175,56 @@ if ($coords && $depart && $returnDate && $returnDate > $depart) {
                         $minRate = null;
                         $boardName = '';
                         $roomName = '';
+                        $roomCode = '';
                         $rateKey = '';
+                        $rateType = '';
+                        $rateClass = '';
+                        $cancellationPolicies = [];
+                        $promotions = [];
+                        $rateCommentsId = '';
+                        $packaging = false;
+                        $sellingRate = 0;
+                        $hotelMandatory = false;
+                        $allRooms = [];
+
                         if (!empty($h['rooms'])) {
                             foreach ($h['rooms'] as $room) {
                                 if (!empty($room['rates'])) {
                                     foreach ($room['rates'] as $rate) {
+                                        // Skip opaque/packaging rates (not combined with other products)
+                                        if (!empty($rate['packaging'])) continue;
+
                                         $net = (float)($rate['net'] ?? 0);
+
+                                        // Collect all room options
+                                        $allRooms[] = [
+                                            'room_name' => $room['name'] ?? '',
+                                            'room_code' => $room['code'] ?? '',
+                                            'board' => $rate['boardName'] ?? '',
+                                            'board_code' => $rate['boardCode'] ?? '',
+                                            'price' => $net,
+                                            'rate_key' => $rate['rateKey'] ?? '',
+                                            'rate_type' => $rate['rateType'] ?? 'BOOKABLE',
+                                            'cancellation_policies' => $rate['cancellationPolicies'] ?? [],
+                                            'promotions' => $rate['promotions'] ?? [],
+                                            'rate_comments_id' => $rate['rateCommentsId'] ?? '',
+                                            'selling_rate' => (float)($rate['sellingRate'] ?? $net),
+                                            'hotel_mandatory' => $rate['hotelMandatory'] ?? false,
+                                        ];
+
                                         if ($minRate === null || $net < $minRate) {
                                             $minRate = $net;
                                             $boardName = $rate['boardName'] ?? '';
                                             $roomName = $room['name'] ?? '';
+                                            $roomCode = $room['code'] ?? '';
                                             $rateKey = $rate['rateKey'] ?? '';
+                                            $rateType = $rate['rateType'] ?? 'BOOKABLE';
+                                            $rateClass = $rate['rateClass'] ?? '';
+                                            $cancellationPolicies = $rate['cancellationPolicies'] ?? [];
+                                            $promotions = $rate['promotions'] ?? [];
+                                            $rateCommentsId = $rate['rateCommentsId'] ?? '';
+                                            $sellingRate = (float)($rate['sellingRate'] ?? $net);
+                                            $hotelMandatory = $rate['hotelMandatory'] ?? false;
                                         }
                                     }
                                 }
@@ -207,13 +238,24 @@ if ($coords && $depart && $returnDate && $returnDate > $depart) {
                                 'stars' => $h['categoryName'] ?? '',
                                 'stars_num' => (int)($h['categoryCode'] ?? 0),
                                 'price' => $minRate,
+                                'selling_rate' => $sellingRate,
                                 'price_per_night' => round($minRate / max($nights, 1), 2),
                                 'nights' => $nights,
                                 'board' => $boardName,
                                 'room' => $roomName,
+                                'room_code' => $roomCode,
                                 'currency' => $data['hotels']['currency'] ?? 'EUR',
                                 'image' => !empty($h['images'][0]['path']) ? 'https://photos.hotelbeds.com/giata/bigger/' . $h['images'][0]['path'] : '',
                                 'rate_key' => $rateKey,
+                                'rate_type' => $rateType,
+                                'rate_class' => $rateClass,
+                                'cancellation_policies' => $cancellationPolicies,
+                                'promotions' => $promotions,
+                                'rate_comments_id' => $rateCommentsId,
+                                'hotel_mandatory' => $hotelMandatory,
+                                'all_rooms' => $allRooms,
+                                'check_in' => $depart,
+                                'check_out' => $returnDate,
                             ];
                         }
                     }
@@ -228,9 +270,11 @@ if ($coords && $depart && $returnDate && $returnDate > $depart) {
                             CURLOPT_RETURNTRANSFER => true,
                             CURLOPT_HTTPHEADER => [
                                 'Accept: application/json',
+                                'Accept-Encoding: gzip',
                                 'Api-key: ' . $apiKey,
                                 'X-Signature: ' . $sigContent,
                             ],
+                            CURLOPT_ENCODING => 'gzip',
                             CURLOPT_TIMEOUT => 10,
                         ]);
                         $imgResp = curl_exec($chImg);
@@ -488,6 +532,23 @@ if ($coords && $depart && $returnDate && $returnDate > $depart) {
                                         <?php endif; ?>
                                         <span class="hotel-detail">&#127769; <?= $hotel['nights'] ?> night<?= $hotel['nights'] > 1 ? 's' : '' ?></span>
                                     </div>
+                                    <?php if (!empty($hotel['promotions'])): ?>
+                                        <div class="hotel-promotions">
+                                            <?php foreach ($hotel['promotions'] as $promo): ?>
+                                                <span class="hotel-promo-tag">&#127873; <?= htmlspecialchars($promo['name'] ?? '') ?></span>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    <?php endif; ?>
+                                    <?php if (!empty($hotel['cancellation_policies'])): ?>
+                                        <div class="hotel-cancellation-info">
+                                            <?php
+                                                $firstPolicy = $hotel['cancellation_policies'][0];
+                                                $cancelFrom = date('M d, Y', strtotime($firstPolicy['from']));
+                                                $cancelAmount = $firstPolicy['amount'] ?? '0';
+                                            ?>
+                                            <span class="cancel-policy">&#128196; Free cancellation before <?= $cancelFrom ?></span>
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
                                 <div class="hotel-price-section">
                                     <div class="hotel-price">
@@ -495,7 +556,10 @@ if ($coords && $depart && $returnDate && $returnDate > $depart) {
                                         <span class="hotel-price-detail">total for <?= $hotel['nights'] ?> night<?= $hotel['nights'] > 1 ? 's' : '' ?></span>
                                         <span class="hotel-price-pernight"><?= htmlspecialchars($hotel['currency']) ?> <?= number_format($hotel['price_per_night'], 2) ?> / night</span>
                                     </div>
-                                    <a href="<?= url('contact') ?>" class="btn btn-sm btn-book">Book Now &#8594;</a>
+                                    <form method="POST" action="<?= url('booking', ['rate_key' => urlencode($hotel['rate_key']), 'hotel_name' => urlencode($hotel['name']), 'rate_type' => $hotel['rate_type']]) ?>" style="display:inline">
+                                        <input type="hidden" name="hotel_data" value="<?= htmlspecialchars(json_encode($hotel)) ?>">
+                                        <button type="submit" name="select_hotel" class="btn btn-sm btn-book">Book Now &#8594;</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>

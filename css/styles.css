@@ -266,7 +266,7 @@ nav {
     justify-content: center;
     text-align: center;
     background: linear-gradient(135deg, rgba(15, 32, 39, 0.7), rgba(44, 83, 100, 0.5), rgba(15, 32, 39, 0.7)),
-                url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920&q=80') center/cover no-repeat;
+                url('../img/hero-bg.jpg') center/cover no-repeat;
     color: #fff;
     padding: 0 2rem;
     position: relative;
@@ -726,7 +726,8 @@ body.dark .city-dropdown .city-group-label {
 }
 
 .card:hover {
-    box-shadow: 0 16px 50px rgba(0, 0, 0, 0.2);
+    transform: translateY(-10px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
 }
 
 .card .card-image {
@@ -781,8 +782,8 @@ body.dark .city-dropdown .city-group-label {
 }
 
 .card:hover .card-image {
-    filter: brightness(1.05);
-    transform: translateZ(20px) scale(1.08);
+    filter: brightness(1.1) saturate(1.2);
+    transform: scale(1.1);
 }
 
 .card-image::before {
@@ -837,6 +838,11 @@ body.dark .city-dropdown .city-group-label {
     padding: 0.3rem 0.8rem;
     background: #fff8ef;
     border-radius: 6px;
+    transition: transform 0.3s, background 0.3s;
+}
+.card:hover .price {
+    transform: scale(1.08);
+    background: #fff0d9;
 }
 
 .section-subtitle {
@@ -2105,6 +2111,458 @@ footer {
     }
 }
 
+/* Children Ages */
+.children-ages {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.children-ages label {
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+.children-ages-inputs {
+    display: flex;
+    gap: 0.4rem;
+}
+.children-ages-inputs select {
+    width: 55px;
+    padding: 0.4rem;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    font-size: 0.85rem;
+}
+
+/* Hotel Promotions & Cancellation on search */
+.hotel-promotions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.5rem;
+}
+.hotel-promo-tag {
+    font-size: 0.78rem;
+    background: #e8f5e9;
+    color: #2e7d32;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+body.dark .hotel-promo-tag {
+    background: rgba(46, 125, 50, 0.15);
+    color: #81c784;
+}
+.hotel-cancellation-info {
+    margin-top: 0.4rem;
+}
+.cancel-policy {
+    font-size: 0.8rem;
+    color: #27ae60;
+    font-weight: 500;
+}
+
+/* Voucher extra styles */
+.voucher-ref-agency {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-heading);
+}
+.voucher-room-item {
+    padding: 1rem 0;
+    border-bottom: 1px solid #eee;
+}
+.voucher-room-item:last-child {
+    border-bottom: none;
+}
+.voucher-rate-comments {
+    background: #fff8ef;
+    padding: 0.8rem;
+    border-radius: 8px;
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    border-left: 3px solid #f18f01;
+}
+body.dark .voucher-rate-comments {
+    background: rgba(241, 143, 1, 0.1);
+}
+.voucher-cancel-policy {
+    background: #f0f7ff;
+    padding: 0.8rem;
+    border-radius: 8px;
+    margin: 0.5rem 0;
+    font-size: 0.85rem;
+}
+body.dark .voucher-cancel-policy {
+    background: rgba(12, 124, 213, 0.1);
+}
+.voucher-payment {
+    background: #f8f9fa;
+    padding: 1.2rem;
+    border-radius: 10px;
+    margin-top: 1rem;
+}
+body.dark .voucher-payment {
+    background: rgba(255,255,255,0.05);
+}
+.voucher-payment p {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* Booking Page */
+.booking-section {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    min-height: 60vh;
+}
+.booking-error-page {
+    text-align: center;
+    padding: 4rem 2rem;
+}
+.booking-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+.booking-error-page h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: var(--text-heading);
+}
+.booking-error-page p {
+    margin-bottom: 1.5rem;
+    color: var(--text-secondary);
+}
+.booking-flow {
+    padding-top: 1rem;
+}
+.booking-steps {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+}
+.booking-step {
+    padding: 0.6rem 1.5rem;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    border: 2px solid #e0e0e0;
+}
+.booking-step.active {
+    background: #0c7cd5;
+    color: #fff;
+    border-color: #0c7cd5;
+}
+.booking-step.done {
+    background: #27ae60;
+    color: #fff;
+    border-color: #27ae60;
+}
+.booking-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+}
+.booking-summary {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px var(--shadow-sm);
+    position: sticky;
+    top: 100px;
+}
+.booking-summary h3 {
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-heading);
+}
+.booking-hotel-image {
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+.booking-hotel-image img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+.booking-detail h4 {
+    font-size: 1.3rem;
+    color: var(--text-heading);
+    margin-bottom: 0.3rem;
+}
+.booking-category {
+    color: #f18f01;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+}
+.booking-dest {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+.booking-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+.booking-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+.booking-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.booking-value {
+    font-weight: 600;
+    color: var(--text-heading);
+}
+.booking-cancellation {
+    background: #fff8ef;
+    padding: 1rem;
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
+    border-left: 3px solid #f18f01;
+}
+.booking-cancellation h5 {
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+.booking-cancellation p {
+    font-size: 0.85rem;
+    color: #666;
+}
+body.dark .booking-cancellation {
+    background: rgba(241, 143, 1, 0.1);
+}
+.booking-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1.5rem;
+    border-top: 2px solid #eee;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+.booking-total-price {
+    font-size: 1.5rem;
+    color: #0c7cd5;
+}
+.booking-form-panel {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px var(--shadow-sm);
+}
+.booking-form-panel h3 {
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-heading);
+}
+.booking-form .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+.booking-form .form-group {
+    margin-bottom: 1.2rem;
+}
+.booking-form label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-heading);
+}
+.booking-form input,
+.booking-form textarea {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+    background: var(--bg-primary);
+    color: var(--text-heading);
+    box-sizing: border-box;
+}
+.booking-form input:focus,
+.booking-form textarea:focus {
+    outline: none;
+    border-color: #0c7cd5;
+}
+.btn-book-confirm {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+    background: #27ae60;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: background 0.3s, transform 0.2s;
+}
+.btn-book-confirm:hover {
+    background: #219a52;
+    transform: translateY(-2px);
+}
+.booking-disclaimer {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 1rem;
+}
+
+/* Voucher */
+.voucher {
+    max-width: 700px;
+    margin: 0 auto;
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 3rem;
+    box-shadow: 0 4px 30px var(--shadow-sm);
+}
+.voucher-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+.voucher-icon {
+    width: 70px;
+    height: 70px;
+    background: #27ae60;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin: 0 auto 1rem;
+}
+.voucher-header h2 {
+    font-size: 1.8rem;
+    color: var(--text-heading);
+    margin-bottom: 0.5rem;
+}
+.voucher-subtitle {
+    color: var(--text-secondary);
+}
+.voucher-ref {
+    text-align: center;
+    background: #f0f7ff;
+    padding: 1.2rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+}
+body.dark .voucher-ref {
+    background: rgba(12, 124, 213, 0.1);
+}
+.voucher-ref-label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.3rem;
+}
+.voucher-ref-code {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #0c7cd5;
+    letter-spacing: 2px;
+}
+.voucher-details {
+    margin-bottom: 2rem;
+}
+.voucher-section {
+    margin-bottom: 1.5rem;
+}
+.voucher-section h4 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-heading);
+}
+.voucher-hotel-name {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-heading);
+}
+.voucher-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    margin-bottom: 1.5rem;
+}
+.voucher-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+.voucher-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.voucher-value {
+    font-weight: 600;
+    color: var(--text-heading);
+}
+.voucher-total {
+    font-size: 1.3rem;
+    color: #0c7cd5;
+}
+.voucher-status-confirmed {
+    color: #27ae60;
+}
+.voucher-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+@media (max-width: 768px) {
+    .booking-layout {
+        grid-template-columns: 1fr;
+    }
+    .booking-summary {
+        position: static;
+    }
+    .booking-steps {
+        flex-direction: column;
+        align-items: center;
+    }
+    .booking-form .form-row {
+        grid-template-columns: 1fr;
+    }
+    .voucher {
+        padding: 2rem 1.5rem;
+    }
+    .voucher-grid {
+        grid-template-columns: 1fr;
+    }
+    .voucher-actions {
+        flex-direction: column;
+    }
+}
+
+@media print {
+    header, footer, .breadcrumbs, .booking-steps, .voucher-actions,
+    .whatsapp-float, .back-to-top, .cookie-banner { display: none !important; }
+    .voucher { box-shadow: none; border: 1px solid #ddd; }
+}
+
 /* 404 Page */
 .error-page {
     padding: 10rem 2rem 5rem;
@@ -2255,32 +2713,28 @@ footer {
     margin-bottom: 2.5rem;
     font-size: 1.1rem;
 }
-.tour-slider-wrapper {
-    position: relative;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-.tour-slider {
+.tour-marquee {
     overflow: hidden;
-    flex: 1;
-    border-radius: 16px;
+    width: 100%;
 }
-.tour-slider-track {
+.tour-marquee-track {
     display: flex;
-    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    gap: 2rem;
+    width: max-content;
+    animation: scroll-tours 30s linear infinite;
 }
-.tour-slide {
-    min-width: 100%;
-    padding: 0 0.5rem;
-    box-sizing: border-box;
+.tour-marquee:hover .tour-marquee-track {
+    animation-play-state: paused;
 }
 .tour-card-fancy {
     border-radius: 16px;
     overflow: hidden;
     box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    flex-shrink: 0;
+    width: 380px;
 }
 .tour-card-img {
-    height: 450px;
+    height: 320px;
     background-size: cover;
     background-position: center;
     position: relative;
@@ -2369,56 +2823,16 @@ footer {
     background: transparent;
     border-color: #fff;
 }
-.tour-slider-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 10;
-    background: rgba(255,255,255,0.2);
-    border: 2px solid rgba(255,255,255,0.4);
-    color: #fff;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    font-size: 1.5rem;
-    cursor: pointer;
-    transition: all 0.3s;
-    backdrop-filter: blur(10px);
-}
-.tour-prev { left: 15px; }
-.tour-next { right: 15px; }
-.tour-slider-btn:hover {
-    background: rgba(255,255,255,0.35);
-    border-color: #fff;
-    transform: translateY(-50%) scale(1.1);
-}
-.tour-dots {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 1.5rem;
-}
-.tour-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.3);
-    cursor: pointer;
-    transition: all 0.3s;
-    border: none;
-}
-.tour-dot.active {
-    background: #2e86ab;
-    transform: scale(1.2);
+@keyframes scroll-tours {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
 }
 @media (max-width: 768px) {
-    .tour-card-img { height: 350px; }
+    .tour-card-fancy { width: 300px; }
+    .tour-card-img { height: 260px; }
     .tour-card-overlay { padding: 1.5rem; }
     .tour-card-info h3 { font-size: 1.3rem; }
     .tour-card-info p { font-size: 0.9rem; }
-    .tour-slider-btn { width: 45px; height: 45px; font-size: 1.2rem; }
-    .tour-prev { left: 8px; }
-    .tour-next { right: 8px; }
     .tour-card-bottom { flex-direction: column; gap: 0.75rem; align-items: flex-start; }
 }
 
@@ -2518,11 +2932,23 @@ footer {
     background-color: #e8e8e8;
     background-size: cover;
     background-position: center;
-    transition: background-image 0.3s ease;
+    transition: opacity 0.5s ease;
+    background-image: linear-gradient(90deg, #e8e8e8 25%, #f5f5f5 50%, #e8e8e8 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+.lazy-bg.lazy-loaded {
+    animation: none;
+    background-size: cover;
+}
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
 }
 
 body.dark .lazy-bg {
     background-color: #2a3a5c;
+    background-image: linear-gradient(90deg, #2a3a5c 25%, #3a4a6c 50%, #2a3a5c 75%);
 }
 
 /* Dark Mode Toggle */

@@ -1,6 +1,6 @@
 <?php
 $message = '';
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit']) && verifyCsrf()) {
     $name = htmlspecialchars(trim($_POST['name']));
     $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
     $msg = htmlspecialchars(trim($_POST['message']));
@@ -65,6 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit'])) {
         <div class="contact-form-panel">
             <?= $message ?>
             <form class="contact-form" method="POST" action="<?= url('contact') ?>">
+                <?= csrfField() ?>
                 <input type="text" name="name" placeholder="Your Name" data-tp="your_name" required>
                 <input type="email" name="email" placeholder="Your Email" data-tp="your_email" required>
                 <textarea name="message" placeholder="Tell us about your dream trip..." data-tp="dream_trip" rows="5" required></textarea>

@@ -68,13 +68,17 @@ window.addEventListener('load', function () {
                 var el = entry.target;
                 var bg = el.dataset.bg;
                 if (bg) {
-                    el.style.backgroundImage = "url('" + bg + "')";
-                    el.classList.add('lazy-loaded');
+                    var img = new Image();
+                    img.onload = function () {
+                        el.style.backgroundImage = "url('" + bg + "')";
+                        el.classList.add('lazy-loaded');
+                    };
+                    img.src = bg;
                 }
                 lazyObserver.unobserve(el);
             }
         });
-    }, { rootMargin: '200px 0px' });
+    }, { rootMargin: '400px 0px' });
 
     lazyEls.forEach(function (el) { lazyObserver.observe(el); });
 })();
@@ -362,6 +366,37 @@ document.querySelectorAll('.trip-btn').forEach(btn => {
         }
     });
 });
+
+// Children age inputs
+(function () {
+    var sel = document.getElementById('childrenSelect');
+    var wrap = document.getElementById('childrenAges');
+    var container = document.getElementById('childrenAgesInputs');
+    if (!sel || !wrap || !container) return;
+
+    sel.addEventListener('change', function () {
+        var count = parseInt(this.value) || 0;
+        container.innerHTML = '';
+        if (count > 0) {
+            wrap.style.display = '';
+            for (var i = 0; i < count; i++) {
+                var select = document.createElement('select');
+                select.name = 'child_age[]';
+                select.required = true;
+                for (var age = 1; age <= 17; age++) {
+                    var opt = document.createElement('option');
+                    opt.value = age;
+                    opt.textContent = age;
+                    if (age === 6) opt.selected = true;
+                    select.appendChild(opt);
+                }
+                container.appendChild(select);
+            }
+        } else {
+            wrap.style.display = 'none';
+        }
+    });
+})();
 
 // Live price lookup
 (function () {
@@ -1133,52 +1168,7 @@ document.querySelectorAll('.card, .feature').forEach(el => {
     observer.observe(el);
 });
 
-// Tour slider
-(function () {
-    const track = document.querySelector('.tour-slider-track');
-    if (!track) return;
-    const slides = track.querySelectorAll('.tour-slide');
-    const prevBtn = document.querySelector('.tour-prev');
-    const nextBtn = document.querySelector('.tour-next');
-    const dotsContainer = document.querySelector('.tour-dots');
-    let current = 0;
-    const total = slides.length;
-    let autoPlay;
-
-    // Create dots
-    slides.forEach(function (_, i) {
-        const dot = document.createElement('button');
-        dot.className = 'tour-dot' + (i === 0 ? ' active' : '');
-        dot.addEventListener('click', function () { goTo(i); });
-        dotsContainer.appendChild(dot);
-    });
-
-    function goTo(index) {
-        current = (index + total) % total;
-        track.style.transform = 'translateX(-' + (current * 100) + '%)';
-        document.querySelectorAll('.tour-dot').forEach(function (d, i) {
-            d.classList.toggle('active', i === current);
-        });
-        resetAuto();
-    }
-
-    function resetAuto() {
-        clearInterval(autoPlay);
-        autoPlay = setInterval(function () { goTo(current + 1); }, 5000);
-    }
-
-    prevBtn.addEventListener('click', function () { goTo(current - 1); });
-    nextBtn.addEventListener('click', function () { goTo(current + 1); });
-    resetAuto();
-
-    // Swipe support
-    let startX = 0;
-    track.addEventListener('touchstart', function (e) { startX = e.touches[0].clientX; });
-    track.addEventListener('touchend', function (e) {
-        var diff = startX - e.changedTouches[0].clientX;
-        if (Math.abs(diff) > 50) goTo(current + (diff > 0 ? 1 : -1));
-    });
-})();
+// Tour marquee - no JS needed, pure CSS animation
 
 // FAQ Accordion
 (function () {
