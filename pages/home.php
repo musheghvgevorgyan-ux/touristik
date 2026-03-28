@@ -94,174 +94,35 @@ $heroSubtitle = getSetting($pdo, 'hero_subtitle', 'Discover breathtaking destina
     </div>
 </section>
 
-<section id="incoming-tours" class="incoming-tours reveal">
-    <h2 data-t="incoming_title">Incoming Tourism Programs</h2>
-    <p class="section-subtitle" data-t="incoming_subtitle">Discover the beauty of Armenia with our curated tour packages</p>
-    <div class="tour-marquee">
-        <div class="tour-marquee-track">
+<section id="tours" class="tours-section reveal">
+    <h2 data-t="tours_title">Tours</h2>
+    <p class="section-subtitle tours-subtitle" data-t="tours_subtitle">Explore our travel services</p>
+    <div class="tours-grid">
 
-            <div class="tour-card-fancy">
-                <div class="tour-card-img lazy-bg" data-bg="https://images.unsplash.com/photo-1668717096562-5a14dbf9454e?w=600&q=80&fm=webp">
-                    <div class="tour-card-overlay">
-                        <span class="tour-duration-badge">3 Days</span>
-                        <div class="tour-card-info">
-                            <h3 data-t="tour_name_1">Classic Yerevan</h3>
-                            <p data-t="tour_desc_1">Explore the Pink City: Republic Square, Cascade Complex, Matenadaran.</p>
-                            <div class="tour-card-bottom">
-                                <span class="tour-price-tag">From <strong>$199</strong> /person</span>
-                                <a href="<?= url('contact') ?>" class="btn btn-sm btn-tour">Inquire &#8594;</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <a href="<?= url('ingoing-tours') ?>" class="tour-category-card reveal-scale">
+            <div class="tour-category-img lazy-bg" data-bg="https://images.unsplash.com/photo-1668717096562-5a14dbf9454e?w=600&q=80&fm=webp"></div>
+            <div class="tour-category-body">
+                <h3 data-t="tour_cat_ingoing">Ingoing Tours</h3>
+                <p data-t="tour_cat_ingoing_desc">Tours</p>
             </div>
+        </a>
 
-            <div class="tour-card-fancy">
-                <div class="tour-card-img lazy-bg" data-bg="https://images.unsplash.com/photo-1695571803214-9e6820bffce7?w=600&q=80&fm=webp">
-                    <div class="tour-card-overlay">
-                        <span class="tour-duration-badge">5 Days</span>
-                        <div class="tour-card-info">
-                            <h3 data-t="tour_name_2">Ancient Temples & Monasteries</h3>
-                            <p data-t="tour_desc_2">Visit Garni Temple, Geghard Monastery, Tatev, Noravank, and Khor Virap.</p>
-                            <div class="tour-card-bottom">
-                                <span class="tour-price-tag">From <strong>$349</strong> /person</span>
-                                <a href="<?= url('contact') ?>" class="btn btn-sm btn-tour">Inquire &#8594;</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <a href="<?= url('outgoing-tours') ?>" class="tour-category-card reveal-scale">
+            <div class="tour-category-img lazy-bg" data-bg="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=80&fm=webp"></div>
+            <div class="tour-category-body">
+                <h3 data-t="tour_cat_outgoing">Outgoing Tours</h3>
+                <p data-t="tour_cat_outgoing_desc">Tours</p>
             </div>
+        </a>
 
-            <div class="tour-card-fancy">
-                <div class="tour-card-img lazy-bg" data-bg="https://plus.unsplash.com/premium_photo-1670552850982-abe0e83c4391?w=600&q=80&fm=webp">
-                    <div class="tour-card-overlay">
-                        <span class="tour-duration-badge">7 Days</span>
-                        <div class="tour-card-info">
-                            <h3 data-t="tour_name_3">Grand Armenia Tour</h3>
-                            <p data-t="tour_desc_3">Lake Sevan, Dilijan, Jermuk, wine tasting in Areni, and Silk Road trails.</p>
-                            <div class="tour-card-bottom">
-                                <span class="tour-price-tag">From <strong>$599</strong> /person</span>
-                                <a href="<?= url('contact') ?>" class="btn btn-sm btn-tour">Inquire &#8594;</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <a href="<?= url('transfer') ?>" class="tour-category-card reveal-scale">
+            <div class="tour-category-img lazy-bg" data-bg="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=600&q=80&fm=webp"></div>
+            <div class="tour-category-body">
+                <h3 data-t="tour_cat_transfer">Transfer</h3>
+                <p data-t="tour_cat_transfer_desc">Transfers</p>
             </div>
+        </a>
 
-            <div class="tour-card-fancy">
-                <div class="tour-card-img lazy-bg" data-bg="https://images.unsplash.com/photo-1624357485917-fbb18b951125?w=600&q=80&fm=webp">
-                    <div class="tour-card-overlay">
-                        <span class="tour-duration-badge">4 Days</span>
-                        <div class="tour-card-info">
-                            <h3 data-t="tour_name_4">Adventure & Hiking</h3>
-                            <p data-t="tour_desc_4">Trek through Dilijan National Park, Aragats summit, and Lastiver caves.</p>
-                            <div class="tour-card-bottom">
-                                <span class="tour-price-tag">From <strong>$279</strong> /person</span>
-                                <a href="<?= url('contact') ?>" class="btn btn-sm btn-tour">Inquire &#8594;</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tour-card-fancy">
-                <div class="tour-card-img lazy-bg" data-bg="https://images.unsplash.com/photo-1743366500405-6689bb916fd2?w=600&q=80&fm=webp">
-                    <div class="tour-card-overlay">
-                        <span class="tour-duration-badge">6 Days</span>
-                        <div class="tour-card-info">
-                            <h3 data-t="tour_name_5">Wine & Gastronomy Trail</h3>
-                            <p data-t="tour_desc_5">Areni wine, Armenian BBQ, lavash baking, and Ararat brandy tasting.</p>
-                            <div class="tour-card-bottom">
-                                <span class="tour-price-tag">From <strong>$449</strong> /person</span>
-                                <a href="<?= url('contact') ?>" class="btn btn-sm btn-tour">Inquire &#8594;</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Duplicated for seamless infinite scroll -->
-            <div class="tour-card-fancy">
-                <div class="tour-card-img lazy-bg" data-bg="https://images.unsplash.com/photo-1668717096562-5a14dbf9454e?w=600&q=80&fm=webp">
-                    <div class="tour-card-overlay">
-                        <span class="tour-duration-badge">3 Days</span>
-                        <div class="tour-card-info">
-                            <h3>Classic Yerevan</h3>
-                            <p>Explore the Pink City: Republic Square, Cascade Complex, Matenadaran.</p>
-                            <div class="tour-card-bottom">
-                                <span class="tour-price-tag">From <strong>$199</strong> /person</span>
-                                <a href="<?= url('contact') ?>" class="btn btn-sm btn-tour">Inquire &#8594;</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tour-card-fancy">
-                <div class="tour-card-img lazy-bg" data-bg="https://images.unsplash.com/photo-1695571803214-9e6820bffce7?w=600&q=80&fm=webp">
-                    <div class="tour-card-overlay">
-                        <span class="tour-duration-badge">5 Days</span>
-                        <div class="tour-card-info">
-                            <h3>Ancient Temples & Monasteries</h3>
-                            <p>Visit Garni Temple, Geghard Monastery, Tatev, Noravank, and Khor Virap.</p>
-                            <div class="tour-card-bottom">
-                                <span class="tour-price-tag">From <strong>$349</strong> /person</span>
-                                <a href="<?= url('contact') ?>" class="btn btn-sm btn-tour">Inquire &#8594;</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tour-card-fancy">
-                <div class="tour-card-img lazy-bg" data-bg="https://plus.unsplash.com/premium_photo-1670552850982-abe0e83c4391?w=600&q=80&fm=webp">
-                    <div class="tour-card-overlay">
-                        <span class="tour-duration-badge">7 Days</span>
-                        <div class="tour-card-info">
-                            <h3>Grand Armenia Tour</h3>
-                            <p>Lake Sevan, Dilijan, Jermuk, wine tasting in Areni, and Silk Road trails.</p>
-                            <div class="tour-card-bottom">
-                                <span class="tour-price-tag">From <strong>$599</strong> /person</span>
-                                <a href="<?= url('contact') ?>" class="btn btn-sm btn-tour">Inquire &#8594;</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tour-card-fancy">
-                <div class="tour-card-img lazy-bg" data-bg="https://images.unsplash.com/photo-1624357485917-fbb18b951125?w=600&q=80&fm=webp">
-                    <div class="tour-card-overlay">
-                        <span class="tour-duration-badge">4 Days</span>
-                        <div class="tour-card-info">
-                            <h3>Adventure & Hiking</h3>
-                            <p>Trek through Dilijan National Park, Aragats summit, and Lastiver caves.</p>
-                            <div class="tour-card-bottom">
-                                <span class="tour-price-tag">From <strong>$279</strong> /person</span>
-                                <a href="<?= url('contact') ?>" class="btn btn-sm btn-tour">Inquire &#8594;</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tour-card-fancy">
-                <div class="tour-card-img lazy-bg" data-bg="https://images.unsplash.com/photo-1743366500405-6689bb916fd2?w=600&q=80&fm=webp">
-                    <div class="tour-card-overlay">
-                        <span class="tour-duration-badge">6 Days</span>
-                        <div class="tour-card-info">
-                            <h3>Wine & Gastronomy Trail</h3>
-                            <p>Areni wine, Armenian BBQ, lavash baking, and Ararat brandy tasting.</p>
-                            <div class="tour-card-bottom">
-                                <span class="tour-price-tag">From <strong>$449</strong> /person</span>
-                                <a href="<?= url('contact') ?>" class="btn btn-sm btn-tour">Inquire &#8594;</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
     </div>
 </section>
 

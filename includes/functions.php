@@ -38,15 +38,46 @@ function getContacts($pdo) {
 // --- Admin functions ---
 
 function loginAdmin($pdo, $username, $password) {
+    // Rate limiting
+    if (!checkLoginRate()) {
+        return false;
+    }
+
     $stmt = $pdo->prepare("SELECT * FROM admins WHERE username = ?");
     $stmt->execute([$username]);
     $admin = $stmt->fetch();
 
     if ($admin && password_verify($password, $admin['password'])) {
+        session_regenerate_id(true);
         $_SESSION['admin'] = $admin['username'];
+        resetLoginAttempts();
         return true;
     }
     return false;
+}
+
+function checkLoginRate() {
+    $ip = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+    $key = 'login_attempts_' . md5($ip);
+    $attempts = $_SESSION[$key] ?? ['count' => 0, 'time' => time()];
+
+    if (time() - $attempts['time'] > 900) {
+        $attempts = ['count' => 0, 'time' => time()];
+    }
+
+    if ($attempts['count'] >= 5) {
+        return false;
+    }
+
+    $attempts['count']++;
+    $_SESSION[$key] = $attempts;
+    return true;
+}
+
+function resetLoginAttempts() {
+    $ip = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+    $key = 'login_attempts_' . md5($ip);
+    unset($_SESSION[$key]);
 }
 
 function isAdmin() {

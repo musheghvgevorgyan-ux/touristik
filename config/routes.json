@@ -50,6 +50,21 @@
             "title": "Hotel Booking - Touristik",
             "auth": false
         },
+        "outgoing-tours": {
+            "file": "pages/outgoing-tours.php",
+            "title": "Outgoing Tours - Touristik",
+            "auth": false
+        },
+        "ingoing-tours": {
+            "file": "pages/ingoing-tours.php",
+            "title": "Ingoing Tours - Touristik",
+            "auth": false
+        },
+        "transfer": {
+            "file": "pages/transfer.php",
+            "title": "Transfer Services - Touristik",
+            "auth": false
+        },
         "404": {
             "file": "pages/404.php",
             "title": "Page Not Found - Wanderlust",

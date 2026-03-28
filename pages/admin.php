@@ -26,8 +26,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && verifyCsrf()) {
     }
 
     if (isset($_POST['save_settings'])) {
+        $allowedKeys = ['site_name', 'site_tagline', 'hero_title', 'hero_subtitle', 'contact_email', 'footer_text', 'items_per_page', 'maintenance_mode', 'ga_measurement_id'];
         foreach ($_POST['settings'] as $key => $value) {
-            updateSetting($pdo, $key, $value);
+            if (in_array($key, $allowedKeys)) {
+                updateSetting($pdo, htmlspecialchars($key), htmlspecialchars($value));
+            }
         }
         $adminMessage = '<div class="alert success" data-t="settings_saved">Settings updated successfully.</div>';
     }
@@ -111,7 +114,7 @@ $settings = getAllSettings($pdo);
                     <td><?= htmlspecialchars($contact['name']) ?></td>
                     <td><?= htmlspecialchars($contact['email']) ?></td>
                     <td><?= htmlspecialchars($contact['message']) ?></td>
-                    <td><?= $contact['created_at'] ?></td>
+                    <td><?= htmlspecialchars($contact['created_at']) ?></td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>

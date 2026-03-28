@@ -20,7 +20,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['select_hotel'])) {
 $step = 'checkrate'; // checkrate → confirm → voucher
 $rateKey = isset($_GET['rate_key']) ? urldecode($_GET['rate_key']) : '';
 $hotelName = isset($_GET['hotel_name']) ? urldecode($_GET['hotel_name']) : '';
-$rateType = isset($_GET['rate_type']) ? $_GET['rate_type'] : 'BOOKABLE';
+$allowedRateTypes = ['RECHECK', 'BOOKABLE'];
+$rateType = (isset($_GET['rate_type']) && in_array($_GET['rate_type'], $allowedRateTypes)) ? $_GET['rate_type'] : 'BOOKABLE';
 $error = '';
 $checkData = null;
 $bookingData = null;

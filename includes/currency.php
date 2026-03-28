@@ -1,7 +1,7 @@
 <?php
 function getCurrencyRates() {
     $cacheDir = __DIR__ . '/../cache';
-    if (!is_dir($cacheDir)) mkdir($cacheDir, 0755, true);
+    if (!is_dir($cacheDir)) mkdir($cacheDir, 0700, true);
     $cacheFile = $cacheDir . '/currency_rates.json';
 
     // Return cached rates if fresh (6 hours)
@@ -17,7 +17,7 @@ function getCurrencyRates() {
     // Fetch live rates from open.er-api.com (free, includes AMD)
     $ch = curl_init('https://open.er-api.com/v6/latest/USD');
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
     curl_setopt($ch, CURLOPT_TIMEOUT, 10);
     $response = curl_exec($ch);
     curl_close($ch);

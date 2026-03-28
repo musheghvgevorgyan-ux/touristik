@@ -9,7 +9,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login_submit']) && ve
     $username = trim($_POST['username']);
     $password = $_POST['password'];
 
-    if (loginAdmin($pdo, $username, $password)) {
+    if (!checkLoginRate()) {
+        $error = '<div class="alert error">Too many login attempts. Please wait 15 minutes.</div>';
+    } elseif (loginAdmin($pdo, $username, $password)) {
         header('Location: ' . url('admin'));
         exit;
     } else {
