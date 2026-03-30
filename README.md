@@ -68,6 +68,10 @@ The booking flow follows Hotelbeds certification requirements:
 - CSS/JS minification (auto-detected via `file_exists`)
 - Lazy background images with IntersectionObserver
 - Google Analytics 4 integrated (GA4 with enhanced measurement — page views, scrolls, outbound clicks)
+- Google Search Console verified, sitemap submitted
+- GZIP compression (mod_deflate) for all text-based assets
+- Browser caching headers (CSS/JS: 1 month, images: 1 year)
+- Hero image optimized (405KB → 252KB) with WebP alternative (184KB)
 - robots.txt configured
 
 ## Accessibility
