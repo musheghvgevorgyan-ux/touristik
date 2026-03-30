@@ -309,6 +309,14 @@ $bookings = ($activeTab === 'bookings') ? getBookings($pdo) : [];
         if ($htaccessExists) { $score++; $checks[] = ['pass', 'Security headers (.htaccess)']; }
         else { $checks[] = ['fail', 'Missing .htaccess']; }
 
+        // GZIP & Caching
+        $maxScore += 2;
+        $htContent = $htaccessExists ? file_get_contents($baseDir . '/.htaccess') : '';
+        if (strpos($htContent, 'mod_deflate') !== false) { $score++; $checks[] = ['pass', 'GZIP compression enabled']; }
+        else { $checks[] = ['fail', 'GZIP compression not configured in .htaccess']; }
+        if (strpos($htContent, 'mod_expires') !== false) { $score++; $checks[] = ['pass', 'Browser caching headers configured']; }
+        else { $checks[] = ['fail', 'Browser caching not configured in .htaccess']; }
+
         // PWA
         $maxScore += 2;
         if ($manifestExists) { $score++; $checks[] = ['pass', 'PWA manifest exists']; }

@@ -25,6 +25,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Touristik">
     <link rel="apple-touch-icon" href="img/icon-192.svg">
+    <link rel="preload" as="image" href="img/hero-bg.webp" type="image/webp">
     <link rel="stylesheet" href="css/styles<?= file_exists(__DIR__ . '/../css/styles.min.css') ? '.min' : '' ?>.css">
     <script type="application/ld+json">
     {
