@@ -19,6 +19,8 @@ Tourism booking website for **Touristik LLC** — a travel agency based in Yerev
 - **Breadcrumbs** — Navigation trail on all inner pages
 - **CSRF Protection** — Token-based protection on all POST forms
 - **Children Ages** — Dynamic age selection (1-17) for hotel search
+- **Email Notifications** — Booking confirmation to guest (with voucher link) + admin alert; contact form auto-reply to customer
+- **Google Analytics 4** — Enhanced measurement (page views, scrolls, outbound clicks), configurable via admin settings
 
 ## Hotel Booking (Hotelbeds API)
 
