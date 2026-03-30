@@ -65,7 +65,7 @@ The booking flow follows Hotelbeds certification requirements:
 - WebP image format for Unsplash images
 - CSS/JS minification (auto-detected via `file_exists`)
 - Lazy background images with IntersectionObserver
-- Google Analytics ready (set `ga_measurement_id` in admin settings)
+- Google Analytics 4 integrated (GA4 with enhanced measurement — page views, scrolls, outbound clicks)
 - robots.txt configured
 
 ## Accessibility

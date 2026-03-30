@@ -147,8 +147,15 @@ try {
             ('contact_email', 'info@wanderlust.com', 'Contact email address'),
             ('footer_text', '© 2026 Wanderlust Tourism. All rights reserved.', 'Footer copyright text'),
             ('items_per_page', '12', 'Number of items per page'),
-            ('maintenance_mode', '0', 'Enable maintenance mode (1=on, 0=off)')
+            ('maintenance_mode', '0', 'Enable maintenance mode (1=on, 0=off)'),
+            ('ga_measurement_id', '', 'Google Analytics Measurement ID (e.g. G-XXXXXXXXXX)')
         ");
+    }
+
+    // Ensure ga_measurement_id exists (for databases seeded before this was added)
+    $gaExists = $pdo->query("SELECT COUNT(*) FROM settings WHERE setting_key = 'ga_measurement_id'")->fetchColumn();
+    if ($gaExists == 0) {
+        $pdo->exec("INSERT INTO settings (setting_key, setting_value, description) VALUES ('ga_measurement_id', '', 'Google Analytics Measurement ID (e.g. G-XXXXXXXXXX)')");
     }
 
 } catch (PDOException $e) {
