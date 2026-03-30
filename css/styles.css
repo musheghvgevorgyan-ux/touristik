@@ -1562,6 +1562,127 @@ footer {
     color: #856404;
 }
 
+/* Performance */
+.perf-score-section {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+}
+
+.perf-score-circle {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 6px solid;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.perf-score-number {
+    font-size: 2.2rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.perf-score-label {
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.perf-score-text h4 {
+    margin: 0 0 0.3rem;
+    font-size: 1.3rem;
+    color: #203a43;
+}
+
+.perf-score-text p {
+    margin: 0;
+    color: #666;
+}
+
+.perf-section {
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+}
+
+.perf-section h4 {
+    margin: 0 0 1rem;
+    color: #203a43;
+    font-size: 1.1rem;
+}
+
+.perf-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.perf-item {
+    background: #fff;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.perf-label {
+    display: block;
+    font-size: 0.85rem;
+    color: #888;
+    margin-bottom: 0.3rem;
+}
+
+.perf-value {
+    display: block;
+    font-weight: 600;
+    color: #203a43;
+}
+
+.perf-checks {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.perf-check {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.7rem 1rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+}
+
+.perf-check-icon {
+    font-size: 1.1rem;
+    width: 1.5rem;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.perf-check-pass {
+    background: #d4edda;
+    color: #155724;
+}
+
+.perf-check-warn {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.perf-check-fail {
+    background: #f8d7da;
+    color: #721c24;
+}
+
 /* Settings */
 .setting-row {
     margin-bottom: 1.2rem;

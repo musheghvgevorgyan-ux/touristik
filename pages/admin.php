@@ -51,6 +51,7 @@ $bookings = ($activeTab === 'bookings') ? getBookings($pdo) : [];
         <a href="<?= url('admin', ['tab' => 'bookings']) ?>" class="tab <?= $activeTab === 'bookings' ? 'active' : '' ?>">Bookings</a>
         <a href="<?= url('admin', ['tab' => 'contacts']) ?>" class="tab <?= $activeTab === 'contacts' ? 'active' : '' ?>" data-t="messages">Messages</a>
         <a href="<?= url('admin', ['tab' => 'settings']) ?>" class="tab <?= $activeTab === 'settings' ? 'active' : '' ?>" data-t="settings">Settings</a>
+        <a href="<?= url('admin', ['tab' => 'performance']) ?>" class="tab <?= $activeTab === 'performance' ? 'active' : '' ?>">Performance</a>
     </div>
 
     <?php if ($activeTab === 'destinations'): ?>
@@ -107,11 +108,11 @@ $bookings = ($activeTab === 'bookings') ? getBookings($pdo) : [];
                 <span class="stat-label">Total Bookings</span>
             </div>
             <div class="stat-card">
-                <span class="stat-number"><?= count(array_filter($bookings, fn($b) => $b['status'] === 'CONFIRMED')) ?></span>
+                <span class="stat-number"><?= count(array_filter($bookings, function($b) { return $b['status'] === 'CONFIRMED'; })) ?></span>
                 <span class="stat-label">Confirmed</span>
             </div>
             <div class="stat-card">
-                <span class="stat-number"><?= count(array_filter($bookings, fn($b) => strtotime($b['check_in']) >= strtotime('today'))) ?></span>
+                <span class="stat-number"><?= count(array_filter($bookings, function($b) { return strtotime($b['check_in']) >= strtotime('today'); })) ?></span>
                 <span class="stat-label">Upcoming</span>
             </div>
         </div>
@@ -206,5 +207,184 @@ $bookings = ($activeTab === 'bookings') ? getBookings($pdo) : [];
             <button type="submit" name="save_settings" class="btn" data-t="save_settings_btn">Save Settings</button>
         </form>
     </div>
+    <?php elseif ($activeTab === 'performance'): ?>
+    <div class="admin-panel">
+        <h3>Site Performance & Health</h3>
+
+        <?php
+        $baseDir = __DIR__ . '/..';
+
+        // Server info
+        $phpVersion = phpversion();
+        $mysqlVersion = $pdo->query("SELECT VERSION()")->fetchColumn();
+
+        // File sizes
+        $cssFile = $baseDir . '/css/styles.css';
+        $cssMinFile = $baseDir . '/css/styles.min.css';
+        $jsFile = $baseDir . '/js/script.js';
+        $jsMinFile = $baseDir . '/js/script.min.js';
+        $cssSize = file_exists($cssFile) ? filesize($cssFile) : 0;
+        $cssMinSize = file_exists($cssMinFile) ? filesize($cssMinFile) : 0;
+        $jsSize = file_exists($jsFile) ? filesize($jsFile) : 0;
+        $jsMinSize = file_exists($jsMinFile) ? filesize($jsMinFile) : 0;
+        $heroImg = $baseDir . '/img/hero-bg.jpg';
+        $heroSize = file_exists($heroImg) ? filesize($heroImg) : 0;
+
+        // Cache status
+        $currencyCache = $baseDir . '/cache/currency_rates.json';
+        $currencyCacheOk = file_exists($currencyCache);
+        $currencyCacheAge = $currencyCacheOk ? (time() - filemtime($currencyCache)) : 0;
+
+        // Database stats
+        $destCount = $pdo->query("SELECT COUNT(*) FROM destinations")->fetchColumn();
+        $contactCount = $pdo->query("SELECT COUNT(*) FROM contacts")->fetchColumn();
+        $bookingCount = $pdo->query("SELECT COUNT(*) FROM bookings")->fetchColumn();
+        $flightCount = $pdo->query("SELECT COUNT(*) FROM flight_prices")->fetchColumn();
+
+        // SEO checks
+        $sitemapExists = file_exists($baseDir . '/sitemap.php');
+        $robotsExists = file_exists($baseDir . '/robots.txt');
+        $manifestExists = file_exists($baseDir . '/manifest.json');
+        $swExists = file_exists($baseDir . '/sw.js');
+        $htaccessExists = file_exists($baseDir . '/.htaccess');
+        $gaId = getSetting($pdo, 'ga_measurement_id', '');
+
+        // Format bytes
+        function formatBytes($bytes) {
+            if ($bytes >= 1048576) return round($bytes / 1048576, 2) . ' MB';
+            if ($bytes >= 1024) return round($bytes / 1024, 1) . ' KB';
+            return $bytes . ' B';
+        }
+
+        // Score calculation
+        $score = 0;
+        $maxScore = 0;
+        $checks = [];
+
+        // Minification
+        $maxScore += 2;
+        if ($cssMinSize > 0) { $score++; $checks[] = ['pass', 'CSS minified (' . formatBytes($cssMinSize) . ')']; }
+        else { $checks[] = ['fail', 'CSS not minified — run terser/csso to create styles.min.css']; }
+        if ($jsMinSize > 0) { $score++; $checks[] = ['pass', 'JS minified (' . formatBytes($jsMinSize) . ')']; }
+        else { $checks[] = ['fail', 'JS not minified — run terser to create script.min.js']; }
+
+        // Minification savings
+        $maxScore += 2;
+        if ($cssMinSize > 0 && $cssSize > 0) {
+            $cssSaving = round((1 - $cssMinSize / $cssSize) * 100);
+            if ($cssSaving >= 20) { $score++; $checks[] = ['pass', "CSS savings: {$cssSaving}% smaller"]; }
+            else { $checks[] = ['warn', "CSS savings only {$cssSaving}% — consider optimizing"]; }
+        }
+        if ($jsMinSize > 0 && $jsSize > 0) {
+            $jsSaving = round((1 - $jsMinSize / $jsSize) * 100);
+            if ($jsSaving >= 20) { $score++; $checks[] = ['pass', "JS savings: {$jsSaving}% smaller"]; }
+            else { $checks[] = ['warn', "JS savings only {$jsSaving}% — consider optimizing"]; }
+        }
+
+        // Hero image
+        $maxScore++;
+        if ($heroSize > 0 && $heroSize < 500000) { $score++; $checks[] = ['pass', 'Hero image: ' . formatBytes($heroSize)]; }
+        elseif ($heroSize >= 500000) { $checks[] = ['warn', 'Hero image is large: ' . formatBytes($heroSize) . ' — consider compressing']; }
+        else { $checks[] = ['pass', 'No local hero image']; $score++; }
+
+        // Cache
+        $maxScore++;
+        if ($currencyCacheOk && $currencyCacheAge < 43200) {
+            $ageHours = round($currencyCacheAge / 3600, 1);
+            $score++; $checks[] = ['pass', "Currency cache active ({$ageHours}h old)"];
+        } elseif ($currencyCacheOk) {
+            $checks[] = ['warn', 'Currency cache stale (' . round($currencyCacheAge / 3600) . 'h old)'];
+        } else {
+            $checks[] = ['fail', 'No currency cache — rates fetched every request'];
+        }
+
+        // SEO
+        $maxScore += 4;
+        if ($sitemapExists) { $score++; $checks[] = ['pass', 'Sitemap exists (sitemap.php)']; }
+        else { $checks[] = ['fail', 'Missing sitemap.php']; }
+        if ($robotsExists) { $score++; $checks[] = ['pass', 'robots.txt exists']; }
+        else { $checks[] = ['fail', 'Missing robots.txt']; }
+        if ($gaId) { $score++; $checks[] = ['pass', 'Google Analytics connected (' . htmlspecialchars($gaId) . ')']; }
+        else { $checks[] = ['fail', 'Google Analytics not configured']; }
+        if ($htaccessExists) { $score++; $checks[] = ['pass', 'Security headers (.htaccess)']; }
+        else { $checks[] = ['fail', 'Missing .htaccess']; }
+
+        // PWA
+        $maxScore += 2;
+        if ($manifestExists) { $score++; $checks[] = ['pass', 'PWA manifest exists']; }
+        else { $checks[] = ['fail', 'Missing manifest.json']; }
+        if ($swExists) { $score++; $checks[] = ['pass', 'Service worker exists']; }
+        else { $checks[] = ['fail', 'Missing sw.js']; }
+
+        $scorePercent = $maxScore > 0 ? round(($score / $maxScore) * 100) : 0;
+        $scoreColor = $scorePercent >= 80 ? '#28a745' : ($scorePercent >= 60 ? '#f18f01' : '#dc3545');
+        ?>
+
+        <!-- Health Score -->
+        <div class="perf-score-section">
+            <div class="perf-score-circle" style="border-color: <?= $scoreColor ?>">
+                <span class="perf-score-number" style="color: <?= $scoreColor ?>"><?= $scorePercent ?></span>
+                <span class="perf-score-label">/ 100</span>
+            </div>
+            <div class="perf-score-text">
+                <h4>Health Score</h4>
+                <p><?= $score ?> / <?= $maxScore ?> checks passed</p>
+            </div>
+        </div>
+
+        <!-- Server Info -->
+        <div class="perf-section">
+            <h4>Server Information</h4>
+            <div class="perf-grid">
+                <div class="perf-item"><span class="perf-label">PHP Version</span><span class="perf-value"><?= $phpVersion ?></span></div>
+                <div class="perf-item"><span class="perf-label">MySQL Version</span><span class="perf-value"><?= $mysqlVersion ?></span></div>
+                <div class="perf-item"><span class="perf-label">Server Software</span><span class="perf-value"><?= htmlspecialchars($_SERVER['SERVER_SOFTWARE'] ?? 'Unknown') ?></span></div>
+            </div>
+        </div>
+
+        <!-- File Sizes -->
+        <div class="perf-section">
+            <h4>File Sizes</h4>
+            <div class="perf-grid">
+                <div class="perf-item">
+                    <span class="perf-label">CSS</span>
+                    <span class="perf-value"><?= formatBytes($cssSize) ?><?= $cssMinSize ? ' (min: ' . formatBytes($cssMinSize) . ')' : '' ?></span>
+                </div>
+                <div class="perf-item">
+                    <span class="perf-label">JavaScript</span>
+                    <span class="perf-value"><?= formatBytes($jsSize) ?><?= $jsMinSize ? ' (min: ' . formatBytes($jsMinSize) . ')' : '' ?></span>
+                </div>
+                <div class="perf-item">
+                    <span class="perf-label">Hero Image</span>
+                    <span class="perf-value"><?= $heroSize > 0 ? formatBytes($heroSize) : 'None' ?></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Database -->
+        <div class="perf-section">
+            <h4>Database</h4>
+            <div class="perf-grid">
+                <div class="perf-item"><span class="perf-label">Destinations</span><span class="perf-value"><?= $destCount ?> records</span></div>
+                <div class="perf-item"><span class="perf-label">Bookings</span><span class="perf-value"><?= $bookingCount ?> records</span></div>
+                <div class="perf-item"><span class="perf-label">Contact Messages</span><span class="perf-value"><?= $contactCount ?> records</span></div>
+                <div class="perf-item"><span class="perf-label">Flight Routes</span><span class="perf-value"><?= $flightCount ?> records</span></div>
+            </div>
+        </div>
+
+        <!-- Checks -->
+        <div class="perf-section">
+            <h4>Health Checks</h4>
+            <div class="perf-checks">
+                <?php foreach ($checks as $check): ?>
+                <div class="perf-check perf-check-<?= $check[0] ?>">
+                    <span class="perf-check-icon"><?= $check[0] === 'pass' ? '&#10003;' : ($check[0] === 'warn' ? '&#9888;' : '&#10007;') ?></span>
+                    <span><?= $check[1] ?></span>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+
     <?php endif; ?>
 </section>
