@@ -45,6 +45,20 @@ body {
     line-height: 1.6;
     background: var(--bg-primary);
     transition: background 0.3s, color 0.3s;
+    cursor: default;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+/* Allow text selection in inputs, textareas, and content that users may want to copy */
+input, textarea, select,
+.admin-table td, .admin-table th,
+p, .contact-info a {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    user-select: text;
+    cursor: auto;
 }
 
 /* Page Loader */

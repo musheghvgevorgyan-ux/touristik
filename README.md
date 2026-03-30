@@ -10,7 +10,7 @@ Tourism booking website for **Touristik LLC** — a travel agency based in Yerev
 - **Hotel Booking Flow** — Full Hotelbeds integration: Availability → CheckRate → Booking → Voucher (certification-ready)
 - **Flight Search** — Autocomplete city inputs with IATA codes, local price database
 - **Visa Support** — Invitation letters, e-visa assistance, fast processing info
-- **Multi-language** — English, Russian, Armenian (data-t attribute translation system)
+- **Multi-language** — English, Russian, Armenian — full site translation (data-t/data-tp attributes), including admin panel, bookings, confirm dialogs
 - **Currency Switcher** — USD, EUR, AMD, RUB with live exchange rates (open.er-api.com, 6h cache)
 - **Dark Mode** — Toggle with localStorage persistence, CSS custom properties theming
 - **PWA** — Installable on mobile, service worker with offline fallback page
@@ -172,10 +172,19 @@ The site is deployed to **touristik.am** via Internet.am hosting (cPanel).
 Access via `/index.php?page=admin` after logging in:
 
 - **Destinations** — Add/delete travel destinations with images
-- **Bookings** — View all hotel bookings (reference, guest, hotel, dates, price, status) with stats
+- **Bookings** — View all hotel bookings (reference, guest, hotel, dates, price, status) with stats — fully translated
 - **Messages** — View contact form submissions
 - **Settings** — Edit site name, tagline, hero text, footer, GA tracking ID
 - **Performance** — Health score, server info, file sizes, database stats, cache status, SEO/PWA checks
+
+## Deployment Notes
+
+**Important:** The `config/` folder on production has **different credentials** than local. Never overwrite these files on the server:
+- `config/database.json` — production DB credentials (`touristi_TouristikLLC`)
+- `config/hotelbeds.json` — API keys
+- `config/travelpayouts.json` — API token
+
+When deploying, only upload code files. If `config/` files are missing on production, create them manually with production credentials via cPanel File Manager.
 
 ## Contact
 

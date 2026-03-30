@@ -82,10 +82,10 @@ $bookings = ($activeTab === 'bookings') ? getBookings($pdo) : [];
 
     <div class="admin-tabs">
         <a href="<?= url('admin', ['tab' => 'destinations']) ?>" class="tab <?= $activeTab === 'destinations' ? 'active' : '' ?>" data-t="destinations">Destinations</a>
-        <a href="<?= url('admin', ['tab' => 'bookings']) ?>" class="tab <?= $activeTab === 'bookings' ? 'active' : '' ?>">Bookings</a>
+        <a href="<?= url('admin', ['tab' => 'bookings']) ?>" class="tab <?= $activeTab === 'bookings' ? 'active' : '' ?>" data-t="tab_bookings">Bookings</a>
         <a href="<?= url('admin', ['tab' => 'contacts']) ?>" class="tab <?= $activeTab === 'contacts' ? 'active' : '' ?>" data-t="messages">Messages</a>
         <a href="<?= url('admin', ['tab' => 'settings']) ?>" class="tab <?= $activeTab === 'settings' ? 'active' : '' ?>" data-t="settings">Settings</a>
-        <a href="<?= url('admin', ['tab' => 'performance']) ?>" class="tab <?= $activeTab === 'performance' ? 'active' : '' ?>">Performance</a>
+        <a href="<?= url('admin', ['tab' => 'performance']) ?>" class="tab <?= $activeTab === 'performance' ? 'active' : '' ?>" data-t="tab_performance">Performance</a>
     </div>
 
     <?php if ($activeTab === 'destinations'): ?>
@@ -121,7 +121,7 @@ $bookings = ($activeTab === 'bookings') ? getBookings($pdo) : [];
                         <form method="POST" action="<?= url('admin', ['tab' => 'destinations']) ?>" style="display:inline">
                             <?= csrfField() ?>
                             <input type="hidden" name="destination_id" value="<?= $dest['id'] ?>">
-                            <button type="submit" name="delete_destination" class="btn btn-danger" data-t="delete_btn" onclick="return confirm('Delete this destination?')">Delete</button>
+                            <button type="submit" name="delete_destination" class="btn btn-danger" data-t="delete_btn" onclick="return confirm((translations[localStorage.getItem('lang')||'en']||translations.en).confirm_delete)">Delete</button>
                         </form>
                     </td>
                 </tr>
@@ -132,37 +132,37 @@ $bookings = ($activeTab === 'bookings') ? getBookings($pdo) : [];
 
     <?php elseif ($activeTab === 'bookings'): ?>
     <div class="admin-panel">
-        <h3>Hotel Bookings</h3>
+        <h3 data-t="booking_title">Hotel Bookings</h3>
         <?php if (empty($bookings)): ?>
-            <p>No bookings yet.</p>
+            <p data-t="booking_no_bookings">No bookings yet.</p>
         <?php else: ?>
         <div class="bookings-stats">
             <div class="stat-card">
                 <span class="stat-number"><?= count($bookings) ?></span>
-                <span class="stat-label">Total Bookings</span>
+                <span class="stat-label" data-t="booking_total">Total Bookings</span>
             </div>
             <div class="stat-card">
                 <span class="stat-number"><?= count(array_filter($bookings, function($b) { return $b['status'] === 'CONFIRMED'; })) ?></span>
-                <span class="stat-label">Confirmed</span>
+                <span class="stat-label" data-t="booking_confirmed">Confirmed</span>
             </div>
             <div class="stat-card">
                 <span class="stat-number"><?= count(array_filter($bookings, function($b) { return strtotime($b['check_in']) >= strtotime('today'); })) ?></span>
-                <span class="stat-label">Upcoming</span>
+                <span class="stat-label" data-t="booking_upcoming">Upcoming</span>
             </div>
         </div>
         <div class="admin-table-wrapper">
         <table class="admin-table">
             <thead>
                 <tr>
-                    <th>Reference</th>
-                    <th>Hotel</th>
-                    <th>Guest</th>
-                    <th>Check-in</th>
-                    <th>Check-out</th>
-                    <th>Price</th>
-                    <th>Status</th>
-                    <th>Booked</th>
-                    <th>Actions</th>
+                    <th data-t="booking_reference">Reference</th>
+                    <th data-t="booking_hotel">Hotel</th>
+                    <th data-t="booking_guest">Guest</th>
+                    <th data-t="booking_checkin">Check-in</th>
+                    <th data-t="booking_checkout">Check-out</th>
+                    <th data-t="th_price">Price</th>
+                    <th data-t="booking_status">Status</th>
+                    <th data-t="booking_booked">Booked</th>
+                    <th data-t="th_actions">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -186,10 +186,10 @@ $bookings = ($activeTab === 'bookings') ? getBookings($pdo) : [];
                     <td><?= date('M d, Y H:i', strtotime($booking['created_at'])) ?></td>
                     <td>
                         <?php if (strtoupper($booking['status']) === 'CONFIRMED'): ?>
-                        <form method="POST" action="<?= url('admin', ['tab' => 'bookings']) ?>" style="display:inline" onsubmit="return confirm('Cancel booking <?= htmlspecialchars($booking['reference']) ?>? This cannot be undone and cancellation fees may apply.')">
+                        <form method="POST" action="<?= url('admin', ['tab' => 'bookings']) ?>" style="display:inline" onsubmit="return confirm((translations[localStorage.getItem('lang')||'en']||translations.en).confirm_cancel_booking)">
                             <?= csrfField() ?>
                             <input type="hidden" name="booking_ref" value="<?= htmlspecialchars($booking['reference']) ?>">
-                            <button type="submit" name="cancel_booking" class="btn btn-danger">Cancel</button>
+                            <button type="submit" name="cancel_booking" class="btn btn-danger" data-t="cancel_btn">Cancel</button>
                         </form>
                         <?php else: ?>
                         <span style="color:#888">-</span>
