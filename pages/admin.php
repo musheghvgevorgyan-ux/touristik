@@ -39,6 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && verifyCsrf()) {
 $destinations = getDestinations($pdo);
 $contacts = getContacts($pdo);
 $settings = getAllSettings($pdo);
+$bookings = ($activeTab === 'bookings') ? getBookings($pdo) : [];
 ?>
 
 <section class="admin-section">
@@ -47,6 +48,7 @@ $settings = getAllSettings($pdo);
 
     <div class="admin-tabs">
         <a href="<?= url('admin', ['tab' => 'destinations']) ?>" class="tab <?= $activeTab === 'destinations' ? 'active' : '' ?>" data-t="destinations">Destinations</a>
+        <a href="<?= url('admin', ['tab' => 'bookings']) ?>" class="tab <?= $activeTab === 'bookings' ? 'active' : '' ?>">Bookings</a>
         <a href="<?= url('admin', ['tab' => 'contacts']) ?>" class="tab <?= $activeTab === 'contacts' ? 'active' : '' ?>" data-t="messages">Messages</a>
         <a href="<?= url('admin', ['tab' => 'settings']) ?>" class="tab <?= $activeTab === 'settings' ? 'active' : '' ?>" data-t="settings">Settings</a>
     </div>
@@ -91,6 +93,67 @@ $settings = getAllSettings($pdo);
                 <?php endforeach; ?>
             </tbody>
         </table>
+    </div>
+
+    <?php elseif ($activeTab === 'bookings'): ?>
+    <div class="admin-panel">
+        <h3>Hotel Bookings</h3>
+        <?php if (empty($bookings)): ?>
+            <p>No bookings yet.</p>
+        <?php else: ?>
+        <div class="bookings-stats">
+            <div class="stat-card">
+                <span class="stat-number"><?= count($bookings) ?></span>
+                <span class="stat-label">Total Bookings</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number"><?= count(array_filter($bookings, fn($b) => $b['status'] === 'CONFIRMED')) ?></span>
+                <span class="stat-label">Confirmed</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number"><?= count(array_filter($bookings, fn($b) => strtotime($b['check_in']) >= strtotime('today'))) ?></span>
+                <span class="stat-label">Upcoming</span>
+            </div>
+        </div>
+        <div class="admin-table-wrapper">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Reference</th>
+                    <th>Hotel</th>
+                    <th>Guest</th>
+                    <th>Check-in</th>
+                    <th>Check-out</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                    <th>Booked</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($bookings as $booking): ?>
+                <tr>
+                    <td><strong><?= htmlspecialchars($booking['reference']) ?></strong></td>
+                    <td><?= htmlspecialchars($booking['hotel_name']) ?></td>
+                    <td>
+                        <?= htmlspecialchars($booking['guest_name']) ?>
+                        <?php if ($booking['guest_email']): ?>
+                            <br><small><?= htmlspecialchars($booking['guest_email']) ?></small>
+                        <?php endif; ?>
+                        <?php if ($booking['guest_phone']): ?>
+                            <br><small><?= htmlspecialchars($booking['guest_phone']) ?></small>
+                        <?php endif; ?>
+                    </td>
+                    <td><?= $booking['check_in'] ? date('M d, Y', strtotime($booking['check_in'])) : '-' ?></td>
+                    <td><?= $booking['check_out'] ? date('M d, Y', strtotime($booking['check_out'])) : '-' ?></td>
+                    <td><?= htmlspecialchars($booking['currency']) ?> <?= number_format($booking['total_price'], 2) ?></td>
+                    <td><span class="booking-status status-<?= strtolower($booking['status']) ?>"><?= htmlspecialchars($booking['status']) ?></span></td>
+                    <td><?= date('M d, Y H:i', strtotime($booking['created_at'])) ?></td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+        </div>
+        <?php endif; ?>
     </div>
 
     <?php elseif ($activeTab === 'contacts'): ?>

@@ -35,6 +35,40 @@ function getContacts($pdo) {
     return $stmt->fetchAll();
 }
 
+// --- Booking functions ---
+
+function saveBooking($pdo, $data) {
+    $stmt = $pdo->prepare("INSERT INTO bookings (reference, client_reference, hotel_name, guest_name, guest_email, guest_phone, check_in, check_out, rooms, currency, total_price, status, raw_response)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE status = VALUES(status), total_price = VALUES(total_price)");
+    return $stmt->execute([
+        $data['reference'] ?? '',
+        $data['client_reference'] ?? '',
+        $data['hotel_name'] ?? '',
+        $data['guest_name'] ?? '',
+        $data['guest_email'] ?? '',
+        $data['guest_phone'] ?? '',
+        $data['check_in'] ?? null,
+        $data['check_out'] ?? null,
+        $data['rooms'] ?? 1,
+        $data['currency'] ?? 'EUR',
+        $data['total_price'] ?? 0,
+        $data['status'] ?? 'CONFIRMED',
+        $data['raw_response'] ?? '',
+    ]);
+}
+
+function getBookings($pdo) {
+    $stmt = $pdo->query("SELECT * FROM bookings ORDER BY created_at DESC");
+    return $stmt->fetchAll();
+}
+
+function getBookingByRef($pdo, $ref) {
+    $stmt = $pdo->prepare("SELECT * FROM bookings WHERE reference = ?");
+    $stmt->execute([$ref]);
+    return $stmt->fetch();
+}
+
 // --- Admin functions ---
 
 function loginAdmin($pdo, $username, $password) {

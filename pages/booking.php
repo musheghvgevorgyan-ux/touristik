@@ -121,8 +121,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_booking']) &&
                 // Save to session for voucher page
                 $_SESSION['last_booking'] = $bookingData;
 
-                // Send booking confirmation emails
+                // Save booking to database
                 $guestEmail = filter_var(trim($_POST['holder_email'] ?? ''), FILTER_VALIDATE_EMAIL);
+                $guestPhone = trim($_POST['holder_phone'] ?? '');
+                saveBooking($pdo, [
+                    'reference' => $bookingData['reference'] ?? '',
+                    'client_reference' => $bookingData['client_reference'] ?? '',
+                    'hotel_name' => $bookingData['hotel'] ?? $hotelName,
+                    'guest_name' => $holder['name'] . ' ' . $holder['surname'],
+                    'guest_email' => $guestEmail ?: '',
+                    'guest_phone' => $guestPhone,
+                    'check_in' => $bookingData['check_in'] ?? null,
+                    'check_out' => $bookingData['check_out'] ?? null,
+                    'rooms' => count($bookingData['rooms'] ?? [1]),
+                    'currency' => $bookingData['currency'] ?? 'EUR',
+                    'total_price' => $bookingData['total_net'] ?? $bookingData['total_selling'] ?? 0,
+                    'status' => $bookingData['status'] ?? 'CONFIRMED',
+                    'raw_response' => json_encode($bookingData),
+                ]);
+
+                // Send booking confirmation emails
                 $adminEmail = getSetting($pdo, 'contact_email', '');
                 $hotelNameEmail = htmlspecialchars($bookingData['hotel'] ?? $hotelName);
                 $ref = htmlspecialchars($bookingData['reference'] ?? '');

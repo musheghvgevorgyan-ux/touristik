@@ -106,6 +106,26 @@ try {
         ");
     }
 
+    // Bookings table for tracking hotel reservations
+    $pdo->exec("CREATE TABLE IF NOT EXISTS bookings (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        reference VARCHAR(100) NOT NULL,
+        client_reference VARCHAR(100) DEFAULT '',
+        hotel_name VARCHAR(255) NOT NULL,
+        guest_name VARCHAR(200) NOT NULL,
+        guest_email VARCHAR(200) DEFAULT '',
+        guest_phone VARCHAR(50) DEFAULT '',
+        check_in DATE,
+        check_out DATE,
+        rooms INT DEFAULT 1,
+        currency VARCHAR(10) DEFAULT 'EUR',
+        total_price DECIMAL(10,2) DEFAULT 0,
+        status VARCHAR(50) DEFAULT 'CONFIRMED',
+        raw_response TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE KEY booking_ref (reference)
+    )");
+
     // Settings table for site-wide configuration
     $pdo->exec("CREATE TABLE IF NOT EXISTS settings (
         id INT AUTO_INCREMENT PRIMARY KEY,
