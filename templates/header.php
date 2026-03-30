@@ -8,6 +8,12 @@
     <meta property="og:title" content="<?= htmlspecialchars($pageTitle) ?>">
     <meta property="og:description" content="Explore the world with Touristik. Flights, hotels, Armenia tours, and visa support.">
     <meta property="og:type" content="website">
+    <meta property="og:image" content="https://touristik.am/img/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="https://touristik.am/">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://touristik.am/img/og-image.jpg">
     <?php $gaId = getSetting($pdo, 'ga_measurement_id', ''); if ($gaId): ?>
     <script async src="https://www.googletagmanager.com/gtag/js?id=<?= htmlspecialchars($gaId) ?>"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','<?= htmlspecialchars($gaId) ?>');</script>
