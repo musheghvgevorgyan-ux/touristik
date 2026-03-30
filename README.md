@@ -161,8 +161,10 @@ The site is deployed to **touristik.am** via Internet.am hosting (cPanel).
 Access via `/index.php?page=admin` after logging in:
 
 - **Destinations** — Add/delete travel destinations with images
+- **Bookings** — View all hotel bookings (reference, guest, hotel, dates, price, status) with stats
 - **Messages** — View contact form submissions
 - **Settings** — Edit site name, tagline, hero text, footer, GA tracking ID
+- **Performance** — Health score, server info, file sizes, database stats, cache status, SEO/PWA checks
 
 ## Contact
 
