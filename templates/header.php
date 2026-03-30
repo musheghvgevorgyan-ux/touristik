@@ -78,7 +78,7 @@
         ],
         "sameAs": [
             "https://www.instagram.com/touristik.am/",
-            "https://www.facebook.com/touristik.am",
+            "https://www.facebook.com/touristik.travell",
             "https://t.me/touristikam"
         ],
         "areaServed": "Worldwide",
