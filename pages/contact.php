@@ -10,12 +10,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit']) && 
 
         // Send email notification
         $adminEmail = getSetting($pdo, 'contact_email', '');
+        $mailHeaders = "From: info@touristik.am\r\nReply-To: info@touristik.am\r\nContent-Type: text/plain; charset=UTF-8";
+
+        // Notify admin
         if ($adminEmail && filter_var($adminEmail, FILTER_VALIDATE_EMAIL)) {
-            $subject = "New Contact from Touristik: " . $name;
-            $body = "Name: $name\nEmail: $email\n\nMessage:\n$msg";
-            $headers = "From: $email\r\nReply-To: $email\r\nContent-Type: text/plain; charset=UTF-8";
-            @mail($adminEmail, $subject, $body, $headers);
+            $adminBody = "New Contact Message\n\nName: $name\nEmail: $email\n\nMessage:\n$msg";
+            $adminHeaders = "From: info@touristik.am\r\nReply-To: $email\r\nContent-Type: text/plain; charset=UTF-8";
+            @mail($adminEmail, "New Contact from Touristik: $name", $adminBody, $adminHeaders);
         }
+
+        // Auto-reply to customer
+        $replyBody = "Dear $name,\n\n"
+            . "Thank you for contacting Touristik Travel Club!\n\n"
+            . "We have received your message and will get back to you within 24 hours.\n\n"
+            . "Your message:\n\"$msg\"\n\n"
+            . "Best regards,\nTouristik Travel Club\n"
+            . "Phone: +374 33 060 609\n"
+            . "Website: https://touristik.am";
+        @mail($email, "We received your message - Touristik Travel Club", $replyBody, $mailHeaders);
 
         $message = '<div class="alert success" data-t="contact_success">Thank you! We will get back to you soon.</div>';
     } else {

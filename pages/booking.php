@@ -120,6 +120,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_booking']) &&
                 $bookingData = $bookResult['booking'];
                 // Save to session for voucher page
                 $_SESSION['last_booking'] = $bookingData;
+
+                // Send booking confirmation emails
+                $guestEmail = filter_var(trim($_POST['holder_email'] ?? ''), FILTER_VALIDATE_EMAIL);
+                $adminEmail = getSetting($pdo, 'contact_email', '');
+                $hotelNameEmail = htmlspecialchars($bookingData['hotel'] ?? $hotelName);
+                $ref = htmlspecialchars($bookingData['reference'] ?? '');
+                $checkIn = $bookingData['check_in'] ?? '';
+                $checkOut = $bookingData['check_out'] ?? '';
+                $guestName = htmlspecialchars($holder['name'] . ' ' . $holder['surname']);
+                $status = $bookingData['status'] ?? 'CONFIRMED';
+
+                $emailBody = "Booking Confirmed!\n\n"
+                    . "Reference: $ref\n"
+                    . "Hotel: $hotelNameEmail\n"
+                    . "Guest: $guestName\n"
+                    . "Check-in: $checkIn\n"
+                    . "Check-out: $checkOut\n"
+                    . "Status: $status\n\n"
+                    . "View your voucher at: https://touristik.am/index.php?page=booking&ref=" . urlencode($bookingData['reference'] ?? '') . "\n\n"
+                    . "Thank you for booking with Touristik Travel Club!\n"
+                    . "Phone: +374 33 060 609\n"
+                    . "Email: info@touristik.am";
+
+                $emailHeaders = "From: info@touristik.am\r\nReply-To: info@touristik.am\r\nContent-Type: text/plain; charset=UTF-8";
+
+                // Email to guest
+                if ($guestEmail) {
+                    @mail($guestEmail, "Booking Confirmation - $ref | Touristik", $emailBody, $emailHeaders);
+                }
+
+                // Email to admin
+                if ($adminEmail && filter_var($adminEmail, FILTER_VALIDATE_EMAIL)) {
+                    $adminBody = "New Booking Received!\n\n"
+                        . "Reference: $ref\n"
+                        . "Hotel: $hotelNameEmail\n"
+                        . "Guest: $guestName\n"
+                        . "Email: " . ($guestEmail ?: 'Not provided') . "\n"
+                        . "Phone: " . htmlspecialchars(trim($_POST['holder_phone'] ?? 'Not provided')) . "\n"
+                        . "Check-in: $checkIn\n"
+                        . "Check-out: $checkOut\n"
+                        . "Status: $status";
+                    @mail($adminEmail, "New Booking: $ref - $hotelNameEmail", $adminBody, $emailHeaders);
+                }
+
                 // Clear rate data
                 unset($_SESSION['booking_rate'], $_SESSION['booking_rate_key']);
             } else {
