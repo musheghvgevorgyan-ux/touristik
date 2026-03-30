@@ -1,3 +1,9 @@
+// Scroll to top on page load
+if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+}
+window.scrollTo(0, 0);
+
 // Forward declaration so currency code can reference it before full definition
 var translations = {};
 

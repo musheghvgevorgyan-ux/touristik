@@ -35,6 +35,25 @@ if ($currentPage === 'home') {
     $pageTitle = $siteName . ' - ' . getSetting($pdo, 'site_tagline', 'Discover the World');
 }
 
+// Handle redirects before any output
+if ($currentPage === 'logout') {
+    session_destroy();
+    header('Location: ' . url('home'));
+    exit;
+}
+if ($currentPage === 'login' && isAdmin()) {
+    header('Location: ' . url('admin'));
+    exit;
+}
+if ($currentPage === 'login' && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login_submit']) && verifyCsrf()) {
+    $username = trim($_POST['username']);
+    $password = $_POST['password'];
+    if (checkLoginRate() && loginAdmin($pdo, $username, $password)) {
+        header('Location: ' . url('admin'));
+        exit;
+    }
+}
+
 // Render the page
 require_once 'templates/header.php';
 require $route['file'];
