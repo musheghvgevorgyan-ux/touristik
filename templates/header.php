@@ -87,8 +87,7 @@
     </div>
     <header>
         <nav aria-label="Main navigation">
-            <div class="logo"><a href="<?= url('home') ?>"><?= htmlspecialchars(getSetting($pdo, 'site_name', 'Touristik Travel
-            ')) ?></a></div>
+            <div class="logo"><a href="<?= url('home') ?>"><img src="img/logo-transparent.png" alt="<?= htmlspecialchars(getSetting($pdo, 'site_name', 'Touristik Travel Club')) ?>" class="logo-img"></a></div>
             <button class="hamburger" id="hamburger" aria-label="Menu">
                 <span></span><span></span><span></span>
             </button>

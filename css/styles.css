@@ -161,6 +161,17 @@ nav {
     letter-spacing: 1px;
 }
 
+.logo-img {
+    max-height: 40px;
+    width: auto;
+    vertical-align: middle;
+    transition: opacity 0.3s;
+}
+
+.logo-img:hover {
+    opacity: 0.85;
+}
+
 .nav-links {
     display: flex;
     gap: 2rem;
