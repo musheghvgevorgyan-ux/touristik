@@ -300,6 +300,13 @@ if (isset($_GET['ref']) && !$bookingData) {
                     </div>
                 <?php endif; ?>
 
+                <?php if (!empty($checkData['rate']['rateComments'])): ?>
+                    <div class="booking-rate-comments">
+                        <h5>&#128196; Important Information</h5>
+                        <p><?= nl2br(htmlspecialchars($checkData['rate']['rateComments'])) ?></p>
+                    </div>
+                <?php endif; ?>
+
                 <div class="booking-total">
                     <span>Total Price</span>
                     <span class="booking-total-price"><?= htmlspecialchars($checkData['rate']['currency']) ?> <?= number_format($checkData['rate']['net'], 2) ?></span>

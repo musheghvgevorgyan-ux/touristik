@@ -25,6 +25,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && verifyCsrf()) {
         $adminMessage = '<div class="alert success" data-t="dest_deleted">Destination deleted.</div>';
     }
 
+    if (isset($_POST['cancel_booking'])) {
+        $ref = trim($_POST['booking_ref'] ?? '');
+        if ($ref) {
+            require_once __DIR__ . '/../includes/hotelbeds.php';
+            $cancelResult = hbCancelBooking($ref);
+            if ($cancelResult['success']) {
+                // Update status in database
+                $stmt = $pdo->prepare("UPDATE bookings SET status = 'CANCELLED' WHERE reference = ?");
+                $stmt->execute([$ref]);
+
+                // Send cancellation email to guest
+                $booking = getBookingByRef($pdo, $ref);
+                if ($booking && $booking['guest_email']) {
+                    $emailBody = "Booking Cancelled\n\n"
+                        . "Reference: " . $ref . "\n"
+                        . "Hotel: " . $booking['hotel_name'] . "\n"
+                        . "Guest: " . $booking['guest_name'] . "\n"
+                        . "Check-in: " . $booking['check_in'] . "\n"
+                        . "Check-out: " . $booking['check_out'] . "\n\n"
+                        . "Your booking has been cancelled. If you have any questions, please contact us.\n\n"
+                        . "Touristik Travel Club\n"
+                        . "Phone: +374 33 060 609\n"
+                        . "Email: info@touristik.am";
+                    $headers = "From: info@touristik.am\r\nReply-To: info@touristik.am\r\nContent-Type: text/plain; charset=UTF-8";
+                    @mail($booking['guest_email'], "Booking Cancelled - $ref | Touristik", $emailBody, $headers);
+                }
+
+                $adminMessage = '<div class="alert success">Booking ' . htmlspecialchars($ref) . ' cancelled successfully.</div>';
+            } else {
+                $adminMessage = '<div class="alert error">Cancellation failed: ' . htmlspecialchars($cancelResult['error']) . '</div>';
+            }
+        }
+    }
+
     if (isset($_POST['save_settings'])) {
         $allowedKeys = ['site_name', 'site_tagline', 'hero_title', 'hero_subtitle', 'contact_email', 'footer_text', 'items_per_page', 'maintenance_mode', 'ga_measurement_id'];
         foreach ($_POST['settings'] as $key => $value) {
@@ -128,6 +162,7 @@ $bookings = ($activeTab === 'bookings') ? getBookings($pdo) : [];
                     <th>Price</th>
                     <th>Status</th>
                     <th>Booked</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -149,6 +184,17 @@ $bookings = ($activeTab === 'bookings') ? getBookings($pdo) : [];
                     <td><?= htmlspecialchars($booking['currency']) ?> <?= number_format($booking['total_price'], 2) ?></td>
                     <td><span class="booking-status status-<?= strtolower($booking['status']) ?>"><?= htmlspecialchars($booking['status']) ?></span></td>
                     <td><?= date('M d, Y H:i', strtotime($booking['created_at'])) ?></td>
+                    <td>
+                        <?php if (strtoupper($booking['status']) === 'CONFIRMED'): ?>
+                        <form method="POST" action="<?= url('admin', ['tab' => 'bookings']) ?>" style="display:inline" onsubmit="return confirm('Cancel booking <?= htmlspecialchars($booking['reference']) ?>? This cannot be undone and cancellation fees may apply.')">
+                            <?= csrfField() ?>
+                            <input type="hidden" name="booking_ref" value="<?= htmlspecialchars($booking['reference']) ?>">
+                            <button type="submit" name="cancel_booking" class="btn btn-danger">Cancel</button>
+                        </form>
+                        <?php else: ?>
+                        <span style="color:#888">-</span>
+                        <?php endif; ?>
+                    </td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>

@@ -148,7 +148,7 @@ if ($coords && $depart && $returnDate && $returnDate > $depart) {
                 ]
             ];
 
-            $ch = curl_init('https://api.test.hotelbeds.com/hotel-api/1.0/hotels');
+            $ch = curl_init(hbBaseUrl() . '/hotels');
             curl_setopt_array($ch, [
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_POST => true,
@@ -264,7 +264,8 @@ if ($coords && $depart && $returnDate && $returnDate > $depart) {
                     if (!empty($hotelCodes)) {
                         $sigContent = hash('sha256', $apiKey . $apiSecret . time());
                         $codesParam = implode(',', $hotelCodes);
-                        $contentUrl = "https://api.test.hotelbeds.com/hotel-content-api/1.0/hotels?codes={$codesParam}&fields=images&language=ENG";
+                        $contentBase = (hbConfig()['environment'] ?? 'test') === 'live' ? 'https://api.hotelbeds.com' : 'https://api.test.hotelbeds.com';
+                        $contentUrl = "{$contentBase}/hotel-content-api/1.0/hotels?codes={$codesParam}&fields=images&language=ENG";
                         $chImg = curl_init($contentUrl);
                         curl_setopt_array($chImg, [
                             CURLOPT_RETURNTRANSFER => true,
@@ -552,9 +553,10 @@ if ($coords && $depart && $returnDate && $returnDate > $depart) {
                                 </div>
                                 <div class="hotel-price-section">
                                     <div class="hotel-price">
-                                        <span class="hotel-price-value"><?= htmlspecialchars($hotel['currency']) ?> <?= number_format($hotel['price'], 2) ?></span>
+                                        <?php $displayPrice = (!empty($hotel['hotel_mandatory']) && $hotel['selling_rate'] > 0) ? $hotel['selling_rate'] : $hotel['price']; ?>
+                                        <span class="hotel-price-value"><?= htmlspecialchars($hotel['currency']) ?> <?= number_format($displayPrice, 2) ?></span>
                                         <span class="hotel-price-detail">total for <?= $hotel['nights'] ?> night<?= $hotel['nights'] > 1 ? 's' : '' ?></span>
-                                        <span class="hotel-price-pernight"><?= htmlspecialchars($hotel['currency']) ?> <?= number_format($hotel['price_per_night'], 2) ?> / night</span>
+                                        <span class="hotel-price-pernight"><?= htmlspecialchars($hotel['currency']) ?> <?= number_format(round($displayPrice / max($hotel['nights'], 1), 2), 2) ?> / night</span>
                                     </div>
                                     <form method="POST" action="<?= url('booking', ['rate_key' => urlencode($hotel['rate_key']), 'hotel_name' => urlencode($hotel['name']), 'rate_type' => $hotel['rate_type']]) ?>" style="display:inline">
                                         <input type="hidden" name="hotel_data" value="<?= htmlspecialchars(json_encode($hotel)) ?>">

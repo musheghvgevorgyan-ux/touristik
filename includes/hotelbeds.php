@@ -8,6 +8,14 @@ function hbConfig() {
     return $config;
 }
 
+function hbBaseUrl() {
+    $config = hbConfig();
+    $env = $config['environment'] ?? 'test';
+    return $env === 'live'
+        ? 'https://api.hotelbeds.com/hotel-api/1.0'
+        : 'https://api.test.hotelbeds.com/hotel-api/1.0';
+}
+
 function hbSignature($apiKey, $apiSecret) {
     return hash('sha256', $apiKey . $apiSecret . time());
 }
@@ -62,7 +70,7 @@ function hbCheckRate($rateKey) {
         ]
     ];
 
-    $result = hbRequest('POST', 'https://api.test.hotelbeds.com/hotel-api/1.0/checkrates', $config['api_key'], $config['api_secret'], $body);
+    $result = hbRequest('POST', hbBaseUrl() . '/checkrates', $config['api_key'], $config['api_secret'], $body);
 
     if ($result['code'] === 200 && !empty($result['body']['hotel'])) {
         $hotel = $result['body']['hotel'];
@@ -137,7 +145,7 @@ function hbBook($rateKey, $holder, $rooms) {
         $body['rooms'][] = $roomData;
     }
 
-    $result = hbRequest('POST', 'https://api.test.hotelbeds.com/hotel-api/1.0/bookings', $config['api_key'], $config['api_secret'], $body);
+    $result = hbRequest('POST', hbBaseUrl() . '/bookings', $config['api_key'], $config['api_secret'], $body);
 
     if ($result['code'] === 200 && !empty($result['body']['booking'])) {
         $booking = $result['body']['booking'];
@@ -181,7 +189,7 @@ function hbGetBooking($reference) {
     $config = hbConfig();
     if (!$config) return ['success' => false, 'error' => 'API not configured'];
 
-    $result = hbRequest('GET', 'https://api.test.hotelbeds.com/hotel-api/1.0/bookings/' . urlencode($reference), $config['api_key'], $config['api_secret']);
+    $result = hbRequest('GET', hbBaseUrl() . '/bookings/' . urlencode($reference), $config['api_key'], $config['api_secret']);
 
     if ($result['code'] === 200 && !empty($result['body']['booking'])) {
         return ['success' => true, 'booking' => $result['body']['booking']];
@@ -197,7 +205,7 @@ function hbCancelBooking($reference) {
     $config = hbConfig();
     if (!$config) return ['success' => false, 'error' => 'API not configured'];
 
-    $result = hbRequest('DELETE', 'https://api.test.hotelbeds.com/hotel-api/1.0/bookings/' . urlencode($reference) . '?cancellationFlag=CANCELLATION', $config['api_key'], $config['api_secret']);
+    $result = hbRequest('DELETE', hbBaseUrl() . '/bookings/' . urlencode($reference) . '?cancellationFlag=CANCELLATION', $config['api_key'], $config['api_secret']);
 
     if ($result['code'] === 200 && !empty($result['body']['booking'])) {
         return ['success' => true, 'booking' => $result['body']['booking']];
