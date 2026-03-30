@@ -29,12 +29,19 @@ The booking flow follows Hotelbeds certification requirements:
 1. **Availability** (`/hotels`) — Geolocation search with GZIP, filters, children ages as paxes
 2. **CheckRate** (`/checkrates`) — Only called when `rateType = RECHECK`
 3. **Booking** (`/bookings`) — 60s timeout, holder + pax details, client reference
-4. **Voucher** — Printable confirmation with all mandatory fields:
+4. **Cancellation** (`DELETE /bookings`) — Cancel from admin panel with confirmation + email notification
+5. **Voucher** — Printable confirmation with all mandatory fields:
    - Hotel name, category, address, destination, phone
    - Booking reference + agency reference
    - Check-in/out dates, room type, board type
    - Guest names, cancellation policies, rate comments
    - Payment text: "Payable through [Supplier], acting as agent..."
+
+**Certification compliance:**
+- Opaque/packaging rates filtered out (`packaging: true` skipped)
+- Selling rates displayed when `hotelMandatory` is true
+- Rate comments shown before booking confirmation
+- API environment configurable (`test` / `live`) via `config/hotelbeds.json`
 
 ## Animations
 
