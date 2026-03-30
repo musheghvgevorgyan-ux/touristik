@@ -59,26 +59,28 @@ $heroSubtitle = getSetting($pdo, 'hero_subtitle', 'Discover breathtaking destina
                 <label data-t="return_date">Return</label>
                 <input type="date" name="return_date" value="<?= date('Y-m-d', strtotime('+14 days')) ?>">
             </div>
-            <div class="search-field persons-field">
-                <label data-t="adults">Adults</label>
-                <select name="adults">
-                    <option value="1">1</option>
-                    <option value="2" selected>2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6+</option>
-                </select>
-            </div>
-            <div class="search-field persons-field">
-                <label data-t="children">Children</label>
-                <select name="children" id="childrenSelect">
-                    <option value="0" selected>0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                </select>
+            <div class="persons-row">
+                <div class="search-field persons-field">
+                    <label data-t="adults">Adults</label>
+                    <select name="adults">
+                        <option value="1">1</option>
+                        <option value="2" selected>2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6+</option>
+                    </select>
+                </div>
+                <div class="search-field persons-field">
+                    <label data-t="children">Children</label>
+                    <select name="children" id="childrenSelect">
+                        <option value="0" selected>0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>
+                </div>
             </div>
             <div class="children-ages" id="childrenAges" style="display:none;">
                 <label>Ages</label>
