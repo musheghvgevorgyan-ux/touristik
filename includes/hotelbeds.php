@@ -108,8 +108,14 @@ function hbCheckRate($rateKey) {
         ];
     }
 
-    $errorMsg = $result['body']['error']['message'] ?? 'Rate is no longer available. Please search again.';
-    return ['success' => false, 'error' => $errorMsg];
+    // 400 = bad request (fix your request), 500 = product unavailable (restart search)
+    $errorMsg = $result['body']['error']['message'] ?? '';
+    if ($result['code'] >= 500) {
+        $errorMsg = $errorMsg ?: 'Rate is no longer available. Please search again.';
+        return ['success' => false, 'error' => $errorMsg, 'restart' => true];
+    }
+    $errorMsg = $errorMsg ?: 'CheckRate failed. Please try again.';
+    return ['success' => false, 'error' => $errorMsg, 'restart' => false];
 }
 
 /**
@@ -178,8 +184,14 @@ function hbBook($rateKey, $holder, $rooms) {
         ];
     }
 
-    $errorMsg = $result['body']['error']['message'] ?? 'Booking failed. Please try again.';
-    return ['success' => false, 'error' => $errorMsg];
+    // 400 = bad request (don't retry same request), 500 = unavailable (restart from search)
+    $errorMsg = $result['body']['error']['message'] ?? '';
+    if ($result['code'] >= 500) {
+        $errorMsg = $errorMsg ?: 'This hotel is no longer available. Please search again.';
+        return ['success' => false, 'error' => $errorMsg, 'restart' => true];
+    }
+    $errorMsg = $errorMsg ?: 'Booking failed. Please check your details and try again.';
+    return ['success' => false, 'error' => $errorMsg, 'restart' => false];
 }
 
 /**
