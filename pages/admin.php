@@ -38,18 +38,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && verifyCsrf()) {
                 // Send cancellation email to guest
                 $booking = getBookingByRef($pdo, $ref);
                 if ($booking && $booking['guest_email']) {
-                    $emailBody = "Booking Cancelled\n\n"
-                        . "Reference: " . $ref . "\n"
-                        . "Hotel: " . $booking['hotel_name'] . "\n"
-                        . "Guest: " . $booking['guest_name'] . "\n"
-                        . "Check-in: " . $booking['check_in'] . "\n"
-                        . "Check-out: " . $booking['check_out'] . "\n\n"
-                        . "Your booking has been cancelled. If you have any questions, please contact us.\n\n"
-                        . "Touristik Travel Club\n"
-                        . "Phone: +374 33 060 609\n"
-                        . "Email: info@touristik.am";
-                    $headers = "From: info@touristik.am\r\nReply-To: info@touristik.am\r\nContent-Type: text/plain; charset=UTF-8";
-                    @mail($booking['guest_email'], "Booking Cancelled - $ref | Touristik", $emailBody, $headers);
+                    $cancelHtml = '<p style="margin:0 0 15px;">Dear <strong>' . htmlspecialchars($booking['guest_name']) . '</strong>,</p>'
+                        . '<p style="margin:0 0 20px;">Your booking has been cancelled. Details below:</p>'
+                        . '<table width="100%" cellpadding="8" cellspacing="0" style="border:1px solid #e0e0e0;border-radius:6px;border-collapse:collapse;margin-bottom:20px;">'
+                        . '<tr style="background:#f8f9fa;"><td style="border-bottom:1px solid #e0e0e0;font-weight:600;width:140px;color:#203a43;">Reference</td><td style="border-bottom:1px solid #e0e0e0;">' . htmlspecialchars($ref) . '</td></tr>'
+                        . '<tr><td style="border-bottom:1px solid #e0e0e0;font-weight:600;color:#203a43;">Hotel</td><td style="border-bottom:1px solid #e0e0e0;">' . htmlspecialchars($booking['hotel_name']) . '</td></tr>'
+                        . '<tr style="background:#f8f9fa;"><td style="border-bottom:1px solid #e0e0e0;font-weight:600;color:#203a43;">Check-in</td><td style="border-bottom:1px solid #e0e0e0;">' . htmlspecialchars($booking['check_in']) . '</td></tr>'
+                        . '<tr><td style="border-bottom:1px solid #e0e0e0;font-weight:600;color:#203a43;">Check-out</td><td style="border-bottom:1px solid #e0e0e0;">' . htmlspecialchars($booking['check_out']) . '</td></tr>'
+                        . '<tr style="background:#f8f9fa;"><td style="font-weight:600;color:#203a43;">Status</td><td><span style="background:#dc3545;color:#fff;padding:3px 10px;border-radius:4px;font-size:13px;">CANCELLED</span></td></tr>'
+                        . '</table>'
+                        . '<p style="margin:0;">If you have any questions, please do not hesitate to contact us.</p>';
+                    sendHtmlEmail($booking['guest_email'], "Booking Cancelled - $ref | Touristik", emailTemplate('Booking Cancelled', $cancelHtml));
                 }
 
                 $adminMessage = '<div class="alert success">Booking ' . htmlspecialchars($ref) . ' cancelled successfully.</div>';

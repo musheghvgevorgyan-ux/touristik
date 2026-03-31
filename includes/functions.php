@@ -163,3 +163,46 @@ function url($page = 'home', $params = []) {
     $query = http_build_query(array_merge(['page' => $page], $params));
     return 'index.php?' . $query;
 }
+
+// --- HTML Email ---
+
+function emailTemplate($title, $contentHtml, $footerExtra = '') {
+    $extra = $footerExtra ? '<tr><td style="padding:0 40px 20px;text-align:center;">' . $footerExtra . '</td></tr>' : '';
+    return '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>' . htmlspecialchars($title) . '</title></head>'
+        . '<body style="margin:0;padding:0;background:#f4f4f4;font-family:\'Segoe UI\',Tahoma,Geneva,Verdana,sans-serif;">'
+        . '<table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f4;"><tr><td align="center" style="padding:20px 10px;">'
+        . '<table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.1);">'
+        // Header
+        . '<tr><td style="background:linear-gradient(135deg,#0f2027 0%,#203a43 50%,#2c5364 100%);padding:30px 40px;text-align:center;">'
+        . '<h1 style="margin:0;color:#ffffff;font-size:24px;font-weight:700;letter-spacing:1px;">&#9992; Touristik Travel Club</h1>'
+        . '</td></tr>'
+        // Title bar
+        . '<tr><td style="background:#f18f01;padding:12px 40px;text-align:center;">'
+        . '<h2 style="margin:0;color:#ffffff;font-size:18px;font-weight:600;">' . htmlspecialchars($title) . '</h2>'
+        . '</td></tr>'
+        // Content
+        . '<tr><td style="padding:30px 40px;color:#333333;font-size:15px;line-height:1.7;">'
+        . $contentHtml
+        . '</td></tr>'
+        . $extra
+        // Divider
+        . '<tr><td style="padding:0 40px;"><hr style="border:none;border-top:1px solid #e0e0e0;"></td></tr>'
+        // Footer
+        . '<tr><td style="padding:20px 40px 30px;color:#888888;font-size:13px;line-height:1.8;">'
+        . '<p style="margin:0 0 8px;font-weight:600;color:#203a43;">Touristik Travel Club</p>'
+        . '<p style="margin:0;">Phone: +374 33 060 609 | +374 55 060 609</p>'
+        . '<p style="margin:0;">Email: info@touristik.am</p>'
+        . '<p style="margin:0;">Website: <a href="https://touristik.am" style="color:#f18f01;text-decoration:none;">touristik.am</a></p>'
+        . '<p style="margin:10px 0 0;font-size:12px;color:#aaa;">Branches: Komitas 38 &bull; Mashtots 7/6 &bull; Arshakunyats 34 (Yerevan Mall, 2nd floor)</p>'
+        . '</td></tr>'
+        . '</table></td></tr></table></body></html>';
+}
+
+function sendHtmlEmail($to, $subject, $htmlBody, $replyTo = '') {
+    $from = 'info@touristik.am';
+    $headers  = "From: $from\r\n";
+    $headers .= "Reply-To: " . ($replyTo ?: $from) . "\r\n";
+    $headers .= "MIME-Version: 1.0\r\n";
+    $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+    return @mail($to, $subject, $htmlBody, $headers);
+}

@@ -149,37 +149,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_booking']) &&
                 $guestName = htmlspecialchars($holder['name'] . ' ' . $holder['surname']);
                 $status = $bookingData['status'] ?? 'CONFIRMED';
 
-                $emailBody = "Booking Confirmed!\n\n"
-                    . "Reference: $ref\n"
-                    . "Hotel: $hotelNameEmail\n"
-                    . "Guest: $guestName\n"
-                    . "Check-in: $checkIn\n"
-                    . "Check-out: $checkOut\n"
-                    . "Status: $status\n\n"
-                    . "View your voucher at: https://touristik.am/index.php?page=booking&ref=" . urlencode($bookingData['reference'] ?? '') . "\n\n"
-                    . "Thank you for booking with Touristik Travel Club!\n"
-                    . "Phone: +374 33 060 609\n"
-                    . "Email: info@touristik.am";
-
-                $emailHeaders = "From: info@touristik.am\r\nReply-To: info@touristik.am\r\nContent-Type: text/plain; charset=UTF-8";
+                $infoRow = function($label, $value, $alt = false) {
+                    $bg = $alt ? 'background:#f8f9fa;' : '';
+                    return '<tr style="' . $bg . '"><td style="border-bottom:1px solid #e0e0e0;font-weight:600;width:140px;color:#203a43;">' . $label . '</td><td style="border-bottom:1px solid #e0e0e0;">' . $value . '</td></tr>';
+                };
+                $table = '<table width="100%" cellpadding="8" cellspacing="0" style="border:1px solid #e0e0e0;border-radius:6px;border-collapse:collapse;margin-bottom:20px;">'
+                    . $infoRow('Reference', $ref, true) . $infoRow('Hotel', $hotelNameEmail)
+                    . $infoRow('Check-in', $checkIn, true) . $infoRow('Check-out', $checkOut)
+                    . '<tr style="background:#f8f9fa;"><td style="font-weight:600;color:#203a43;">Status</td><td><span style="background:#28a745;color:#fff;padding:3px 10px;border-radius:4px;font-size:13px;">' . $status . '</span></td></tr></table>';
 
                 // Email to guest
                 if ($guestEmail) {
-                    @mail($guestEmail, "Booking Confirmation - $ref | Touristik", $emailBody, $emailHeaders);
+                    $guestHtml = '<p style="margin:0 0 15px;">Dear <strong>' . $guestName . '</strong>,</p>'
+                        . '<p style="margin:0 0 20px;">Your booking has been confirmed. Here are your reservation details:</p>'
+                        . $table . '<p style="margin:0;">Thank you for booking with Touristik Travel Club!</p>';
+                    $voucherUrl = 'https://touristik.am/index.php?page=booking&ref=' . urlencode($bookingData['reference'] ?? '');
+                    $cta = '<a href="' . $voucherUrl . '" style="display:inline-block;background:#f18f01;color:#ffffff;padding:12px 30px;border-radius:6px;text-decoration:none;font-weight:600;font-size:15px;">View Your Voucher</a>';
+                    sendHtmlEmail($guestEmail, "Booking Confirmation - $ref | Touristik", emailTemplate('Booking Confirmation', $guestHtml, $cta));
                 }
 
                 // Email to admin
                 if ($adminEmail && filter_var($adminEmail, FILTER_VALIDATE_EMAIL)) {
-                    $adminBody = "New Booking Received!\n\n"
-                        . "Reference: $ref\n"
-                        . "Hotel: $hotelNameEmail\n"
-                        . "Guest: $guestName\n"
-                        . "Email: " . ($guestEmail ?: 'Not provided') . "\n"
-                        . "Phone: " . htmlspecialchars(trim($_POST['holder_phone'] ?? 'Not provided')) . "\n"
-                        . "Check-in: $checkIn\n"
-                        . "Check-out: $checkOut\n"
-                        . "Status: $status";
-                    @mail($adminEmail, "New Booking: $ref - $hotelNameEmail", $adminBody, $emailHeaders);
+                    $guestPhone = htmlspecialchars(trim($_POST['holder_phone'] ?? 'Not provided'));
+                    $adminHtml = '<p style="margin:0 0 15px;font-size:16px;font-weight:600;color:#203a43;">A new booking has been received.</p>'
+                        . '<table width="100%" cellpadding="8" cellspacing="0" style="border:1px solid #e0e0e0;border-radius:6px;border-collapse:collapse;margin-bottom:15px;">'
+                        . $infoRow('Reference', $ref, true) . $infoRow('Hotel', $hotelNameEmail)
+                        . $infoRow('Guest', $guestName, true) . $infoRow('Email', $guestEmail ?: 'Not provided')
+                        . $infoRow('Phone', $guestPhone, true) . $infoRow('Check-in', $checkIn)
+                        . $infoRow('Check-out', $checkOut, true)
+                        . '<tr><td style="font-weight:600;color:#203a43;">Status</td><td>' . $status . '</td></tr></table>';
+                    sendHtmlEmail($adminEmail, "New Booking: $ref - $hotelNameEmail", emailTemplate('New Booking Received', $adminHtml));
                 }
 
                 // Clear rate data

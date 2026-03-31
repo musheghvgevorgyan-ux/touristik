@@ -138,15 +138,23 @@ try {
     // Seed default destinations
     $count = $pdo->query("SELECT COUNT(*) FROM destinations")->fetchColumn();
     if ($count == 0) {
-        $pdo->exec("INSERT INTO destinations (name, description, price, color, emoji) VALUES
-            ('Paris, France', 'The City of Light awaits with iconic landmarks, world-class cuisine, and timeless romance.', 899, '#2e86ab', '&#9968;'),
-            ('Tokyo, Japan', 'Experience the perfect blend of ancient tradition and cutting-edge modernity.', 1199, '#a23b72', '&#9961;'),
-            ('Bali, Indonesia', 'Tropical paradise with stunning temples, lush rice terraces, and pristine beaches.', 749, '#f18f01', '&#127796;'),
-            ('Rome, Italy', 'Walk through millennia of history among ancient ruins, fountains, and piazzas.', 949, '#c73e1d', '&#127963;'),
-            ('New York, USA', 'The city that never sleeps offers endless entertainment, dining, and culture.', 699, '#3b1f2b', '&#127747;'),
-            ('Maldives', 'Crystal-clear waters, overwater villas, and unforgettable sunsets await you.', 1499, '#119da4', '&#9978;')
+        $pdo->exec("INSERT INTO destinations (name, description, price, color, emoji, image_url) VALUES
+            ('Paris, France', 'The City of Light awaits with iconic landmarks, world-class cuisine, and timeless romance.', 899, '#2e86ab', '&#9968;', 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&q=80&fm=webp'),
+            ('Tokyo, Japan', 'Experience the perfect blend of ancient tradition and cutting-edge modernity.', 1199, '#a23b72', '&#9961;', 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&q=80&fm=webp'),
+            ('Bali, Indonesia', 'Tropical paradise with stunning temples, lush rice terraces, and pristine beaches.', 749, '#f18f01', '&#127796;', 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600&q=80&fm=webp'),
+            ('Rome, Italy', 'Walk through millennia of history among ancient ruins, fountains, and piazzas.', 949, '#c73e1d', '&#127963;', 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=600&q=80&fm=webp'),
+            ('New York, USA', 'The city that never sleeps offers endless entertainment, dining, and culture.', 699, '#3b1f2b', '&#127747;', 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=600&q=80&fm=webp'),
+            ('Maldives', 'Crystal-clear waters, overwater villas, and unforgettable sunsets await you.', 1499, '#119da4', '&#9978;', 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=600&q=80&fm=webp')
         ");
     }
+
+    // Update existing destinations that have no image
+    $pdo->exec("UPDATE destinations SET image_url = 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&q=80&fm=webp' WHERE name = 'Paris, France' AND (image_url = '' OR image_url IS NULL)");
+    $pdo->exec("UPDATE destinations SET image_url = 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&q=80&fm=webp' WHERE name = 'Tokyo, Japan' AND (image_url = '' OR image_url IS NULL)");
+    $pdo->exec("UPDATE destinations SET image_url = 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600&q=80&fm=webp' WHERE name = 'Bali, Indonesia' AND (image_url = '' OR image_url IS NULL)");
+    $pdo->exec("UPDATE destinations SET image_url = 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=600&q=80&fm=webp' WHERE name = 'Rome, Italy' AND (image_url = '' OR image_url IS NULL)");
+    $pdo->exec("UPDATE destinations SET image_url = 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=600&q=80&fm=webp' WHERE name = 'New York, USA' AND (image_url = '' OR image_url IS NULL)");
+    $pdo->exec("UPDATE destinations SET image_url = 'https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=600&q=80&fm=webp' WHERE name = 'Maldives' AND (image_url = '' OR image_url IS NULL)");
 
     // Seed default admin
     $adminCount = $pdo->query("SELECT COUNT(*) FROM admins")->fetchColumn();

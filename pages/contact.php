@@ -10,24 +10,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_submit']) && 
 
         // Send email notification
         $adminEmail = getSetting($pdo, 'contact_email', '');
-        $mailHeaders = "From: info@touristik.am\r\nReply-To: info@touristik.am\r\nContent-Type: text/plain; charset=UTF-8";
 
         // Notify admin
         if ($adminEmail && filter_var($adminEmail, FILTER_VALIDATE_EMAIL)) {
-            $adminBody = "New Contact Message\n\nName: $name\nEmail: $email\n\nMessage:\n$msg";
-            $adminHeaders = "From: info@touristik.am\r\nReply-To: $email\r\nContent-Type: text/plain; charset=UTF-8";
-            @mail($adminEmail, "New Contact from Touristik: $name", $adminBody, $adminHeaders);
+            $adminHtml = '<p style="margin:0 0 15px;font-weight:600;color:#203a43;">New contact form submission:</p>'
+                . '<table width="100%" cellpadding="8" cellspacing="0" style="border:1px solid #e0e0e0;border-radius:6px;border-collapse:collapse;margin-bottom:15px;">'
+                . '<tr style="background:#f8f9fa;"><td style="border-bottom:1px solid #e0e0e0;font-weight:600;width:100px;">Name</td><td style="border-bottom:1px solid #e0e0e0;">' . $name . '</td></tr>'
+                . '<tr><td style="font-weight:600;">Email</td><td><a href="mailto:' . $email . '" style="color:#f18f01;">' . $email . '</a></td></tr>'
+                . '</table>'
+                . '<div style="background:#f8f9fa;padding:15px 20px;border-radius:6px;border-left:4px solid #f18f01;">'
+                . '<p style="margin:0;font-weight:600;color:#203a43;margin-bottom:8px;">Message:</p>'
+                . '<p style="margin:0;white-space:pre-wrap;">' . nl2br($msg) . '</p></div>';
+            sendHtmlEmail($adminEmail, "New Contact from Touristik: $name", emailTemplate('New Contact Message', $adminHtml), $email);
         }
 
         // Auto-reply to customer
-        $replyBody = "Dear $name,\n\n"
-            . "Thank you for contacting Touristik Travel Club!\n\n"
-            . "We have received your message and will get back to you within 24 hours.\n\n"
-            . "Your message:\n\"$msg\"\n\n"
-            . "Best regards,\nTouristik Travel Club\n"
-            . "Phone: +374 33 060 609\n"
-            . "Website: https://touristik.am";
-        @mail($email, "We received your message - Touristik Travel Club", $replyBody, $mailHeaders);
+        $replyHtml = '<p style="margin:0 0 15px;">Dear <strong>' . $name . '</strong>,</p>'
+            . '<p style="margin:0 0 15px;">Thank you for contacting Touristik Travel Club!</p>'
+            . '<p style="margin:0 0 20px;">We have received your message and will get back to you within 24 hours.</p>'
+            . '<div style="background:#f8f9fa;padding:15px 20px;border-radius:6px;border-left:4px solid #2c5364;margin-bottom:20px;">'
+            . '<p style="margin:0;font-weight:600;color:#203a43;margin-bottom:8px;">Your message:</p>'
+            . '<p style="margin:0;font-style:italic;color:#555;">&ldquo;' . nl2br($msg) . '&rdquo;</p></div>'
+            . '<p style="margin:0;">Best regards,<br><strong>Touristik Travel Club</strong></p>';
+        sendHtmlEmail($email, "We received your message - Touristik Travel Club", emailTemplate('Message Received', $replyHtml));
 
         $message = '<div class="alert success" data-t="contact_success">Thank you! We will get back to you soon.</div>';
     } else {
