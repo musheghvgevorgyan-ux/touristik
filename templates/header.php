@@ -99,7 +99,14 @@
             </button>
             <ul class="nav-links">
                 <li><a href="<?= url('home') ?>" <?= $currentPage === 'home' ? 'class="active"' : '' ?> data-t="home">Home</a></li>
-                <li><a href="<?= url('tours') ?>" <?= in_array($currentPage, ['tours','ingoing-tours','outgoing-tours','transfer']) ? 'class="active"' : '' ?> data-t="tours_nav">Tours</a></li>
+                <li class="nav-dropdown">
+                    <a href="<?= url('tours') ?>" <?= in_array($currentPage, ['tours','ingoing-tours','outgoing-tours','transfer']) ? 'class="active"' : '' ?> data-t="tours_nav">Tours <span class="nav-arrow">&#9662;</span></a>
+                    <ul class="nav-submenu">
+                        <li><a href="<?= url('ingoing-tours') ?>" <?= $currentPage === 'ingoing-tours' ? 'class="active"' : '' ?> data-t="tour_cat_ingoing">Ingoing Tours</a></li>
+                        <li><a href="<?= url('outgoing-tours') ?>" <?= $currentPage === 'outgoing-tours' ? 'class="active"' : '' ?> data-t="tour_cat_outgoing">Outgoing Tours</a></li>
+                        <li><a href="<?= url('transfer') ?>" <?= $currentPage === 'transfer' ? 'class="active"' : '' ?> data-t="tour_cat_transfer">Transfer</a></li>
+                    </ul>
+                </li>
                 <li><a href="<?= url('destinations') ?>" <?= $currentPage === 'destinations' ? 'class="active"' : '' ?> data-t="destinations">Destinations</a></li>
                 <li><a href="<?= url('about') ?>" <?= $currentPage === 'about' ? 'class="active"' : '' ?> data-t="about">About</a></li>
                 <li><a href="<?= url('contact') ?>" <?= $currentPage === 'contact' ? 'class="active"' : '' ?> data-t="contact">Contact</a></li>

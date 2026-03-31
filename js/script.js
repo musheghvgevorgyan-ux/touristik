@@ -169,6 +169,18 @@ window.addEventListener('load', function () {
         navLinks.classList.toggle('open');
     });
 
+    // Mobile dropdown toggle for Tours submenu
+    var dropdownLink = navLinks.querySelector('.nav-dropdown > a');
+    var submenu = navLinks.querySelector('.nav-submenu');
+    if (dropdownLink && submenu) {
+        dropdownLink.addEventListener('click', function (e) {
+            if (window.innerWidth <= 768) {
+                e.preventDefault();
+                submenu.classList.toggle('open');
+            }
+        });
+    }
+
     // Close menu when a nav link is clicked
     navLinks.querySelectorAll('a').forEach(function (link) {
         link.addEventListener('click', closeMenu);
@@ -796,7 +808,28 @@ translations = {
         booking_status: 'Status', booking_booked: 'Booked',
         cancel_btn: 'Cancel',
         confirm_delete: 'Delete this destination?',
-        confirm_cancel_booking: 'Cancel this booking? This cannot be undone and cancellation fees may apply.'
+        confirm_cancel_booking: 'Cancel this booking? This cannot be undone and cancellation fees may apply.',
+        // Tours page
+        tours_nav: 'Tours',
+        tours_page_subtitle: 'Discover Armenia, explore the world, or book a comfortable transfer',
+        tours_ingoing_desc: 'Explore the beauty of Armenia with our guided tours \u2014 from ancient temples and monasteries to scenic hikes and wine trails.',
+        tours_outgoing_desc: 'Travel the world with Touristik \u2014 curated packages to Europe, USA, Asia and beyond with flights and accommodation included.',
+        tours_transfer_desc: 'Comfortable airport pickups, VIP transfers, and day-trip transportation across Armenia at fixed prices.',
+        tours_featured: 'Featured Tours',
+        tours_from: 'From',
+        tours_view_all: 'View All \u2794',
+        tour_classic_yerevan: 'Classic Yerevan City Tour',
+        tour_classic_yerevan_desc: 'Walk through the Pink City \u2014 Republic Square, Cascade Complex, Vernissage market, Matenadaran, and the brandy factory.',
+        tour_greece: 'Greece',
+        tour_greece_desc: 'Athens, Santorini and Mykonos \u2014 ancient ruins, blue-domed churches, crystal waters and unforgettable sunsets.',
+        tour_airport_transfer: 'Airport Transfer',
+        tour_airport_desc: 'Comfortable pickup from Zvartnots Airport to anywhere in Yerevan. Available 24/7 with meet & greet service.',
+        // Contact validation
+        validate_name_required: 'Please enter your name',
+        validate_email_required: 'Please enter your email',
+        validate_email_invalid: 'Please enter a valid email address',
+        validate_message_required: 'Please enter your message',
+        validate_message_short: 'Message must be at least 10 characters'
     },
     ru: {
         // Nav
@@ -949,7 +982,28 @@ translations = {
         booking_status: '\u0421\u0442\u0430\u0442\u0443\u0441', booking_booked: '\u0417\u0430\u0431\u0440\u043e\u043d\u0438\u0440\u043e\u0432\u0430\u043d\u043e',
         cancel_btn: '\u041e\u0442\u043c\u0435\u043d\u0438\u0442\u044c',
         confirm_delete: '\u0423\u0434\u0430\u043b\u0438\u0442\u044c \u044d\u0442\u043e \u043d\u0430\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0435?',
-        confirm_cancel_booking: '\u041e\u0442\u043c\u0435\u043d\u0438\u0442\u044c \u044d\u0442\u043e \u0431\u0440\u043e\u043d\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435? \u0414\u0435\u0439\u0441\u0442\u0432\u0438\u0435 \u043d\u0435\u043b\u044c\u0437\u044f \u043e\u0442\u043c\u0435\u043d\u0438\u0442\u044c, \u0432\u043e\u0437\u043c\u043e\u0436\u043d\u044b \u0448\u0442\u0440\u0430\u0444\u044b.'
+        confirm_cancel_booking: '\u041e\u0442\u043c\u0435\u043d\u0438\u0442\u044c \u044d\u0442\u043e \u0431\u0440\u043e\u043d\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435? \u0414\u0435\u0439\u0441\u0442\u0432\u0438\u0435 \u043d\u0435\u043b\u044c\u0437\u044f \u043e\u0442\u043c\u0435\u043d\u0438\u0442\u044c, \u0432\u043e\u0437\u043c\u043e\u0436\u043d\u044b \u0448\u0442\u0440\u0430\u0444\u044b.',
+        // Tours page
+        tours_nav: '\u0422\u0443\u0440\u044b',
+        tours_page_subtitle: '\u041e\u0442\u043a\u0440\u043e\u0439\u0442\u0435 \u0410\u0440\u043c\u0435\u043d\u0438\u044e, \u043f\u0443\u0442\u0435\u0448\u0435\u0441\u0442\u0432\u0443\u0439\u0442\u0435 \u043f\u043e \u043c\u0438\u0440\u0443 \u0438\u043b\u0438 \u0437\u0430\u043a\u0430\u0436\u0438\u0442\u0435 \u0442\u0440\u0430\u043d\u0441\u0444\u0435\u0440',
+        tours_ingoing_desc: '\u041e\u0442\u043a\u0440\u043e\u0439\u0442\u0435 \u043a\u0440\u0430\u0441\u043e\u0442\u0443 \u0410\u0440\u043c\u0435\u043d\u0438\u0438 \u0441 \u043d\u0430\u0448\u0438\u043c\u0438 \u0442\u0443\u0440\u0430\u043c\u0438 \u2014 \u043e\u0442 \u0434\u0440\u0435\u0432\u043d\u0438\u0445 \u0445\u0440\u0430\u043c\u043e\u0432 \u0434\u043e \u0433\u043e\u0440\u043d\u044b\u0445 \u043f\u043e\u0445\u043e\u0434\u043e\u0432 \u0438 \u0432\u0438\u043d\u043d\u044b\u0445 \u0442\u0440\u043e\u043f.',
+        tours_outgoing_desc: '\u041f\u0443\u0442\u0435\u0448\u0435\u0441\u0442\u0432\u0443\u0439\u0442\u0435 \u0441 Touristik \u2014 \u0442\u0443\u0440\u044b \u0432 \u0415\u0432\u0440\u043e\u043f\u0443, \u0421\u0428\u0410, \u0410\u0437\u0438\u044e \u0441 \u043f\u0435\u0440\u0435\u043b\u0451\u0442\u0430\u043c\u0438 \u0438 \u043f\u0440\u043e\u0436\u0438\u0432\u0430\u043d\u0438\u0435\u043c.',
+        tours_transfer_desc: '\u041a\u043e\u043c\u0444\u043e\u0440\u0442\u043d\u044b\u0435 \u0442\u0440\u0430\u043d\u0441\u0444\u0435\u0440\u044b \u0438\u0437 \u0430\u044d\u0440\u043e\u043f\u043e\u0440\u0442\u0430, VIP-\u0442\u0440\u0430\u043d\u0441\u0444\u0435\u0440\u044b \u0438 \u044d\u043a\u0441\u043a\u0443\u0440\u0441\u0438\u043e\u043d\u043d\u044b\u0435 \u043f\u043e\u0435\u0437\u0434\u043a\u0438 \u043f\u043e \u0410\u0440\u043c\u0435\u043d\u0438\u0438.',
+        tours_featured: '\u0420\u0435\u043a\u043e\u043c\u0435\u043d\u0434\u0443\u0435\u043c\u044b\u0435 \u0442\u0443\u0440\u044b',
+        tours_from: '\u041e\u0442',
+        tours_view_all: '\u0421\u043c\u043e\u0442\u0440\u0435\u0442\u044c \u0432\u0441\u0435 \u2794',
+        tour_classic_yerevan: '\u041a\u043b\u0430\u0441\u0441\u0438\u0447\u0435\u0441\u043a\u0438\u0439 \u0442\u0443\u0440 \u043f\u043e \u0415\u0440\u0435\u0432\u0430\u043d\u0443',
+        tour_classic_yerevan_desc: '\u041f\u0440\u043e\u0433\u0443\u043b\u043a\u0430 \u043f\u043e \u0420\u043e\u0437\u043e\u0432\u043e\u043c\u0443 \u0433\u043e\u0440\u043e\u0434\u0443 \u2014 \u041f\u043b\u043e\u0449\u0430\u0434\u044c \u0420\u0435\u0441\u043f\u0443\u0431\u043b\u0438\u043a\u0438, \u041a\u0430\u0441\u043a\u0430\u0434, \u0412\u0435\u0440\u043d\u0438\u0441\u0430\u0436, \u041c\u0430\u0442\u0435\u043d\u0430\u0434\u0430\u0440\u0430\u043d \u0438 \u043a\u043e\u043d\u044c\u044f\u0447\u043d\u044b\u0439 \u0437\u0430\u0432\u043e\u0434.',
+        tour_greece: '\u0413\u0440\u0435\u0446\u0438\u044f',
+        tour_greece_desc: '\u0410\u0444\u0438\u043d\u044b, \u0421\u0430\u043d\u0442\u043e\u0440\u0438\u043d\u0438 \u0438 \u041c\u0438\u043a\u043e\u043d\u043e\u0441 \u2014 \u0434\u0440\u0435\u0432\u043d\u0438\u0435 \u0440\u0443\u0438\u043d\u044b, \u043a\u0440\u0438\u0441\u0442\u0430\u043b\u044c\u043d\u044b\u0435 \u0432\u043e\u0434\u044b \u0438 \u043d\u0435\u0437\u0430\u0431\u044b\u0432\u0430\u0435\u043c\u044b\u0435 \u0437\u0430\u043a\u0430\u0442\u044b.',
+        tour_airport_transfer: '\u0422\u0440\u0430\u043d\u0441\u0444\u0435\u0440 \u0438\u0437 \u0430\u044d\u0440\u043e\u043f\u043e\u0440\u0442\u0430',
+        tour_airport_desc: '\u041a\u043e\u043c\u0444\u043e\u0440\u0442\u043d\u044b\u0439 \u0442\u0440\u0430\u043d\u0441\u0444\u0435\u0440 \u0438\u0437 \u0430\u044d\u0440\u043e\u043f\u043e\u0440\u0442\u0430 \u0417\u0432\u0430\u0440\u0442\u043d\u043e\u0446 \u0432 \u043b\u044e\u0431\u0443\u044e \u0442\u043e\u0447\u043a\u0443 \u0415\u0440\u0435\u0432\u0430\u043d\u0430. \u0414\u043e\u0441\u0442\u0443\u043f\u0435\u043d 24/7.',
+        // Contact validation
+        validate_name_required: '\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0432\u0430\u0448\u0435 \u0438\u043c\u044f',
+        validate_email_required: '\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0432\u0430\u0448 email',
+        validate_email_invalid: '\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043a\u043e\u0440\u0440\u0435\u043a\u0442\u043d\u044b\u0439 email',
+        validate_message_required: '\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u0435',
+        validate_message_short: '\u0421\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u0435 \u0434\u043e\u043b\u0436\u043d\u043e \u0441\u043e\u0434\u0435\u0440\u0436\u0430\u0442\u044c \u043c\u0438\u043d\u0438\u043c\u0443\u043c 10 \u0441\u0438\u043c\u0432\u043e\u043b\u043e\u0432'
     },
     hy: {
         // Nav
@@ -1106,7 +1160,28 @@ translations = {
         booking_status: 'Կարգավիճակ', booking_booked: 'Ամրագրված',
         cancel_btn: 'Չեղարկել',
         confirm_delete: 'Ջնջե՞լ այս ուղղությունը:',
-        confirm_cancel_booking: 'Չեղարկե՞լ ամրագրումը: Սա հնարավոր չէ հետ կանչել, հնարավոր են տուգանքներ:'
+        confirm_cancel_booking: 'Չեղարկե՞լ ամրագրումը: Սա հնարավոր չէ հետ կանչել, հնարավոր են տուգանքներ:',
+        // Tours page
+        tours_nav: 'Տուրեր',
+        tours_page_subtitle: 'Հայտնաբերել Հայաստանը, ճամփորդել աշխարհով կամ ամրագրել տրանսֆեր',
+        tours_ingoing_desc: 'Բացահայտեք Հայաստանի գեղեցկությունը մեր տուրերով — հին տաճարներից մինչև գինեգատնական արահետներ:',
+        tours_outgoing_desc: 'Ճամփորդեք Touristik-ի հետ — տուրեր Եվրոպա, ԱՄՆ, Ազիա և ավելին թռիչքներով և կացարանով:',
+        tours_transfer_desc: 'Հարմարավետ օդանավայրային տրանսֆերներ, VIP-տրանսֆերներ և էքսկուրսիոն փոխադրումներ:',
+        tours_featured: 'Առաջարկվող տուրեր',
+        tours_from: 'Սկսած',
+        tours_view_all: 'Տեսնել բոլորը ➔',
+        tour_classic_yerevan: 'Դասական Երևանի տուր',
+        tour_classic_yerevan_desc: 'Զբոսանք Վարդագույն քաղաքով — Հանրապետության հրապարակ, Կասկադ, Վերնիսաեւ, Մատենադարան:',
+        tour_greece: 'Հունաստան',
+        tour_greece_desc: 'Աթենք, Սանտորինի և Միկոնոս — հին ավերակներ, կապույտ եկեղեցուծ և անմոռանալի մայրամուտներ:',
+        tour_airport_transfer: 'Օդանավայրային տրանսֆեր',
+        tour_airport_desc: 'Հարմարավետ տրանսֆեր Զվարտնոցի օդանավայրակայանից Երևանի ցանկացած կետ: 24/7:',
+        // Contact validation
+        validate_name_required: 'Խնդրում ենք գրեք ձեր անունը',
+        validate_email_required: 'Խնդրում ենք գրեք ձեր էլ. հասցեը',
+        validate_email_invalid: 'Խնդրում ենք գրեք վավեր էլ. հասցե',
+        validate_message_required: 'Խնդրում ենք գրեք ձեր հաղորդագրությունը',
+        validate_message_short: 'Հաղորդագրությունը պետք է լինի նվազագույնը 10 նիշ'
     }
 };
 
@@ -1454,4 +1529,77 @@ document.querySelectorAll('.card, .feature').forEach(el => {
 
     // Start after page loader fades
     setTimeout(type, 600);
+})();
+
+// Contact form validation
+(function () {
+    var form = document.querySelector('.contact-form');
+    if (!form) return;
+
+    var fields = [
+        { el: form.querySelector('input[name="name"]'), key: 'name' },
+        { el: form.querySelector('input[name="email"]'), key: 'email' },
+        { el: form.querySelector('textarea[name="message"]'), key: 'message' }
+    ];
+
+    function t(key) {
+        var lang = localStorage.getItem('lang') || 'en';
+        return (translations[lang] && translations[lang][key]) || translations.en[key] || '';
+    }
+
+    function getOrCreateError(field) {
+        var err = field.el.parentNode.querySelector('.field-error');
+        if (!err) {
+            err = document.createElement('div');
+            err.className = 'field-error';
+            field.el.parentNode.insertBefore(err, field.el.nextSibling);
+        }
+        return err;
+    }
+
+    function validateField(field) {
+        var val = field.el.value.trim();
+        var err = getOrCreateError(field);
+        var msg = '';
+
+        if (field.key === 'name' && !val) {
+            msg = t('validate_name_required');
+        } else if (field.key === 'email') {
+            if (!val) msg = t('validate_email_required');
+            else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) msg = t('validate_email_invalid');
+        } else if (field.key === 'message') {
+            if (!val) msg = t('validate_message_required');
+            else if (val.length < 10) msg = t('validate_message_short');
+        }
+
+        if (msg) {
+            err.textContent = msg;
+            err.style.display = 'block';
+            field.el.classList.add('invalid');
+            field.el.classList.remove('valid');
+            return false;
+        } else {
+            err.style.display = 'none';
+            field.el.classList.remove('invalid');
+            if (val) field.el.classList.add('valid');
+            return true;
+        }
+    }
+
+    fields.forEach(function (field) {
+        if (!field.el) return;
+        field.el.addEventListener('blur', function () { validateField(field); });
+        field.el.addEventListener('input', function () {
+            if (field.el.classList.contains('invalid')) validateField(field);
+        });
+    });
+
+    form.addEventListener('submit', function (e) {
+        var valid = true;
+        fields.forEach(function (field) {
+            if (!field.el) return;
+            if (!validateField(field)) valid = false;
+        });
+        if (!valid) e.preventDefault();
+    });
 })();
