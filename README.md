@@ -1,192 +1,199 @@
-# Touristik Travel Club
+# Touristik Travel Platform
 
 **Live site: [touristik.am](https://touristik.am)**
 
-Tourism booking website for **Touristik LLC** — a travel agency based in Yerevan, Armenia with 3 branches.
-
-![PHP](https://img.shields.io/badge/PHP-8.x-777BB4?logo=php&logoColor=white)
-![MySQL](https://img.shields.io/badge/MySQL-5.7+-4479A1?logo=mysql&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?logo=javascript&logoColor=black)
-
-## Features
-
-- **Hotel Booking** — Full Hotelbeds API integration: Availability, CheckRate, Booking, Cancellation, Voucher
-- **Tour Pages** — Ingoing Tours (Armenia), Outgoing Tours (international), Transfer services with sidebar filters
-- **Tours Dropdown Nav** — Hover submenu for quick access to tour categories
-- **Flight Search** — Autocomplete city inputs with IATA codes, local price database
-- **Multi-language** — Full site translation in English, Russian, Armenian (including admin panel, confirm dialogs, validation messages)
-- **Currency Switcher** — USD, EUR, AMD, RUB with live exchange rates (6h cache)
-- **Dark Mode** — Toggle with localStorage persistence
-- **Contact Form** — Client-side validation with translated error messages + server-side validation
-- **HTML Email Templates** — Branded emails for booking confirmation, cancellation, contact form (admin + auto-reply)
-- **Visa Support** — Invitation letters, e-visa assistance, fast processing info
-- **PWA** — Installable on mobile, service worker with offline fallback
-- **FAQ Accordion** — Common questions about booking, visas, payments
-- **Google Analytics 4** — Enhanced measurement, configurable via admin
-- **Google Search Console** — Verified, sitemap submitted
-
-## Hotel Booking (Hotelbeds API)
-
-The booking flow follows Hotelbeds certification requirements:
-
-1. **Availability** (`/hotels`) — Geolocation search with GZIP, filters, children ages
-2. **CheckRate** (`/checkrates`) — Called when `rateType = RECHECK`
-3. **Booking** (`/bookings`) — 60s timeout, holder + pax details, client reference
-4. **Cancellation** (`DELETE /bookings`) — Cancel from admin panel with email notification
-5. **Voucher** — Printable confirmation with all mandatory fields
-
-## Security
-
-- HTTPS redirect, security headers (X-Frame-Options, CSP, HSTS)
-- Session hardening (httponly, SameSite=Lax, regeneration on login)
-- Rate limiting (5 login attempts, 15-min lockout)
-- CSRF tokens on all POST forms
-- Prepared statements (PDO), output escaping
-- Directory protection for config/, includes/, cache/
-
-## SEO & Performance
-
-- JSON-LD structured data (TravelAgency schema)
-- Dynamic XML sitemap (`sitemap.php`)
-- GZIP compression, browser caching headers
-- CSS/JS minification (auto-detected)
-- Lazy background images with IntersectionObserver
-- Hero image optimized with WebP alternative
-- Preconnect & dns-prefetch hints
-
-## Accessibility
-
-- Skip-to-content link, `focus-visible` outlines
-- ARIA labels on navigation, FAQ, breadcrumbs
-- `prefers-reduced-motion` support
-- Semantic HTML
+Full-featured travel booking platform for **Touristik LLC** — a travel agency based in Yerevan, Armenia with 3 branches.
 
 ## Tech Stack
 
-| Component | Technology |
-|-----------|-----------|
-| Backend | PHP 8+ (vanilla, no framework) |
-| Database | MySQL via PDO (auto-creates tables) |
-| Frontend | Vanilla CSS & JavaScript (no dependencies) |
-| Server | Apache (XAMPP locally, Internet.am production) |
-| Hotel API | Hotelbeds Hotel API |
-| Currency | open.er-api.com |
-| Build | `terser` (JS), `clean-css-cli` (CSS) |
+- **Framework:** Laravel 12 (PHP 8.2+)
+- **Database:** MySQL 8 with 17+ tables
+- **Frontend:** Blade templates + custom CSS (4,400+ lines) + vanilla JS
+- **API Integration:** Hotelbeds (hotel search & booking)
+- **Architecture:** MVC with Service Layer + Supplier Abstraction
+
+## Features
+
+### Public Site
+- Hotel search with real-time Hotelbeds API integration
+- Tour listings (Ingoing Armenia, Outgoing, Transfer)
+- Destination pages with images and pricing
+- Contact form with database storage
+- Multi-language support (EN, RU, HY)
+- Multi-currency display (USD, EUR, AMD, RUB)
+- Dark mode toggle
+- PWA support (offline page, manifest)
+- SEO optimized (Schema.org, Open Graph, sitemap)
+- Responsive design (mobile-first)
+
+### Booking System
+- Full booking pipeline: Search → Select → Guest Details → Confirm → Voucher
+- Hotelbeds CheckRate + Book API integration
+- Payment gateway abstraction (sandbox + office + future real gateways)
+- Printable HTML vouchers (Hotelbeds certification compliant)
+- Booking reference generation (TK-YYMMDD-XXX format)
+- Email notifications (booking confirmation, cancellation, admin alerts)
+
+### Customer Accounts
+- Registration & login with password reset
+- Customer dashboard with booking history
+- Profile management (name, phone, language, currency preferences)
+- Wishlist (save hotels, tours, destinations)
+- Reviews & ratings (with admin moderation)
+- In-app notifications (bell icon with unread count)
+
+### Admin Panel (`/admin`)
+- Dashboard with stats (users, bookings, revenue)
+- Booking management (view, filter, cancel)
+- User management (roles: customer/agent/admin/superadmin, suspend/activate)
+- Destination CRUD (name, slug, description, image, featured)
+- Tour management (ingoing/outgoing/transfer, itinerary editor)
+- Site settings (hero text, contact info, GA4, maintenance mode)
+- Promo code management (percentage/fixed, usage limits, date ranges)
+- Review moderation (approve/reject/reply)
+- Reports (revenue, top destinations, user growth)
+
+### B2B Agent Portal (`/agent`)
+- Agency registration with admin approval
+- Agent dashboard (bookings, commission, balance)
+- Hotel search with NET pricing (agent sees wholesale prices)
+- Commission tracking (markup/percentage/prepaid models)
+- Monthly commission breakdown
+- Per-booking commission reports
+
+## Database Schema (17 tables)
+
+| Table | Purpose |
+|-------|---------|
+| users | Customers, agents, admins (role-based) |
+| agencies | B2B travel agency accounts |
+| bookings | Unified bookings (hotel, flight, tour, transfer) |
+| payments | Payment transactions with gateway abstraction |
+| destinations | Travel destinations with images |
+| tours | Tour packages (ingoing/outgoing/transfer) |
+| contacts | Contact form submissions |
+| flight_prices | Flight pricing data |
+| settings | Site configuration key-value store |
+| activity_log | Audit trail for all actions |
+| notifications | In-app user notifications |
+| invoices | B2B agency invoices |
+| promo_codes | Discount/promo codes |
+| promo_usage | Promo code usage tracking |
+| wishlists | User saved items |
+| reviews | Product reviews with moderation |
+| password_reset_tokens | Password reset flow |
+
+## Supplier Abstraction
+
+The platform uses a supplier interface pattern allowing any travel API to be plugged in:
+
+```php
+interface SupplierInterface {
+    public function search(array $params): array;
+    public function checkRate(string $rateKey): array;
+    public function book(array $details): array;
+    public function cancel(string $reference): array;
+    public function getBooking(string $reference): array;
+}
+```
+
+Currently implemented: **Hotelbeds** (800,000+ hotels worldwide)
+Ready for: Amadeus (flights), local tour operators, transfer services
+
+## Setup
+
+### Requirements
+- PHP 8.2+
+- MySQL 8+
+- Composer
+- Apache with mod_rewrite
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/musheghvgeorgyan/touristik.git
+cd touristik/laravel
+
+# Install dependencies
+composer install
+
+# Configure environment
+cp .env.example .env
+php artisan key:generate
+
+# Edit .env with your database and API credentials
+# DB_DATABASE=touristik_laravel
+# HOTELBEDS_API_KEY=your_key
+# HOTELBEDS_API_SECRET=your_secret
+
+# Run migrations and seed
+php artisan migrate
+php artisan db:seed
+
+# Default admin: admin@touristik.am / admin123
+```
+
+### Local Development
+
+```bash
+php artisan serve
+# Visit http://localhost:8000
+```
+
+### Apache Virtual Host
+
+```apache
+<VirtualHost *:80>
+    DocumentRoot "/path/to/touristik/laravel/public"
+    ServerName touristik.local
+    <Directory "/path/to/touristik/laravel/public">
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>
+```
 
 ## Project Structure
 
 ```
-touristik/
-├── api/                  # API endpoints (get_price, get_rates)
-├── cache/                # Hotel search & currency cache (gitignored)
-├── config/               # Credentials (gitignored except routes.json)
-│   ├── .htaccess           # Deny all access
-│   ├── database.json
-│   ├── hotelbeds.json
-│   ├── travelpayouts.json
-│   └── routes.json
-├── css/
-│   ├── styles.css
-│   └── styles.min.css
-├── img/                  # Hero image, logo, PWA icons, partner logos
-├── includes/
-│   ├── .htaccess           # Deny all access
-│   ├── currency.php        # Exchange rate fetching + caching
-│   ├── db.php              # Database setup + schema
-│   ├── flight_prices.php   # Local flight price lookup
-│   ├── functions.php       # Helpers, CSRF, rate limiting, email templates
-│   ├── hotelbeds.php       # Hotelbeds API (CheckRate, Book, Cancel)
-│   └── router.php          # JSON-based route resolver
-├── js/
-│   ├── script.js
-│   └── script.min.js
-├── pages/
-│   ├── home.php            # Hero, search, tours, visa, stats, destinations
-│   ├── tours.php           # Tours overview (3 categories + featured)
-│   ├── ingoing-tours.php   # Armenia tours with filters
-│   ├── outgoing-tours.php  # International tours with filters
-│   ├── transfer.php        # Transfer services with filters
-│   ├── destinations.php    # All destinations grid
-│   ├── destination.php     # Single destination detail
-│   ├── search.php          # Flight + hotel search results
-│   ├── booking.php         # Hotel booking flow + voucher
-│   ├── about.php           # About page
-│   ├── contact.php         # Contact form with validation
-│   ├── admin.php           # Dashboard (destinations, bookings, messages, settings, performance)
-│   ├── login.php           # Admin authentication
-│   ├── logout.php          # Session termination
-│   └── 404.php             # Error page
-├── templates/
-│   ├── header.php          # Nav with Tours dropdown, dark mode, currency, language
-│   └── footer.php          # Footer, social buttons, back-to-top, cookies
-├── .htaccess               # HTTPS, security headers, GZIP, caching
-├── index.php               # Entry point / router
-├── manifest.json           # PWA manifest
-├── sw.js                   # Service worker
-├── offline.html            # Offline fallback
-├── sitemap.php             # Dynamic XML sitemap
-└── robots.txt
+laravel/
+├── app/
+│   ├── Http/Controllers/       # 29 controllers (Public, Admin, Agent, API)
+│   ├── Models/                 # 16 Eloquent models with relationships
+│   └── Services/               # 12 services (Booking, Payment, Email, etc.)
+│       └── Suppliers/          # Supplier abstraction (Hotelbeds adapter)
+├── config/
+│   ├── suppliers.php           # API credentials
+│   └── payment.php             # Payment gateway config
+├── database/
+│   ├── migrations/             # 18 migration files
+│   └── seeders/                # Admin, destinations, tours, settings
+├── resources/views/            # 45+ Blade templates
+│   ├── layouts/main.blade.php  # Main layout with header/footer
+│   ├── admin/                  # 11 admin views
+│   ├── agent/                  # 4 agent portal views
+│   ├── auth/                   # 5 auth views
+│   └── ...                     # Public page views
+└── public/
+    ├── css/styles.css          # 4,400+ lines of custom CSS
+    ├── js/app.js               # 1,600+ lines of vanilla JS
+    └── img/                    # Site images and icons
 ```
 
-## Setup
+## Branches
 
-### Local Development
+| Branch | Description |
+|--------|-------------|
+| `master` | Original vanilla PHP site (live at touristik.am) |
+| `platform-v2` | Custom MVC platform (140 PHP files, intermediate step) |
+| `laravel` | **Laravel 12 platform (production-ready)** |
 
-1. Clone into XAMPP htdocs:
-   ```bash
-   git clone https://github.com/musheghvgevorgyan-ux/touristik.git
-   cp -r touristik /xampp/htdocs/tourism
-   ```
+## Company
 
-2. Create `config/database.json`:
-   ```json
-   {
-       "host": "localhost",
-       "dbname": "tourism_db",
-       "username": "root",
-       "password": "",
-       "charset": "utf8mb4"
-   }
-   ```
+**Touristik LLC** — Travel Agency, Yerevan, Armenia
 
-3. Create `config/hotelbeds.json`:
-   ```json
-   {
-       "api_key": "YOUR_KEY",
-       "api_secret": "YOUR_SECRET"
-   }
-   ```
-
-4. Start Apache + MySQL in XAMPP, visit `http://localhost/tourism/`
-   - Tables auto-create on first visit
-   - Default admin: `admin` / `admin123`
-
-### Production Deployment
-
-Upload code files to `public_html/` via cPanel File Manager.
-
-**Never overwrite these on production** — they have different credentials:
-- `config/database.json`
-- `config/hotelbeds.json`
-- `config/travelpayouts.json`
-
-## Admin Panel
-
-Access via `/index.php?page=admin` after logging in:
-
-- **Destinations** — Add/delete travel destinations with images
-- **Bookings** — View hotel bookings with stats (total, confirmed, upcoming), cancel with email notification
-- **Messages** — View contact form submissions
-- **Settings** — Site name, tagline, hero text, footer, GA tracking ID
-- **Performance** — Health score, server info, file sizes, database stats
-
-## Contact
-
-- **Website:** [touristik.am](https://touristik.am)
-- **Email:** info@touristik.am
-- **Phone:** +374 33 060 609
 - **Branches:** Komitas 38 | Mashtots 7/6 | Yerevan Mall (2nd floor)
-
-## Author
-
-**Mushegh Gevorgyan** — [GitHub](https://github.com/musheghvgevorgyan-ux)
+- **Phone:** +374 33 060 609, +374 55 060 609, +374 44 060 608
+- **Email:** info@touristik.am
+- **Social:** [Instagram](https://instagram.com/touristik.am) | [Facebook](https://facebook.com/touristik.travell) | [Telegram](https://t.me/touristikam)
