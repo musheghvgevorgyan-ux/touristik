@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\PromoController as AdminPromoController;
 use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
 use App\Http\Controllers\Admin\ReportController as AdminReportController;
 use App\Http\Controllers\Admin\TourController as AdminTourController;
+use App\Http\Controllers\Admin\ContactController as AdminContactController;
 use App\Http\Controllers\Agent\DashboardController as AgentDashboardController;
 use App\Http\Controllers\Agent\SearchController as AgentSearchController;
 use App\Http\Controllers\Agent\BookingController as AgentBookingController;
@@ -132,6 +133,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::post('/promos', [AdminPromoController::class, 'store']);
     Route::get('/reviews', [AdminReviewController::class, 'index']);
     Route::post('/reviews/{id}', [AdminReviewController::class, 'moderate']);
+    Route::get('/contacts', [AdminContactController::class, 'index']);
+    Route::post('/contacts/{id}', [AdminContactController::class, 'markRead']);
     Route::get('/reports', [AdminReportController::class, 'index']);
     Route::get('/profile', [AdminSettingsController::class, 'profile']);
     Route::post('/profile', [AdminSettingsController::class, 'updateProfile']);

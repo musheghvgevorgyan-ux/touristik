@@ -44,12 +44,12 @@
         <div class="stat-label">Total Bookings</div>
     </div>
     <div class="admin-stat">
-        <div class="stat-value">3</div>
-        <div class="stat-label">Branches</div>
+        <div class="stat-value">{!! $newMessages !!}</div>
+        <div class="stat-label">New Messages</div>
     </div>
     <div class="admin-stat">
-        <div class="stat-value">1</div>
-        <div class="stat-label">Active Suppliers</div>
+        <div class="stat-value">3</div>
+        <div class="stat-label">Branches</div>
     </div>
 </div>
 
@@ -86,11 +86,14 @@
 </div>
 
 <div class="admin-quick-links">
+    <a href="/admin/contacts" class="admin-quick-link"><span class="link-icon">&#9993;</span> Messages</a>
     <a href="/admin/bookings" class="admin-quick-link"><span class="link-icon">&#128203;</span> Manage Bookings</a>
     <a href="/admin/users" class="admin-quick-link"><span class="link-icon">&#128101;</span> Manage Users</a>
     <a href="/admin/destinations" class="admin-quick-link"><span class="link-icon">&#127758;</span> Destinations</a>
+    <a href="/admin/tours" class="admin-quick-link"><span class="link-icon">&#127960;</span> Tours</a>
     <a href="/admin/settings" class="admin-quick-link"><span class="link-icon">&#9881;</span> Settings</a>
     <a href="/admin/promos" class="admin-quick-link"><span class="link-icon">&#127873;</span> Promo Codes</a>
     <a href="/admin/reviews" class="admin-quick-link"><span class="link-icon">&#11088;</span> Reviews</a>
+    <a href="/admin/profile" class="admin-quick-link"><span class="link-icon">&#128100;</span> My Profile</a>
 </div>
 @endsection
