@@ -1,59 +1,120 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Touristik - Travel Agency Platform
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Official website for **Touristik LLC**, a travel agency based in Yerevan, Armenia with 3 branches.
 
-## About Laravel
+**Live:** [https://touristik.am](https://touristik.am)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Tech Stack
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **Backend:** Laravel 12, PHP 8.3
+- **Database:** MySQL
+- **Frontend:** Blade templates, vanilla JS, CSS3
+- **Maps:** Leaflet.js (world map), custom SVG (Armenia map)
+- **Hosting:** internet.am (cPanel), deployed via Git
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Features
 
-## Learning Laravel
+### Public Pages
+- **Homepage** - Hero with flight search, destinations, FAQ, testimonials, partners
+- **Ingoing Tours** - Interactive SVG map of Armenia (11 provinces + Lake Sevan), click region to filter tours, region info panel with cities/sights/stats
+- **Outgoing Tours** - Interactive Leaflet world map with destination markers, flight lines from Yerevan, 8 destinations (Greece, Egypt, UAE, Georgia, Turkey, Thailand, Italy, Maldives)
+- **Tour Detail Pages** - Photo gallery, day-by-day itinerary, what's included/excluded, sticky sidebar with inline booking form, related tours
+- **Destinations** - World map with markers, destination cards
+- **Blog** - Posts with admin CRUD
+- **Contact** - Form with styled HTML emails, branch maps (Leaflet)
+- **About** - Company story, team, branch locations with maps
+- **Transfer** - Airport pickup, city transfers, intercity routes
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### Admin Panel (/admin)
+- Dashboard with charts and recent messages
+- Tour management (full CRUD: create, edit, delete with gallery, itinerary, includes/excludes, region)
+- Blog post management
+- Contact messages
+- User management
+- Destination management
+- Settings (site name, GA tracking, etc.)
+- Profile/password change
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Integrations
+- Google Analytics 4 (G-JHCDZH0E3T)
+- Google Search Console (sitemap.xml)
+- SMTP email (mail.touristik.am)
+- Request-a-Call floating button
 
-## Laravel Sponsors
+### i18n
+- 3 languages: English, Russian, Armenian
+- Client-side translation system via `translations.js`
+- Language switcher in navbar
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Setup (Local Development)
 
-### Premium Partners
+```bash
+git clone https://github.com/musheghvgevorgyan-ux/touristik.git
+cd touristik/laravel
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate
+php artisan db:seed
+php artisan serve
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## Deployment (Production)
 
-## Contributing
+SSH into server and run:
+```bash
+cd ~/touristik_laravel/laravel
+git pull
+php artisan migrate --force
+php deploy.php
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+`deploy.php` runs: migrate, config:cache, route:cache, view:cache.
 
-## Code of Conduct
+To seed tours:
+```bash
+php artisan db:seed --class=IngoingToursSeeder --force
+php artisan db:seed --class=OutgoingToursSeeder --force
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Server Details
 
-## Security Vulnerabilities
+- **Host:** internet.am, cPanel at ext48.host.am:2083
+- **Username:** TouristikLLC
+- **PHP:** 8.3 (via .htaccess AddHandler)
+- **Database:** touristi_laravel
+- **Domain:** touristik.am
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Project Structure
+
+```
+laravel/
+  app/
+    Http/Controllers/       # Public + Admin controllers
+    Models/                 # Tour, Destination, User, Post, Setting, etc.
+  database/
+    migrations/             # All table schemas
+    seeders/                # IngoingToursSeeder, OutgoingToursSeeder, DatabaseSeeder
+  resources/views/
+    layouts/main.blade.php  # Main layout (nav, footer, floating buttons)
+    home/index.blade.php    # Homepage
+    tours/
+      ingoing.blade.php     # Armenia map + tours
+      outgoing.blade.php    # World map + tours
+      show.blade.php        # Tour detail page
+    admin/                  # Admin panel views
+  public/
+    css/styles.css          # Main stylesheet
+    js/app.js               # Main JS (animations, menu, search, etc.)
+    js/translations.js      # i18n translations (EN/RU/HY)
+    img/                    # Logo, hero, favicons
+```
+
+## Known Issues
+
+- Mobile nav submenu (Tours dropdown) has intermittent toggle issues on some devices - needs CSS/JS refactor for touch events
+- Tour images are Unsplash placeholders - need real Armenian landmark photos
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Proprietary - Touristik LLC. All rights reserved.
