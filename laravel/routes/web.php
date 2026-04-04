@@ -151,9 +151,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::post('/tours/delete', [AdminTourController::class, 'delete']);
     Route::get('/posts', [\App\Http\Controllers\Admin\PostController::class, 'index']);
     Route::post('/posts', [\App\Http\Controllers\Admin\PostController::class, 'store']);
+    Route::post('/posts/delete', [\App\Http\Controllers\Admin\PostController::class, 'delete']);
     Route::get('/posts/{id}/edit', [\App\Http\Controllers\Admin\PostController::class, 'edit']);
     Route::post('/posts/{id}', [\App\Http\Controllers\Admin\PostController::class, 'update']);
-    Route::post('/posts/delete', [\App\Http\Controllers\Admin\PostController::class, 'delete']);
 });
 
 // B2B Agent portal
