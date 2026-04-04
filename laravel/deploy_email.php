@@ -9,7 +9,7 @@ $updates = [
     'MAIL_PORT' => '465',
     'MAIL_USERNAME' => 'info@touristik.am',
     'MAIL_PASSWORD' => 'Touristik055060609',
-    'MAIL_SCHEME' => 'ssl',
+    'MAIL_SCHEME' => 'smtps',
     'MAIL_FROM_ADDRESS' => 'info@touristik.am',
     'MAIL_FROM_NAME' => '"Touristik Travel"',
 ];
