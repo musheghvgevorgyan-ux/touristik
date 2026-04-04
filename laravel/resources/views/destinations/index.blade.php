@@ -92,17 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
         maxZoom: 19
     }).addTo(map);
 
-    var destinations = @json($destinations->map(function($d) {
-        return [
-            'name' => $d->name,
-            'slug' => $d->slug,
-            'country' => $d->country ?? '',
-            'price' => $d->price_from ?? 0,
-            'image' => $d->image_url ?? '',
-            'lat' => $d->latitude ?? null,
-            'lng' => $d->longitude ?? null,
-        ];
-    }));
+    var destinations = @json($mapData);
 
     var markers = [];
     destinations.forEach(function(d) {

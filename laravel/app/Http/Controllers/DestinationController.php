@@ -10,7 +10,19 @@ class DestinationController extends Controller
     {
         $destinations = Destination::orderBy('name')->get();
 
-        return view('destinations.index', compact('destinations'));
+        $mapData = $destinations->map(function ($d) {
+            return [
+                'name' => $d->name,
+                'slug' => $d->slug,
+                'country' => $d->country ?? '',
+                'price' => $d->price_from ?? 0,
+                'image' => $d->image_url ?? '',
+                'lat' => $d->latitude,
+                'lng' => $d->longitude,
+            ];
+        });
+
+        return view('destinations.index', compact('destinations', 'mapData'));
     }
 
     public function show(string $slug)
