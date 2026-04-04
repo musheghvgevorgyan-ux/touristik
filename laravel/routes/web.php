@@ -108,6 +108,7 @@ Route::middleware('auth')->prefix('account')->group(function () {
     Route::get('/', [AccountController::class, 'dashboard']);
     Route::get('/profile', [AccountController::class, 'profile']);
     Route::post('/profile', [AccountController::class, 'updateProfile']);
+    Route::post('/password', [AccountController::class, 'updatePassword']);
     Route::get('/bookings', [AccountController::class, 'bookings']);
     Route::get('/wishlist', [WishlistController::class, 'index']);
     Route::post('/wishlist', [WishlistController::class, 'toggle']);
@@ -132,6 +133,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/reviews', [AdminReviewController::class, 'index']);
     Route::post('/reviews/{id}', [AdminReviewController::class, 'moderate']);
     Route::get('/reports', [AdminReportController::class, 'index']);
+    Route::get('/profile', [AdminSettingsController::class, 'profile']);
+    Route::post('/profile', [AdminSettingsController::class, 'updateProfile']);
     Route::get('/tours', [AdminTourController::class, 'index']);
     Route::post('/tours', [AdminTourController::class, 'store']);
     Route::post('/tours/delete', [AdminTourController::class, 'delete']);

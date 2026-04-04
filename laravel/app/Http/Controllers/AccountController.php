@@ -31,23 +31,39 @@ class AccountController extends Controller
         $user = Auth::user();
 
         $validated = $request->validate([
-            'name'     => 'required|string|max:100',
-            'email'    => 'required|email|unique:users,email,' . $user->id,
-            'phone'    => 'nullable|string|max:30',
-            'password' => 'nullable|string|min:8|confirmed',
+            'first_name' => 'required|string|max:50',
+            'last_name'  => 'required|string|max:50',
+            'phone'      => 'nullable|string|max:30',
+            'language'   => 'nullable|string|in:en,ru,hy',
+            'currency'   => 'nullable|string|in:USD,EUR,AMD,RUB',
         ]);
 
-        $user->name = $validated['name'];
-        $user->email = $validated['email'];
+        $user->name = $validated['first_name'] . ' ' . $validated['last_name'];
         $user->phone = $validated['phone'] ?? $user->phone;
-
-        if (! empty($validated['password'])) {
-            $user->password = Hash::make($validated['password']);
-        }
-
+        $user->language = $validated['language'] ?? $user->language;
+        $user->currency = $validated['currency'] ?? $user->currency;
         $user->save();
 
         return redirect('/account/profile')->with('success', 'Profile updated successfully.');
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $user = Auth::user();
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'Current password is incorrect.']);
+        }
+
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        return redirect('/account/profile')->with('success', 'Password updated successfully.');
     }
 
     public function bookings()

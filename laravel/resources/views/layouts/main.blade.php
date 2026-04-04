@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', config('app.name', 'Touristik'))</title>
-    <meta name="description" content="Touristik Travel - Book flights, hotels, and tour packages from Yerevan to the world. Visa support, incoming tourism programs, and 24/7 service.">
+    <meta name="description" content="@yield('meta_description', 'Touristik Travel - Book flights, hotels, and tour packages from Yerevan to the world. Visa support, incoming tourism programs, and 24/7 service.')">
     <meta property="og:title" content="@yield('title', config('app.name', 'Touristik'))">
-    <meta property="og:description" content="Explore the world with Touristik. Flights, hotels, Armenia tours, and visa support.">
+    <meta property="og:description" content="@yield('meta_description', 'Explore the world with Touristik. Flights, hotels, Armenia tours, and visa support.')">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="https://touristik.am/img/og-image.jpg">
+    <meta property="og:image" content="@yield('og_image', 'https://touristik.am/img/og-image.jpg')">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:url" content="https://touristik.am{{ request()->getRequestUri() }}">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://touristik.am/img/og-image.jpg">
+    <meta name="twitter:image" content="@yield('og_image', 'https://touristik.am/img/og-image.jpg')">
     @if(config('services.google.analytics_id'))
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ config('services.google.analytics_id') }}"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','{{ config('services.google.analytics_id') }}');</script>

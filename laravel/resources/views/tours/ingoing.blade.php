@@ -1,6 +1,7 @@
 @extends('layouts.main')
 
 @section('title', 'Ingoing Tours - Touristik')
+@section('meta_description', 'Explore Armenia with Touristik ingoing tours. Visit ancient monasteries, Lake Sevan, and discover the beauty of the Armenian highlands.')
 
 @push('styles')
 <style>

@@ -1,6 +1,7 @@
 @extends('layouts.main')
 
 @section('title', 'Contact Us - Touristik')
+@section('meta_description', 'Get in touch with Touristik Travel. Visit our 3 branches in Yerevan or call us for flights, hotels, tours, and visa support. 24/7 assistance.')
 
 @push('styles')
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />

@@ -1,9 +1,18 @@
 @extends('layouts.main')
 
 @section('title', 'About - Touristik')
+@section('meta_description', 'Learn about Touristik Travel Club — your trusted travel partner in Armenia. 3 branches in Yerevan, 10+ years of experience, flights, hotels, and visa support.')
 
 @push('styles')
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <style>
+    .about-map { height: 300px; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-top: 2rem; z-index: 1; }
+    .leaflet-popup-content-wrapper { border-radius: 12px !important; }
+    .leaflet-popup-content { margin: 0 !important; padding: 0 !important; }
+    .map-popup { padding: 1rem 1.2rem; }
+    .map-popup h4 { margin: 0 0 0.3rem; font-size: 1rem; color: #1a1a2e; }
+    .map-popup p { margin: 0; font-size: 0.85rem; color: #555; line-height: 1.5; }
+    .map-popup a { color: #FF6B35; text-decoration: none; font-weight: 600; }
     .about-page { max-width: 1100px; margin: 0 auto; padding: 2rem 2rem 4rem; }
     .about-page .section-header { text-align: center; margin-bottom: 3rem; }
     .about-page .section-header h1 { font-size: 2.2rem; color: var(--text-heading); margin-bottom: 0.5rem; }
@@ -110,6 +119,10 @@
         </div>
     </div>
 
+    <div class="branches-section">
+        <div class="about-map reveal" id="aboutMap"></div>
+    </div>
+
     <div class="team-section">
         <h2 data-t="team_title">Our Team</h2>
         <p class="team-subtitle" data-t="team_subtitle">Dedicated professionals ready to make your travel dreams come true</p>
@@ -138,3 +151,30 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var map = L.map('aboutMap', { scrollWheelZoom: false }).setView([40.1872, 44.5152], 13);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; OSM &copy; CARTO', maxZoom: 19
+    }).addTo(map);
+    var icon = L.divIcon({
+        className: 'custom-marker',
+        html: '<div style="background:#FF6B35;width:32px;height:32px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:3px solid #fff;box-shadow:0 3px 12px rgba(255,107,53,0.4);display:flex;align-items:center;justify-content:center;"><span style="transform:rotate(45deg);color:#fff;font-size:14px;">&#9992;</span></div>',
+        iconSize: [32, 32], iconAnchor: [16, 32], popupAnchor: [0, -34]
+    });
+    var branches = [
+        { lat: 40.2090, lng: 44.5155, name: 'Komitas Branch', addr: 'Komitas 38', phone: '+374 33 060 609' },
+        { lat: 40.1811, lng: 44.5133, name: 'Mashtots Branch', addr: 'Mashtots 7/6', phone: '+374 44 060 608' },
+        { lat: 40.1699, lng: 44.5068, name: 'Yerevan Mall Branch', addr: 'Arshakunyats 34, 2nd Floor', phone: '+374 33 060 609' }
+    ];
+    branches.forEach(function(b) {
+        L.marker([b.lat, b.lng], { icon: icon }).addTo(map)
+            .bindPopup('<div class="map-popup"><h4>' + b.name + '</h4><p>' + b.addr + '</p><p><a href="tel:' + b.phone.replace(/\s/g,'') + '">' + b.phone + '</a></p></div>');
+    });
+    map.fitBounds(L.featureGroup(branches.map(function(b) { return L.marker([b.lat, b.lng]); })).getBounds().pad(0.3));
+});
+</script>
+@endpush

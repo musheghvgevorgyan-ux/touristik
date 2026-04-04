@@ -1,6 +1,7 @@
 @extends('layouts.main')
 
 @section('title', 'Outgoing Tours - Touristik')
+@section('meta_description', 'Travel the world with Touristik outgoing tours. Greece, Dubai, Egypt, and more — all-inclusive packages from Yerevan.')
 
 @push('styles')
 <style>

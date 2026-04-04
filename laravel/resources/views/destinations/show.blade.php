@@ -1,6 +1,8 @@
 @extends('layouts.main')
 
-@section('title', 'Destination - Touristik')
+@section('title', ($destination->name ?? 'Destination') . ' - Touristik')
+@section('meta_description', Str::limit(strip_tags($destination->description ?? ''), 155))
+@section('og_image', $destination->image_url ?? 'https://touristik.am/img/og-image.jpg')
 
 @push('styles')
 <style>

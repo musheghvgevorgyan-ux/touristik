@@ -2,6 +2,22 @@
 
 @section('title', 'Touristik - Travel Club')
 
+@push('styles')
+<style>
+    .testimonials { text-align: center; padding: 4rem 2rem; }
+    .testimonials h2 { font-size: 2rem; color: var(--text-heading); margin-bottom: 0.3rem; }
+    .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; max-width: 1200px; margin: 2rem auto 0; }
+    .testimonial-card { background: var(--bg-card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 2rem; text-align: left; transition: transform 0.3s; }
+    .testimonial-card:hover { transform: translateY(-4px); }
+    .testimonial-stars { color: #f7b731; font-size: 1.2rem; margin-bottom: 0.8rem; letter-spacing: 2px; }
+    .testimonial-text { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7; font-style: italic; margin-bottom: 1.2rem; }
+    .testimonial-author { display: flex; align-items: center; gap: 0.8rem; }
+    .testimonial-avatar { width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, #FF6B35, #f7a072); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 1.1rem; flex-shrink: 0; }
+    .testimonial-author strong { display: block; font-size: 0.95rem; color: var(--text-heading); }
+    .testimonial-author span { font-size: 0.8rem; color: var(--text-secondary); }
+</style>
+@endpush
+
 @section('content')
 <section id="home" class="hero">
     <div class="hero-floating" aria-hidden="true">
@@ -246,6 +262,47 @@
             <div class="feature-icon">&#128222;</div>
             <h3 data-t="support_247">24/7 Support</h3>
             <p data-t="support_247_desc">Our team is available around the clock to assist you before, during, and after your trip.</p>
+        </div>
+    </div>
+</section>
+
+<section class="testimonials reveal has-blobs">
+    <div class="blob blob-3" aria-hidden="true"></div>
+    <h2 data-t="testimonials_title">What Our Travelers Say</h2>
+    <p class="section-subtitle" data-t="testimonials_subtitle">Real experiences from our valued customers</p>
+    <div class="testimonials-grid">
+        <div class="testimonial-card reveal-scale">
+            <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <p class="testimonial-text">"Touristik made our honeymoon to Greece absolutely perfect. Every detail was planned, from the flights to the seaside hotel. Highly recommend!"</p>
+            <div class="testimonial-author">
+                <div class="testimonial-avatar">A</div>
+                <div>
+                    <strong>Anna K.</strong>
+                    <span>Greece Tour, 2025</span>
+                </div>
+            </div>
+        </div>
+        <div class="testimonial-card reveal-scale">
+            <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <p class="testimonial-text">"Best visa support service in Yerevan. They handled everything for our family's Schengen visa in just 5 days. Professional and friendly team."</p>
+            <div class="testimonial-author">
+                <div class="testimonial-avatar">D</div>
+                <div>
+                    <strong>David M.</strong>
+                    <span>Visa Support, 2025</span>
+                </div>
+            </div>
+        </div>
+        <div class="testimonial-card reveal-scale">
+            <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <p class="testimonial-text">"We used Touristik for our corporate retreat — 30 people, flights, hotels, and transfers. Everything was seamless. Will use again for sure."</p>
+            <div class="testimonial-author">
+                <div class="testimonial-avatar">S</div>
+                <div>
+                    <strong>Sargis T.</strong>
+                    <span>Corporate Travel, 2026</span>
+                </div>
+            </div>
         </div>
     </div>
 </section>

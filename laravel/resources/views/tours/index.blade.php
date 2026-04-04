@@ -1,6 +1,7 @@
 @extends('layouts.main')
 
 @section('title', 'Tours - Touristik')
+@section('meta_description', 'Discover tour packages with Touristik — ingoing tours to Armenia, outgoing tours worldwide, and comfortable transfer services.')
 
 @section('content')
 <div class="tours-page">

@@ -1,6 +1,7 @@
 @extends('layouts.main')
 
 @section('title', 'Transfer Services - Touristik')
+@section('meta_description', 'Reliable airport transfers and intercity transport services in Armenia. Comfortable vehicles, professional drivers, 24/7 availability.')
 
 @push('styles')
 <style>

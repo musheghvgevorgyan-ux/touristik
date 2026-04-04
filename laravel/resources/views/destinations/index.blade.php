@@ -1,6 +1,7 @@
 @extends('layouts.main')
 
 @section('title', 'Destinations - Touristik')
+@section('meta_description', 'Explore popular travel destinations with Touristik. Find the best deals on flights and hotels to Paris, Tokyo, Bali, Rome, and more.')
 
 @push('styles')
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
