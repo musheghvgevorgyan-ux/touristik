@@ -288,6 +288,7 @@
     </div>
 
     <script src="/js/app.min.js"></script>
+    <script src="/js/translations.js"></script>
     <script>
     // Make all .reveal elements visible (fix for opacity:0 blocking interactions)
     document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('visible'); });
