@@ -309,7 +309,7 @@
     .filter-clear:hover { background: var(--primary); color: #fff; }
 
     /* ─── Tour Cards ─────────────────────────────────────── */
-    .tour-card { background: var(--bg-card); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; transition: transform 0.3s, box-shadow 0.3s; }
+    .tour-card { display: block; text-decoration: none; color: inherit; background: var(--bg-card); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; transition: transform 0.3s, box-shadow 0.3s; }
     .tour-card:hover { transform: translateY(-6px); box-shadow: 0 12px 40px rgba(0,0,0,0.12); }
     .tour-card.hidden-card { display: none; }
     .tour-card-img { height: 200px; background-size: cover; background-position: center; position: relative; }
@@ -558,20 +558,20 @@
     {{-- ─── Tour Cards Grid ──────────────────────────────── --}}
     <div class="card-grid" id="tourGrid">
         @foreach($tours as $tour)
-        <div class="tour-card reveal" data-region="{{ $tour->region }}">
+        <a href="/tours/{{ $tour->slug }}" class="tour-card reveal" data-region="{{ $tour->region }}">
             <div class="tour-card-img lazy-bg" data-bg="{{ $tour->image_url }}">
                 <span class="tour-duration">{{ $tour->duration }}</span>
                 <span class="tour-region-badge" data-t="region_{{ $tour->region }}">{{ ucwords(str_replace('_', ' ', $tour->region)) }}</span>
             </div>
             <div class="tour-card-content">
                 <h3>{{ $tour->title }}</h3>
-                <p class="tour-desc">{{ $tour->description }}</p>
+                <p class="tour-desc">{{ Str::limit($tour->description, 150) }}</p>
                 <div class="tour-card-footer">
                     <span class="price">From ${{ number_format($tour->price_from, 0) }}</span>
-                    <a href="/contact" class="btn-details" data-t="inquire">Inquire</a>
+                    <span class="btn-details" data-t="view_details">View Details</span>
                 </div>
             </div>
-        </div>
+        </a>
         @endforeach
     </div>
 

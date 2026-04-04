@@ -33,6 +33,12 @@ class TourController extends Controller
     public function show(string $slug)
     {
         $tour = Tour::active()->where('slug', $slug)->firstOrFail();
-        return view('tours.show', compact('tour'));
+        $relatedTours = Tour::active()
+            ->where('type', $tour->type)
+            ->where('id', '!=', $tour->id)
+            ->when($tour->region, fn($q) => $q->orderByRaw("CASE WHEN region = ? THEN 0 ELSE 1 END", [$tour->region]))
+            ->limit(3)
+            ->get();
+        return view('tours.show', compact('tour', 'relatedTours'));
     }
 }

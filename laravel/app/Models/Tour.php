@@ -15,9 +15,12 @@ class Tour extends Model
         'region',
         'description',
         'itinerary',
+        'includes',
+        'excludes',
         'duration',
         'price_from',
         'image_url',
+        'gallery',
         'destination_id',
         'featured',
         'status',
@@ -27,6 +30,9 @@ class Tour extends Model
     {
         return [
             'itinerary' => 'array',
+            'includes' => 'array',
+            'excludes' => 'array',
+            'gallery' => 'array',
             'price_from' => 'decimal:2',
             'featured' => 'boolean',
         ];

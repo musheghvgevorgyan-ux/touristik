@@ -149,6 +149,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/tours', [AdminTourController::class, 'index']);
     Route::post('/tours', [AdminTourController::class, 'store']);
     Route::post('/tours/delete', [AdminTourController::class, 'delete']);
+    Route::post('/tours/{id}', [AdminTourController::class, 'update']);
     Route::get('/posts', [\App\Http\Controllers\Admin\PostController::class, 'index']);
     Route::post('/posts', [\App\Http\Controllers\Admin\PostController::class, 'store']);
     Route::post('/posts/delete', [\App\Http\Controllers\Admin\PostController::class, 'delete']);
