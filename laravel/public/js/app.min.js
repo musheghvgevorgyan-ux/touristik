@@ -159,40 +159,43 @@ window.addEventListener('load', function () {
     var navControls = document.querySelector('.nav-controls');
     if (!hamburger || !navLinks) return;
 
+    var dropdownLink = navLinks.querySelector('.nav-dropdown > a');
+    var submenu = navLinks.querySelector('.nav-submenu');
+
     function closeMenu() {
         hamburger.classList.remove('active');
         navLinks.classList.remove('open');
     }
 
-    hamburger.addEventListener('click', function () {
+    hamburger.addEventListener('click', function (e) {
+        e.stopPropagation();
         hamburger.classList.toggle('active');
         navLinks.classList.toggle('open');
     });
 
-    // Mobile dropdown toggle for Tours submenu
-    var dropdownLink = navLinks.querySelector('.nav-dropdown > a');
-    var submenu = navLinks.querySelector('.nav-submenu');
+    // Mobile: Tours dropdown toggles submenu (debounced to prevent double-fire)
+    var lastToggle = 0;
     if (dropdownLink && submenu) {
         dropdownLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
             if (window.innerWidth <= 768) {
-                e.preventDefault();
+                var now = Date.now();
+                if (now - lastToggle < 400) return;
+                lastToggle = now;
                 submenu.classList.toggle('open');
             }
         });
     }
 
-    // Close menu when a nav link is clicked (but not the dropdown toggle)
+    // Close menu when a regular nav link is clicked (not Tours toggle, not submenu)
     navLinks.querySelectorAll('a').forEach(function (link) {
-        link.addEventListener('click', function () {
-            // Don't close menu when tapping the Tours dropdown toggle on mobile
-            if (window.innerWidth <= 768 && link.parentElement.classList.contains('nav-dropdown')) return;
-            // Don't close menu when tapping submenu links — let them navigate first
-            if (window.innerWidth <= 768 && link.closest('.nav-submenu')) {
-                setTimeout(closeMenu, 100);
-                return;
-            }
-            closeMenu();
-        });
+        // Skip the Tours dropdown toggle
+        if (link === dropdownLink) return;
+        // Skip submenu links — let them navigate naturally
+        if (link.closest('.nav-submenu')) return;
+        // All other links close the menu
+        link.addEventListener('click', closeMenu);
     });
 
     // Close menu when currency or language option is selected
@@ -202,7 +205,7 @@ window.addEventListener('load', function () {
         });
     }
 
-    // Close menu when tapping outside the panel
+    // Close menu when tapping outside
     document.addEventListener('click', function (e) {
         if (!navLinks.classList.contains('open')) return;
         if (!navLinks.contains(e.target) && !hamburger.contains(e.target) &&

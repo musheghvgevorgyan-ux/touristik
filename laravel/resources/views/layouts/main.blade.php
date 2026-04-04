@@ -70,7 +70,7 @@
             </button>
             <ul class="nav-links">
                 <li class="nav-dropdown">
-                    <a href="#" onclick="return false;" {{ request()->is('tours*') ? 'class=active' : '' }} data-t="tours_nav">Tours <span class="nav-arrow">&#9662;</span></a>
+                    <a href="javascript:void(0)" {{ request()->is('tours*') ? 'class=active' : '' }} data-t="tours_nav">Tours <span class="nav-arrow">&#9662;</span></a>
                     <ul class="nav-submenu">
                         <li><a href="/tours/ingoing" {{ request()->is('tours/ingoing') ? 'class=active' : '' }} data-t="tour_cat_ingoing">Ingoing Tours</a></li>
                         <li><a href="/tours/outgoing" {{ request()->is('tours/outgoing') ? 'class=active' : '' }} data-t="tour_cat_outgoing">Outgoing Tours</a></li>
