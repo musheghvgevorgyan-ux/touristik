@@ -94,13 +94,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var destinations = @json($destinations->map(function($d) {
         return [
-            'name' => $d['name'],
-            'slug' => $d['slug'],
-            'country' => $d['country'] ?? '',
-            'price' => $d['price_from'] ?? 0,
-            'image' => $d['image_url'] ?? '',
-            'lat' => $d['latitude'] ?? null,
-            'lng' => $d['longitude'] ?? null,
+            'name' => $d->name,
+            'slug' => $d->slug,
+            'country' => $d->country ?? '',
+            'price' => $d->price_from ?? 0,
+            'image' => $d->image_url ?? '',
+            'lat' => $d->latitude ?? null,
+            'lng' => $d->longitude ?? null,
         ];
     }));
 
