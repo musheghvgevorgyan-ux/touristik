@@ -69,9 +69,8 @@
                 <span></span><span></span><span></span>
             </button>
             <ul class="nav-links">
-                <li><a href="/" {{ request()->is('/') ? 'class=active' : '' }} data-t="home">Home</a></li>
                 <li class="nav-dropdown">
-                    <a href="/tours" {{ request()->is('tours*') ? 'class=active' : '' }} data-t="tours_nav">Tours <span class="nav-arrow">&#9662;</span></a>
+                    <a href="#" onclick="return false;" {{ request()->is('tours*') ? 'class=active' : '' }} data-t="tours_nav">Tours <span class="nav-arrow">&#9662;</span></a>
                     <ul class="nav-submenu">
                         <li><a href="/tours/ingoing" {{ request()->is('tours/ingoing') ? 'class=active' : '' }} data-t="tour_cat_ingoing">Ingoing Tours</a></li>
                         <li><a href="/tours/outgoing" {{ request()->is('tours/outgoing') ? 'class=active' : '' }} data-t="tour_cat_outgoing">Outgoing Tours</a></li>

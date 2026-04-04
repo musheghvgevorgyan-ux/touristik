@@ -7,7 +7,7 @@
 
 @push('styles')
 <style>
-    .tours-detail-page { max-width: 1200px; margin: 0 auto; padding: 2rem 2rem 4rem; }
+    .tours-detail-page { max-width: 1200px; margin: 0 auto; padding: 6rem 2rem 4rem; }
     .tours-detail-page .section-header { text-align: center; margin-bottom: 2rem; }
     .tours-detail-page .section-header h1 { font-size: 2.2rem; color: var(--text-heading); margin-bottom: 0.5rem; }
     .tours-detail-page .section-header p { color: var(--text-secondary); font-size: 1.1rem; max-width: 650px; margin: 0 auto; }
@@ -87,14 +87,62 @@
         flex: 1;
         display: flex;
         flex-direction: column;
+    }
+    .tour-styles-title {
+        font-size: 1.2rem;
+        color: var(--text-heading);
+        margin-bottom: 0.8rem;
+    }
+    .tour-style-cards {
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+        flex: 1;
+    }
+    .tour-style-card {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        padding: 0.8rem;
+        border-radius: 10px;
+        border: 1.5px solid rgba(59,130,246,0.12);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .tour-style-card:hover {
+        border-color: #3b82f6;
+        background: rgba(59,130,246,0.04);
+        transform: translateX(4px);
+    }
+    .tour-style-icon {
+        flex-shrink: 0;
+        width: 48px;
+        height: 48px;
+        display: flex;
         align-items: center;
         justify-content: center;
-        text-align: center;
-        color: var(--text-secondary);
+        background: rgba(59,130,246,0.08);
+        border-radius: 10px;
+        color: #3b82f6;
     }
-    .info-default .info-icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.5; }
-    .info-default h3 { font-size: 1.3rem; color: var(--text-heading); margin-bottom: 0.5rem; }
-    .info-default p { font-size: 0.95rem; max-width: 280px; line-height: 1.5; }
+    .tour-style-text strong {
+        display: block;
+        font-size: 0.95rem;
+        color: var(--text-heading);
+        margin-bottom: 0.15rem;
+    }
+    .tour-style-text span {
+        font-size: 0.78rem;
+        color: var(--text-secondary);
+        line-height: 1.35;
+    }
+    .tour-styles-hint {
+        text-align: center;
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        margin-top: 0.8rem;
+        opacity: 0.7;
+    }
     .info-region { display: none; flex-direction: column; flex: 1; }
     .info-region.visible { display: flex; }
     .info-region h3 {
@@ -118,10 +166,56 @@
         line-height: 1.55;
         margin-bottom: 1rem;
     }
-    .region-stats {
+    .region-places-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--text-secondary);
+        margin-bottom: 0.5rem;
+    }
+    .region-places {
         display: flex;
-        gap: 1.2rem;
+        gap: 0.5rem;
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
         margin-bottom: 1rem;
+        scrollbar-width: thin;
+    }
+    .region-places::-webkit-scrollbar { height: 4px; }
+    .region-places::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 2px; }
+    .place-thumb {
+        flex: 0 0 auto;
+        width: 90px;
+        text-align: center;
+        cursor: default;
+    }
+    .place-thumb img {
+        width: 90px;
+        height: 62px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 2px solid rgba(59,130,246,0.1);
+        transition: border-color 0.2s;
+    }
+    .place-thumb:hover img { border-color: #3b82f6; }
+    .place-thumb span {
+        display: block;
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-top: 0.25rem;
+        line-height: 1.2;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .region-stats {
+        display: inline-flex;
+        gap: 0.6rem;
+        margin-bottom: 0.6rem;
+        transform: scale(0.6);
+        transform-origin: left top;
     }
     .region-stat {
         display: flex;
@@ -134,8 +228,8 @@
         border-radius: 8px;
     }
     .region-stat svg { color: #3b82f6; flex-shrink: 0; }
-    .region-stat .stat-label { color: var(--text-secondary); font-weight: 500; }
-    .region-stat .stat-value { font-weight: 700; }
+    .region-stat .stat-label { color: var(--text-secondary); font-weight: 500; font-size: 1.3rem; }
+    .region-stat .stat-value { font-weight: 700; font-size: 1.3rem; }
     .info-region .region-highlights {
         list-style: none;
         padding: 0;
@@ -250,7 +344,6 @@
 <div class="tours-detail-page">
     <div class="section-header reveal">
         <h1 data-t="ingoing_title">Discover Armenia</h1>
-        <p data-t="ingoing_subtitle">Explore the land of ancient monasteries, breathtaking mountains, and warm hospitality</p>
     </div>
 
     {{-- ─── Explorer: Map + Info Panel ───────────────────── --}}
@@ -323,27 +416,88 @@
 
         <div class="explorer-info">
             <div class="info-panel">
-                {{-- Default state --}}
+                {{-- Default state: Tour style picker --}}
                 <div class="info-default" id="infoDefault">
-                    <div class="info-icon">&#x1F5FA;</div>
-                    <h3 data-t="explore_regions">Explore Armenia's Regions</h3>
-                    <p data-t="explore_regions_desc">Click on any region on the map to discover its unique attractions and available tours.</p>
+                    <h3 class="tour-styles-title" data-t="choose_tour_style">Choose Your Tour Style</h3>
+                    <div class="tour-style-cards">
+                        <div class="tour-style-card">
+                            <div class="tour-style-icon">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                            </div>
+                            <div class="tour-style-text">
+                                <strong data-t="group_tours">Group Tours</strong>
+                                <span data-t="group_tours_desc">Join small groups of 6-12 travelers. Shared experiences, new friendships.</span>
+                            </div>
+                        </div>
+                        <div class="tour-style-card">
+                            <div class="tour-style-icon">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            </div>
+                            <div class="tour-style-text">
+                                <strong data-t="private_tours">Private Tours</strong>
+                                <span data-t="private_tours_desc">Your own guide, your own pace. Fully customized itineraries.</span>
+                            </div>
+                        </div>
+                        <div class="tour-style-card">
+                            <div class="tour-style-icon">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a4 4 0 00-8 0v2"/><line x1="12" y1="11" x2="12" y2="15"/></svg>
+                            </div>
+                            <div class="tour-style-text">
+                                <strong data-t="tour_packages">Tour Packages</strong>
+                                <span data-t="tour_packages_desc">All-inclusive multi-day packages. Hotels, transport & meals included.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="tour-styles-hint" data-t="explore_regions_desc">Click on any region on the map to explore</p>
                 </div>
 
                 {{-- Region info panels --}}
                 @php
                 $regions = [
-                    'yerevan' => ['desc' => 'The pink city — Armenia\'s vibrant capital with cafes, museums, and stunning Mount Ararat views.', 'area' => '223', 'pop' => '1,092,800', 'highlights' => ['Republic Square', 'The Cascade', 'Vernissage Market', 'Matenadaran']],
-                    'aragatsotn' => ['desc' => 'Home to Armenia\'s highest peak, Mount Aragats, and ancient fortresses set among alpine meadows.', 'area' => '2,756', 'pop' => '126,300', 'highlights' => ['Mount Aragats', 'Amberd Fortress', 'Byurakan Observatory', 'Saghmosavank']],
-                    'ararat' => ['desc' => 'Sacred land at the foot of biblical Mount Ararat with iconic monasteries and fertile valleys.', 'area' => '2,096', 'pop' => '260,400', 'highlights' => ['Khor Virap Monastery', 'Dvin Ancient Capital', 'Ararat Valley Views']],
-                    'armavir' => ['desc' => 'The spiritual heart of Armenia, home to Echmiadzin — the oldest cathedral in the world.', 'area' => '1,242', 'pop' => '265,800', 'highlights' => ['Echmiadzin Cathedral', 'Zvartnots Temple', 'Sardarapat Memorial']],
-                    'gegharkunik' => ['desc' => 'Home to Lake Sevan, the "Pearl of Armenia" — the largest lake in the Caucasus region.', 'area' => '5,348', 'pop' => '215,400', 'highlights' => ['Lake Sevan', 'Sevanavank Monastery', 'Hayravank', 'Noratus Cemetery']],
-                    'kotayk' => ['desc' => 'Cultural treasures from Greco-Roman temples to rock-carved monasteries, minutes from Yerevan.', 'area' => '2,089', 'pop' => '254,400', 'highlights' => ['Garni Temple', 'Geghard Monastery', 'Symphony of Stones', 'Azat River Gorge']],
-                    'lori' => ['desc' => 'Lush green gorges with UNESCO World Heritage monasteries — masterpieces of medieval architecture.', 'area' => '3,799', 'pop' => '218,400', 'highlights' => ['Haghpat Monastery', 'Sanahin Monastery', 'Akhtala Fortress', 'Odzun Church']],
-                    'shirak' => ['desc' => 'Home to Gyumri, Armenia\'s cultural capital with unique black tufa architecture and vibrant arts.', 'area' => '2,681', 'pop' => '235,600', 'highlights' => ['Gyumri Old Quarter', 'Sev Berd Fortress', 'Marmashen Monastery']],
-                    'syunik' => ['desc' => 'Dramatic southern landscapes with the world\'s longest reversible aerial tramway to Tatev.', 'area' => '4,506', 'pop' => '137,600', 'highlights' => ['Tatev Monastery', 'Wings of Tatev', 'Khndzoresk Caves', 'Shaki Waterfall']],
-                    'tavush' => ['desc' => 'The "Armenian Switzerland" — pristine forests, crystal-clear lakes, and serene monasteries.', 'area' => '2,704', 'pop' => '121,900', 'highlights' => ['Dilijan National Park', 'Goshavank', 'Haghartsin', 'Parz Lake']],
-                    'vayots_dzor' => ['desc' => 'Red rock canyons, medieval monasteries, and the birthplace of the world\'s oldest winemaking.', 'area' => '2,308', 'pop' => '48,800', 'highlights' => ['Noravank Monastery', 'Areni Cave & Winery', 'Jermuk Waterfall']],
+                    'yerevan' => ['desc' => 'The pink city — Armenia\'s vibrant capital with cafes, museums, and stunning Mount Ararat views.', 'area' => '223', 'pop' => '1,092,800',
+                        'places' => [['Yerevan','https://images.unsplash.com/photo-1558972250-100afca53bde?w=200&q=80'],['Republic Sq.','https://images.unsplash.com/photo-1609946860441-a36e1e4b7587?w=200&q=80'],['Kentron','https://images.unsplash.com/photo-1607962837359-5e7e89f86776?w=200&q=80']],
+                        'sights' => [['The Cascade','https://images.unsplash.com/photo-1607962837359-5e7e89f86776?w=200&q=80'],['Matenadaran','https://images.unsplash.com/photo-1617391654483-a07e77c08fa7?w=200&q=80'],['Vernissage','https://images.unsplash.com/photo-1555685812-4b943f1cb0eb?w=200&q=80'],['Opera House','https://images.unsplash.com/photo-1558972250-100afca53bde?w=200&q=80']],
+                    ],
+                    'aragatsotn' => ['desc' => 'Home to Armenia\'s highest peak, Mount Aragats, and ancient fortresses set among alpine meadows.', 'area' => '2,756', 'pop' => '126,300',
+                        'places' => [['Ashtarak','https://images.unsplash.com/photo-1605196560547-b2f7281fb18a?w=200&q=80'],['Aparan','https://images.unsplash.com/photo-1590073242678-70ee3fc28e8e?w=200&q=80'],['Talin','https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?w=200&q=80']],
+                        'sights' => [['Mt. Aragats','https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=200&q=80'],['Amberd','https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?w=200&q=80'],['Saghmosavank','https://images.unsplash.com/photo-1569949237615-e1268f0b311b?w=200&q=80'],['Byurakan','https://images.unsplash.com/photo-1532074205216-d0e1f4b87368?w=200&q=80']],
+                    ],
+                    'ararat' => ['desc' => 'Sacred land at the foot of biblical Mount Ararat with iconic monasteries and fertile valleys.', 'area' => '2,096', 'pop' => '260,400',
+                        'places' => [['Artashat','https://images.unsplash.com/photo-1590073242678-70ee3fc28e8e?w=200&q=80'],['Ararat City','https://images.unsplash.com/photo-1605196560547-b2f7281fb18a?w=200&q=80'],['Vedi','https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?w=200&q=80']],
+                        'sights' => [['Khor Virap','https://images.unsplash.com/photo-1584646098378-0874589d76b1?w=200&q=80'],['Dvin Ruins','https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?w=200&q=80'],['Ararat Valley','https://images.unsplash.com/photo-1590073242678-70ee3fc28e8e?w=200&q=80']],
+                    ],
+                    'armavir' => ['desc' => 'The spiritual heart of Armenia, home to Echmiadzin — the oldest cathedral in the world.', 'area' => '1,242', 'pop' => '265,800',
+                        'places' => [['Vagharshapat','https://images.unsplash.com/photo-1560969184-10fe8719e047?w=200&q=80'],['Armavir City','https://images.unsplash.com/photo-1605196560547-b2f7281fb18a?w=200&q=80'],['Metsamor','https://images.unsplash.com/photo-1590073242678-70ee3fc28e8e?w=200&q=80']],
+                        'sights' => [['Echmiadzin','https://images.unsplash.com/photo-1569949237615-e1268f0b311b?w=200&q=80'],['Zvartnots','https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?w=200&q=80'],['Sardarapat','https://images.unsplash.com/photo-1590073242678-70ee3fc28e8e?w=200&q=80']],
+                    ],
+                    'gegharkunik' => ['desc' => 'Home to Lake Sevan, the "Pearl of Armenia" — the largest lake in the Caucasus region.', 'area' => '5,348', 'pop' => '215,400',
+                        'places' => [['Sevan','https://images.unsplash.com/photo-1603921288457-0a30e11e7db8?w=200&q=80'],['Gavar','https://images.unsplash.com/photo-1590073242678-70ee3fc28e8e?w=200&q=80'],['Martuni','https://images.unsplash.com/photo-1605196560547-b2f7281fb18a?w=200&q=80']],
+                        'sights' => [['Lake Sevan','https://images.unsplash.com/photo-1603921288457-0a30e11e7db8?w=200&q=80'],['Sevanavank','https://images.unsplash.com/photo-1569949237615-e1268f0b311b?w=200&q=80'],['Hayravank','https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?w=200&q=80'],['Noratus','https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?w=200&q=80']],
+                    ],
+                    'kotayk' => ['desc' => 'Cultural treasures from Greco-Roman temples to rock-carved monasteries, minutes from Yerevan.', 'area' => '2,089', 'pop' => '254,400',
+                        'places' => [['Hrazdan','https://images.unsplash.com/photo-1605196560547-b2f7281fb18a?w=200&q=80'],['Abovyan','https://images.unsplash.com/photo-1590073242678-70ee3fc28e8e?w=200&q=80'],['Charentsavan','https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?w=200&q=80']],
+                        'sights' => [['Garni Temple','https://images.unsplash.com/photo-1600959907703-125ba1374a12?w=200&q=80'],['Geghard','https://images.unsplash.com/photo-1569949237615-e1268f0b311b?w=200&q=80'],['Azat Gorge','https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=200&q=80'],['Symphony of Stones','https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=200&q=80']],
+                    ],
+                    'lori' => ['desc' => 'Lush green gorges with UNESCO World Heritage monasteries — masterpieces of medieval architecture.', 'area' => '3,799', 'pop' => '218,400',
+                        'places' => [['Vanadzor','https://images.unsplash.com/photo-1605196560547-b2f7281fb18a?w=200&q=80'],['Alaverdi','https://images.unsplash.com/photo-1597922187945-f300350e9097?w=200&q=80'],['Stepanavan','https://images.unsplash.com/photo-1590073242678-70ee3fc28e8e?w=200&q=80']],
+                        'sights' => [['Haghpat','https://images.unsplash.com/photo-1597922187945-f300350e9097?w=200&q=80'],['Sanahin','https://images.unsplash.com/photo-1569949237615-e1268f0b311b?w=200&q=80'],['Akhtala','https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?w=200&q=80'],['Odzun','https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?w=200&q=80']],
+                    ],
+                    'shirak' => ['desc' => 'Home to Gyumri, Armenia\'s cultural capital with unique black tufa architecture and vibrant arts.', 'area' => '2,681', 'pop' => '235,600',
+                        'places' => [['Gyumri','https://images.unsplash.com/photo-1595867818082-083862f3d630?w=200&q=80'],['Artik','https://images.unsplash.com/photo-1590073242678-70ee3fc28e8e?w=200&q=80'],['Maralik','https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?w=200&q=80']],
+                        'sights' => [['Gyumri Old Quarter','https://images.unsplash.com/photo-1595867818082-083862f3d630?w=200&q=80'],['Sev Berd','https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?w=200&q=80'],['Marmashen','https://images.unsplash.com/photo-1569949237615-e1268f0b311b?w=200&q=80']],
+                    ],
+                    'syunik' => ['desc' => 'Dramatic southern landscapes with the world\'s longest reversible aerial tramway to Tatev.', 'area' => '4,506', 'pop' => '137,600',
+                        'places' => [['Kapan','https://images.unsplash.com/photo-1590073242678-70ee3fc28e8e?w=200&q=80'],['Goris','https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=200&q=80'],['Sisian','https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?w=200&q=80']],
+                        'sights' => [['Tatev','https://images.unsplash.com/photo-1608746249753-9346e2dca7c0?w=200&q=80'],['Wings of Tatev','https://images.unsplash.com/photo-1608746249753-9346e2dca7c0?w=200&q=80'],['Khndzoresk','https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=200&q=80'],['Shaki Falls','https://images.unsplash.com/photo-1565073182887-6bcefbe225b1?w=200&q=80']],
+                    ],
+                    'tavush' => ['desc' => 'The "Armenian Switzerland" — pristine forests, crystal-clear lakes, and serene monasteries.', 'area' => '2,704', 'pop' => '121,900',
+                        'places' => [['Ijevan','https://images.unsplash.com/photo-1580137189272-c9379f8864fd?w=200&q=80'],['Dilijan','https://images.unsplash.com/photo-1580137189272-c9379f8864fd?w=200&q=80'],['Noyemberyan','https://images.unsplash.com/photo-1590073242678-70ee3fc28e8e?w=200&q=80']],
+                        'sights' => [['Dilijan Park','https://images.unsplash.com/photo-1580137189272-c9379f8864fd?w=200&q=80'],['Goshavank','https://images.unsplash.com/photo-1569949237615-e1268f0b311b?w=200&q=80'],['Haghartsin','https://images.unsplash.com/photo-1597922187945-f300350e9097?w=200&q=80'],['Parz Lake','https://images.unsplash.com/photo-1580137189272-c9379f8864fd?w=200&q=80']],
+                    ],
+                    'vayots_dzor' => ['desc' => 'Red rock canyons, medieval monasteries, and the birthplace of the world\'s oldest winemaking.', 'area' => '2,308', 'pop' => '48,800',
+                        'places' => [['Yeghegnadzor','https://images.unsplash.com/photo-1590073242678-70ee3fc28e8e?w=200&q=80'],['Jermuk','https://images.unsplash.com/photo-1565073182887-6bcefbe225b1?w=200&q=80'],['Vayk','https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?w=200&q=80']],
+                        'sights' => [['Noravank','https://images.unsplash.com/photo-1569949237615-e1268f0b311b?w=200&q=80'],['Areni Winery','https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?w=200&q=80'],['Jermuk Falls','https://images.unsplash.com/photo-1565073182887-6bcefbe225b1?w=200&q=80']],
+                    ],
                 ];
                 @endphp
 
@@ -366,11 +520,24 @@
                             <span class="stat-value">{{ $info['pop'] }}</span>
                         </div>
                     </div>
-                    <ul class="region-highlights">
-                        @foreach($info['highlights'] as $h)
-                        <li>{{ $h }}</li>
+                    <div class="region-places-label">Cities</div>
+                    <div class="region-places">
+                        @foreach($info['places'] as [$placeName, $placeImg])
+                        <div class="place-thumb">
+                            <img src="{{ $placeImg }}" alt="{{ $placeName }}" loading="lazy">
+                            <span>{{ $placeName }}</span>
+                        </div>
                         @endforeach
-                    </ul>
+                    </div>
+                    <div class="region-places-label">Sights & Attractions</div>
+                    <div class="region-places">
+                        @foreach($info['sights'] as [$sightName, $sightImg])
+                        <div class="place-thumb">
+                            <img src="{{ $sightImg }}" alt="{{ $sightName }}" loading="lazy">
+                            <span>{{ $sightName }}</span>
+                        </div>
+                        @endforeach
+                    </div>
                     <div class="info-tour-count">
                         <span>{{ $tourCounts[$slug] ?? 0 }} {{ ($tourCounts[$slug] ?? 0) === 1 ? 'tour' : 'tours' }} available</span>
                         <button class="btn-view-tours" onclick="document.getElementById('tourGrid').scrollIntoView({behavior:'smooth'})" data-t="view_tours">View Tours</button>

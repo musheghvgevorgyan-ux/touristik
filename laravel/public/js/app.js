@@ -1505,30 +1505,31 @@ document.querySelectorAll('.card, .feature').forEach(el => {
     var el = document.querySelector('.hero-typed');
     if (!el) return;
 
-    var fullText = el.textContent.trim();
-    el.textContent = '';
-    el.style.minWidth = '0';
+    // Wait for translations to apply first
+    setTimeout(function() {
+        var fullText = el.textContent.trim();
+        el.textContent = '';
+        el.style.minWidth = '0';
 
-    var i = 0;
-    var speed = 55;
+        var i = 0;
+        var speed = 55;
 
-    function type() {
-        if (i < fullText.length) {
-            el.textContent += fullText.charAt(i);
-            i++;
-            setTimeout(type, speed);
-        } else {
-            // Done typing — remove cursor, show subtitle
-            setTimeout(function () {
-                el.classList.add('typing-done');
-                var subtitle = document.querySelector('.hero-subtitle-fade');
-                if (subtitle) subtitle.classList.add('visible');
-            }, 400);
+        function type() {
+            if (i < fullText.length) {
+                el.textContent += fullText.charAt(i);
+                i++;
+                setTimeout(type, speed);
+            } else {
+                setTimeout(function () {
+                    el.classList.add('typing-done');
+                    var subtitle = document.querySelector('.hero-subtitle-fade');
+                    if (subtitle) subtitle.classList.add('visible');
+                }, 400);
+            }
         }
-    }
 
-    // Start after page loader fades
-    setTimeout(type, 600);
+        type();
+    }, 700);
 })();
 
 // Contact form validation
