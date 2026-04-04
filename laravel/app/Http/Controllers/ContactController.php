@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Contact;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ContactController extends Controller
 {
@@ -30,6 +31,24 @@ class ContactController extends Controller
             'user_id' => auth()->id(),
             'status'  => 'new',
         ]);
+
+        try {
+            Mail::raw(
+                "New contact form submission:\n\n" .
+                "Name: {$validated['name']}\n" .
+                "Email: {$validated['email']}\n" .
+                "Subject: " . ($validated['subject'] ?? 'N/A') . "\n\n" .
+                "Message:\n{$validated['message']}",
+                function ($m) use ($validated) {
+                    $m->to('info@touristik.am')
+                      ->replyTo($validated['email'], $validated['name'])
+                      ->subject('New Contact: ' . ($validated['subject'] ?? 'Website Inquiry'));
+                }
+            );
+        } catch (\Exception $e) {
+            // Log error but don't fail the request
+            \Log::error('Contact email failed: ' . $e->getMessage());
+        }
 
         if ($request->ajax()) {
             return response()->json(['success' => true, 'message' => 'Thank you! Your message has been sent.']);
