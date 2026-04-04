@@ -12,6 +12,7 @@ class Tour extends Model
         'title',
         'slug',
         'type',
+        'region',
         'description',
         'itinerary',
         'duration',
