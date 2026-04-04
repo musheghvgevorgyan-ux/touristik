@@ -1,31 +1,29 @@
 <?php
-// Update .env with all production settings
+// Fix .env - rewrite clean version
 $envPath = __DIR__ . '/.env';
 $env = file_get_contents($envPath);
 
-// Add missing env variables if not present
-$additions = [
-    'GOOGLE_ANALYTICS_ID' => 'G-JHCDZH0E3T',
-    'MAIL_MAILER' => 'smtp',
-    'MAIL_HOST' => 'mail.touristik.am',
-    'MAIL_PORT' => '465',
-    'MAIL_USERNAME' => 'info@touristik.am',
-    'MAIL_PASSWORD' => '',
-    'MAIL_SCHEME' => 'tls',
-    'MAIL_FROM_ADDRESS' => 'info@touristik.am',
-    'MAIL_FROM_NAME' => 'Touristik Travel',
-];
+// Fix MAIL_FROM_NAME to have quotes
+$env = preg_replace('/MAIL_FROM_NAME=(.+)/', 'MAIL_FROM_NAME="${1}"', $env);
 
-foreach ($additions as $key => $value) {
-    if (strpos($env, "$key=") === false) {
-        $env .= "\n$key=$value";
+// If MAIL_FROM_NAME not present, it was added without quotes - remove bad lines and re-add
+$lines = explode("\n", $env);
+$clean = [];
+foreach ($lines as $line) {
+    $trimmed = trim($line);
+    if ($trimmed === '' && end($clean) === '') continue; // skip double blanks
+    if (strpos($trimmed, 'MAIL_FROM_NAME=') === 0) {
+        $clean[] = 'MAIL_FROM_NAME="Touristik Travel"';
+    } else {
+        $clean[] = $line;
     }
 }
+$env = implode("\n", $clean);
 
 file_put_contents($envPath, $env);
-echo "ENV updated\n";
+echo "ENV fixed\n";
 
-// Clear and rebuild caches
+// Rebuild caches
 echo shell_exec('php ' . __DIR__ . '/artisan config:cache 2>&1');
 echo shell_exec('php ' . __DIR__ . '/artisan route:cache 2>&1');
 echo shell_exec('php ' . __DIR__ . '/artisan view:cache 2>&1');
