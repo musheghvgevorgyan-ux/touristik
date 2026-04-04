@@ -94,6 +94,7 @@
     <a href="/admin/settings" class="admin-quick-link"><span class="link-icon">&#9881;</span> Settings</a>
     <a href="/admin/promos" class="admin-quick-link"><span class="link-icon">&#127873;</span> Promo Codes</a>
     <a href="/admin/reviews" class="admin-quick-link"><span class="link-icon">&#11088;</span> Reviews</a>
+    <a href="/admin/posts" class="admin-quick-link"><span class="link-icon">&#128221;</span> Blog Posts</a>
     <a href="/admin/profile" class="admin-quick-link"><span class="link-icon">&#128100;</span> My Profile</a>
 </div>
 @endsection

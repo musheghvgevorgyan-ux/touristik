@@ -80,6 +80,7 @@
                 </li>
                 <li><a href="/destinations" {{ request()->is('destinations*') ? 'class=active' : '' }} data-t="destinations">Destinations</a></li>
                 <li><a href="/about" {{ request()->is('about') ? 'class=active' : '' }} data-t="about">About</a></li>
+                <li><a href="/blog" {{ request()->is('blog*') ? 'class=active' : '' }}>Blog</a></li>
                 <li><a href="/contact" {{ request()->is('contact') ? 'class=active' : '' }} data-t="contact">Contact</a></li>
                 @auth
                     <li>@include('partials.notifications-dropdown')</li>
@@ -213,6 +214,67 @@
             <svg viewBox="0 0 32 32" width="20" height="20" fill="#fff"><path d="M16.004 0C7.174 0 .002 7.172.002 16c0 2.82.737 5.572 2.137 7.998L.012 32l8.204-2.094A15.9 15.9 0 0016.004 32C24.834 32 32 24.828 32 16S24.834 0 16.004 0zm0 29.32a13.28 13.28 0 01-7.09-2.04l-.508-.303-4.87 1.244 1.302-4.706-.332-.528A13.27 13.27 0 012.68 16c0-7.348 5.976-13.32 13.324-13.32S29.32 8.652 29.32 16s-5.968 13.32-13.316 13.32zm7.296-9.976c-.4-.2-2.367-1.168-2.734-1.301-.367-.133-.634-.2-.9.2-.268.4-1.034 1.301-1.268 1.568-.234.267-.467.3-.867.1-.4-.2-1.69-.623-3.22-1.987-1.19-1.062-1.993-2.374-2.227-2.774-.233-.4-.025-.616.175-.815.18-.18.4-.467.6-.7.2-.234.267-.4.4-.667.133-.267.067-.5-.033-.7-.1-.2-.9-2.168-1.234-2.968-.325-.78-.655-.674-.9-.686l-.767-.013c-.267 0-.7.1-1.067.5s-1.4 1.368-1.4 3.335c0 1.968 1.434 3.87 1.634 4.137.2.267 2.82 4.306 6.834 6.037.955.412 1.7.658 2.28.842.959.305 1.832.262 2.522.159.77-.115 2.367-.968 2.7-1.902.334-.934.334-1.734.234-1.902-.1-.167-.367-.267-.767-.467z"/></svg>
         </a>
     </div>
+    <!-- Request a Call Button -->
+    <button class="callback-fab" id="callbackFab" aria-label="Request a Call" onclick="document.getElementById('callbackModal').classList.add('active')">
+        <span style="font-size:22px;">&#128222;</span>
+    </button>
+    <div class="callback-overlay" id="callbackModal">
+        <div class="callback-modal">
+            <button class="callback-close" onclick="document.getElementById('callbackModal').classList.remove('active')">&times;</button>
+            <h3>&#128222; Request a Call</h3>
+            <p style="color:#6c757d;font-size:0.9rem;margin-bottom:1.2rem;">Leave your number and we'll call you back shortly</p>
+            <div id="callbackResult" style="display:none;padding:0.8rem;border-radius:8px;margin-bottom:1rem;font-weight:600;text-align:center;font-size:0.9rem;"></div>
+            <form id="callbackForm" onsubmit="return submitCallback(event)">
+                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                <div style="margin-bottom:0.8rem;">
+                    <input type="text" name="name" placeholder="Your name" required style="width:100%;padding:0.7rem 1rem;border:1px solid #ddd;border-radius:8px;font-size:0.95rem;">
+                </div>
+                <div style="margin-bottom:0.8rem;">
+                    <input type="tel" name="phone" placeholder="+374 XX XXX XXX" required style="width:100%;padding:0.7rem 1rem;border:1px solid #ddd;border-radius:8px;font-size:0.95rem;">
+                </div>
+                <div style="margin-bottom:1rem;">
+                    <input type="text" name="note" placeholder="Brief note (optional)" style="width:100%;padding:0.7rem 1rem;border:1px solid #ddd;border-radius:8px;font-size:0.95rem;">
+                </div>
+                <button type="submit" style="width:100%;padding:0.8rem;background:#FF6B35;color:#fff;border:none;border-radius:8px;font-size:1rem;font-weight:600;cursor:pointer;">Call Me Back</button>
+            </form>
+        </div>
+    </div>
+    <style>
+        .callback-fab { position: fixed; bottom: 100px; left: 20px; width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg,#28a745,#20c997); color: #fff; border: none; cursor: pointer; box-shadow: 0 4px 20px rgba(40,167,69,0.4); z-index: 999; transition: transform 0.3s; animation: pulse-call 2s infinite; }
+        .callback-fab:hover { transform: scale(1.1); }
+        @keyframes pulse-call { 0%,100% { box-shadow: 0 4px 20px rgba(40,167,69,0.4); } 50% { box-shadow: 0 4px 30px rgba(40,167,69,0.7); } }
+        .callback-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 10000; align-items: center; justify-content: center; }
+        .callback-overlay.active { display: flex; }
+        .callback-modal { background: #fff; border-radius: 16px; padding: 2rem; max-width: 380px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.3); position: relative; }
+        .callback-modal h3 { margin: 0 0 0.3rem; font-size: 1.3rem; color: #1a1a2e; }
+        .callback-close { position: absolute; top: 12px; right: 16px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #999; }
+    </style>
+    <script>
+    function submitCallback(e) {
+        e.preventDefault();
+        var form = document.getElementById('callbackForm');
+        var result = document.getElementById('callbackResult');
+        var btn = form.querySelector('button[type=submit]');
+        btn.disabled = true; btn.textContent = 'Sending...';
+        fetch('/callback', {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' }
+        }).then(function(r) { return r.json(); }).then(function(data) {
+            result.style.display = 'block';
+            result.style.background = '#d4edda'; result.style.color = '#155724';
+            result.textContent = data.message || 'We will call you shortly!';
+            form.reset();
+            setTimeout(function() { document.getElementById('callbackModal').classList.remove('active'); result.style.display = 'none'; }, 3000);
+        }).catch(function() {
+            result.style.display = 'block';
+            result.style.background = '#f8d7da'; result.style.color = '#721c24';
+            result.textContent = 'Error. Please try again.';
+        }).finally(function() { btn.disabled = false; btn.textContent = 'Call Me Back'; });
+        return false;
+    }
+    </script>
+
     <button class="back-to-top" id="backToTop" aria-label="Back to top">&#8679;</button>
 
     <div class="cookie-banner" id="cookieBanner">

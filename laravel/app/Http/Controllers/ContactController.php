@@ -33,20 +33,17 @@ class ContactController extends Controller
         ]);
 
         try {
-            Mail::raw(
-                "New contact form submission:\n\n" .
-                "Name: {$validated['name']}\n" .
-                "Email: {$validated['email']}\n" .
-                "Subject: " . ($validated['subject'] ?? 'N/A') . "\n\n" .
-                "Message:\n{$validated['message']}",
-                function ($m) use ($validated) {
-                    $m->to('info@touristik.am')
-                      ->replyTo($validated['email'], $validated['name'])
-                      ->subject('New Contact: ' . ($validated['subject'] ?? 'Website Inquiry'));
-                }
-            );
+            Mail::send('emails.contact', [
+                'contactName' => $validated['name'],
+                'contactEmail' => $validated['email'],
+                'contactSubject' => $validated['subject'] ?? null,
+                'contactMessage' => $validated['message'],
+            ], function ($m) use ($validated) {
+                $m->to('info@touristik.am')
+                  ->replyTo($validated['email'], $validated['name'])
+                  ->subject('New Contact: ' . ($validated['subject'] ?? 'Website Inquiry'));
+            });
         } catch (\Exception $e) {
-            // Log error but don't fail the request
             \Log::error('Contact email failed: ' . $e->getMessage());
         }
 

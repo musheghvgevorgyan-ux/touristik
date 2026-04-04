@@ -48,6 +48,11 @@ Route::get('/sitemap.xml', function () {
     foreach ($tours as $t) {
         $urls[] = ['loc' => '/tours/' . $t->slug, 'priority' => '0.7', 'changefreq' => 'weekly'];
     }
+    $urls[] = ['loc' => '/blog', 'priority' => '0.8', 'changefreq' => 'daily'];
+    $posts = \App\Models\Post::published()->get();
+    foreach ($posts as $p) {
+        $urls[] = ['loc' => '/blog/' . $p->slug, 'priority' => '0.6', 'changefreq' => 'weekly'];
+    }
     $content = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
     $content .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
     foreach ($urls as $url) {
@@ -66,6 +71,9 @@ Route::get('/', [HomeController::class, 'index']);
 Route::get('/about', [HomeController::class, 'about']);
 Route::get('/contact', [ContactController::class, 'index']);
 Route::post('/contact', [ContactController::class, 'send']);
+Route::post('/callback', [\App\Http\Controllers\CallbackController::class, 'store']);
+Route::get('/blog', [\App\Http\Controllers\BlogController::class, 'index']);
+Route::get('/blog/{slug}', [\App\Http\Controllers\BlogController::class, 'show']);
 Route::get('/destinations', [DestinationController::class, 'index']);
 Route::get('/destinations/{slug}', [DestinationController::class, 'show']);
 Route::get('/hotels/search', [HotelController::class, 'search']);
@@ -141,6 +149,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/tours', [AdminTourController::class, 'index']);
     Route::post('/tours', [AdminTourController::class, 'store']);
     Route::post('/tours/delete', [AdminTourController::class, 'delete']);
+    Route::get('/posts', [\App\Http\Controllers\Admin\PostController::class, 'index']);
+    Route::post('/posts', [\App\Http\Controllers\Admin\PostController::class, 'store']);
+    Route::get('/posts/{id}/edit', [\App\Http\Controllers\Admin\PostController::class, 'edit']);
+    Route::post('/posts/{id}', [\App\Http\Controllers\Admin\PostController::class, 'update']);
+    Route::post('/posts/delete', [\App\Http\Controllers\Admin\PostController::class, 'delete']);
 });
 
 // B2B Agent portal
