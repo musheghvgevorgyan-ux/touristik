@@ -1,2 +1,6 @@
 User-agent: *
-Disallow:
+Disallow: /admin/
+Disallow: /agent/
+Disallow: /account/
+
+Sitemap: https://touristik.am/sitemap.xml

@@ -26,6 +26,40 @@ use App\Http\Controllers\Agent\SearchController as AgentSearchController;
 use App\Http\Controllers\Agent\BookingController as AgentBookingController;
 use App\Http\Controllers\Agent\CommissionController as AgentCommissionController;
 
+// Sitemap
+Route::get('/sitemap.xml', function () {
+    $urls = [
+        ['loc' => '/', 'priority' => '1.0', 'changefreq' => 'weekly'],
+        ['loc' => '/about', 'priority' => '0.8', 'changefreq' => 'monthly'],
+        ['loc' => '/contact', 'priority' => '0.8', 'changefreq' => 'monthly'],
+        ['loc' => '/destinations', 'priority' => '0.9', 'changefreq' => 'weekly'],
+        ['loc' => '/tours', 'priority' => '0.9', 'changefreq' => 'weekly'],
+        ['loc' => '/tours/ingoing', 'priority' => '0.8', 'changefreq' => 'weekly'],
+        ['loc' => '/tours/outgoing', 'priority' => '0.8', 'changefreq' => 'weekly'],
+        ['loc' => '/tours/transfer', 'priority' => '0.7', 'changefreq' => 'weekly'],
+        ['loc' => '/hotels/search', 'priority' => '0.8', 'changefreq' => 'daily'],
+    ];
+    $destinations = \App\Models\Destination::all();
+    foreach ($destinations as $d) {
+        $urls[] = ['loc' => '/destinations/' . $d->slug, 'priority' => '0.7', 'changefreq' => 'weekly'];
+    }
+    $tours = \App\Models\Tour::all();
+    foreach ($tours as $t) {
+        $urls[] = ['loc' => '/tours/' . $t->slug, 'priority' => '0.7', 'changefreq' => 'weekly'];
+    }
+    $content = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+    $content .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+    foreach ($urls as $url) {
+        $content .= "  <url>\n";
+        $content .= "    <loc>https://touristik.am{$url['loc']}</loc>\n";
+        $content .= "    <changefreq>{$url['changefreq']}</changefreq>\n";
+        $content .= "    <priority>{$url['priority']}</priority>\n";
+        $content .= "  </url>\n";
+    }
+    $content .= '</urlset>';
+    return response($content, 200)->header('Content-Type', 'application/xml');
+});
+
 // Public pages
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/about', [HomeController::class, 'about']);
