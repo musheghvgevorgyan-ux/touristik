@@ -1291,7 +1291,7 @@ body.dark .city-dropdown .city-group-label {
     .nav-submenu::before {
         display: none;
     }
-    .nav-submenu.open {
+    .nav-dropdown .nav-submenu.open {
         display: block !important;
     }
     .nav-submenu li a {
