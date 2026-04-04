@@ -181,9 +181,18 @@ window.addEventListener('load', function () {
         });
     }
 
-    // Close menu when a nav link is clicked
+    // Close menu when a nav link is clicked (but not the dropdown toggle)
     navLinks.querySelectorAll('a').forEach(function (link) {
-        link.addEventListener('click', closeMenu);
+        link.addEventListener('click', function () {
+            // Don't close menu when tapping the Tours dropdown toggle on mobile
+            if (window.innerWidth <= 768 && link.parentElement.classList.contains('nav-dropdown')) return;
+            // Don't close menu when tapping submenu links — let them navigate first
+            if (window.innerWidth <= 768 && link.closest('.nav-submenu')) {
+                setTimeout(closeMenu, 100);
+                return;
+            }
+            closeMenu();
+        });
     });
 
     // Close menu when currency or language option is selected
