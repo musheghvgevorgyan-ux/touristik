@@ -3,7 +3,24 @@
 @section('title', 'Destinations - Touristik')
 
 @push('styles')
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <style>
+    .dest-map-wrapper { max-width: 1200px; margin: 0 auto 2rem; padding: 0 2rem; }
+    .dest-map-container { position: relative; height: 420px; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 40px rgba(0,0,0,0.12); }
+    .dest-map-overlay { position: absolute; top: 1.5rem; left: 1.5rem; z-index: 1000; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-radius: 12px; padding: 1rem 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+    .dest-map-overlay h3 { margin: 0 0 0.2rem; font-size: 1rem; color: #1a1a2e; }
+    .dest-map-overlay p { margin: 0; font-size: 0.8rem; color: #666; }
+    .leaflet-popup-content-wrapper { border-radius: 12px !important; box-shadow: 0 8px 30px rgba(0,0,0,0.15) !important; }
+    .leaflet-popup-content { margin: 0 !important; padding: 0 !important; }
+    .dest-popup { padding: 0; overflow: hidden; border-radius: 12px; min-width: 200px; }
+    .dest-popup-img { width: 100%; height: 120px; object-fit: cover; display: block; }
+    .dest-popup-body { padding: 0.8rem 1rem; }
+    .dest-popup-body h4 { margin: 0 0 0.2rem; font-size: 1rem; color: #1a1a2e; }
+    .dest-popup-body .dest-popup-country { font-size: 0.8rem; color: #888; margin-bottom: 0.4rem; }
+    .dest-popup-body .dest-popup-price { font-size: 0.9rem; color: #FF6B35; font-weight: 700; }
+    .dest-popup-body a { display: inline-block; margin-top: 0.5rem; padding: 0.4rem 1rem; background: #FF6B35; color: #fff; text-decoration: none; border-radius: 6px; font-size: 0.8rem; font-weight: 600; transition: background 0.2s; }
+    .dest-popup-body a:hover { background: #e55a2b; }
+    @media (max-width: 768px) { .dest-map-container { height: 300px; } .dest-map-overlay { top: 0.8rem; left: 0.8rem; padding: 0.7rem 1rem; } }
     .destinations-page { max-width: 1200px; margin: 0 auto; padding: 2rem 2rem 4rem; }
     .destinations-page .section-header { text-align: center; margin-bottom: 2.5rem; }
     .destinations-page .section-header h1 { font-size: 2.2rem; color: var(--text-heading); margin-bottom: 0.5rem; }
@@ -22,6 +39,15 @@
 @endpush
 
 @section('content')
+<div class="dest-map-wrapper reveal">
+    <div class="dest-map-container">
+        <div class="dest-map-overlay">
+            <h3>Explore Destinations</h3>
+            <p>Click a pin to discover more</p>
+        </div>
+        <div id="destMap" style="height:100%;width:100%;"></div>
+    </div>
+</div>
 <div class="destinations-page">
     <div class="section-header reveal">
         <h1 data-t="destinations_title">Popular Destinations</h1>
@@ -54,3 +80,62 @@
     @endif
 </div>
 @endsection
+
+@push('scripts')
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var map = L.map('destMap', { scrollWheelZoom: false, zoomControl: true }).setView([30, 30], 2);
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
+        maxZoom: 19
+    }).addTo(map);
+
+    var destinations = @json($destinations->map(function($d) {
+        return [
+            'name' => $d['name'],
+            'slug' => $d['slug'],
+            'country' => $d['country'] ?? '',
+            'price' => $d['price_from'] ?? 0,
+            'image' => $d['image_url'] ?? '',
+            'lat' => $d['latitude'] ?? null,
+            'lng' => $d['longitude'] ?? null,
+        ];
+    }));
+
+    var markers = [];
+    destinations.forEach(function(d) {
+        if (!d.lat || !d.lng) return;
+
+        var icon = L.divIcon({
+            className: 'custom-dest-marker',
+            html: '<div style="background:#FF6B35;width:36px;height:36px;border-radius:50%;border:3px solid #fff;box-shadow:0 4px 15px rgba(255,107,53,0.4);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform 0.2s;"><span style="color:#fff;font-size:16px;">&#9992;</span></div>',
+            iconSize: [36, 36],
+            iconAnchor: [18, 18],
+            popupAnchor: [0, -22]
+        });
+
+        var imgHtml = d.image ? '<img src="' + d.image + '" class="dest-popup-img" alt="' + d.name + '">' : '';
+        var priceHtml = d.price > 0 ? '<div class="dest-popup-price">From $' + Number(d.price).toLocaleString() + '</div>' : '';
+
+        var popup = '<div class="dest-popup">' +
+            imgHtml +
+            '<div class="dest-popup-body">' +
+            '<h4>' + d.name + '</h4>' +
+            '<div class="dest-popup-country">' + d.country + '</div>' +
+            priceHtml +
+            '<a href="/destinations/' + d.slug + '">Explore &rarr;</a>' +
+            '</div></div>';
+
+        var marker = L.marker([d.lat, d.lng], { icon: icon }).addTo(map).bindPopup(popup, { maxWidth: 250, minWidth: 200 });
+        markers.push(marker);
+    });
+
+    if (markers.length > 1) {
+        var group = L.featureGroup(markers);
+        map.fitBounds(group.getBounds().pad(0.2));
+    }
+});
+</script>
+@endpush

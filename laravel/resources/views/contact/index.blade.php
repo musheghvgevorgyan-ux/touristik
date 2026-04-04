@@ -3,6 +3,7 @@
 @section('title', 'Contact Us - Touristik')
 
 @push('styles')
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <style>
     .contact-page { max-width: 1200px; margin: 0 auto; padding: 2rem 2rem 4rem; }
     .contact-page .section-header { text-align: center; margin-bottom: 2.5rem; }
@@ -28,7 +29,13 @@
     .branch-card p { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin: 0; }
     .branch-card a { color: var(--primary); text-decoration: none; font-weight: 500; }
     .branch-card a:hover { text-decoration: underline; }
-    .map-placeholder { background: var(--bg-card); border-radius: var(--radius); box-shadow: var(--shadow); height: 200px; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); font-size: 1rem; margin-top: 1.5rem; border: 2px dashed var(--border-color); }
+    .leaflet-popup-content-wrapper { border-radius: 12px !important; box-shadow: 0 8px 30px rgba(0,0,0,0.15) !important; }
+    .leaflet-popup-content { margin: 0 !important; padding: 0 !important; }
+    .map-popup { padding: 1rem 1.2rem; font-family: inherit; }
+    .map-popup h4 { margin: 0 0 0.4rem; font-size: 1rem; color: #1a1a2e; }
+    .map-popup p { margin: 0; font-size: 0.85rem; color: #555; line-height: 1.5; }
+    .map-popup a { color: #FF6B35; text-decoration: none; font-weight: 600; }
+    .map-popup a:hover { text-decoration: underline; }
     @media (max-width: 768px) {
         .contact-layout { grid-template-columns: 1fr; }
     }
@@ -167,10 +174,45 @@
                 <p data-t="hours_weekend">Sat - Sun: 11:00 - 18:00</p>
             </div>
 
-            <div class="map-placeholder reveal">
-                <span data-t="map_placeholder">Map integration coming soon</span>
-            </div>
+            <div class="branches-map reveal" id="branchesMap" style="height:350px;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;z-index:1;"></div>
         </div>
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var map = L.map('branchesMap', { scrollWheelZoom: false, zoomControl: true }).setView([40.1872, 44.5152], 13);
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
+        maxZoom: 19
+    }).addTo(map);
+
+    var icon = L.divIcon({
+        className: 'custom-marker',
+        html: '<div style="background:#FF6B35;width:32px;height:32px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:3px solid #fff;box-shadow:0 3px 12px rgba(255,107,53,0.4);display:flex;align-items:center;justify-content:center;"><span style="transform:rotate(45deg);color:#fff;font-size:14px;">&#9992;</span></div>',
+        iconSize: [32, 32],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -34]
+    });
+
+    var branches = [
+        { lat: 40.2090, lng: 44.5155, name: 'Komitas Branch', addr: 'Komitas 38, Yerevan', phone: '+374 33 060 609' },
+        { lat: 40.1811, lng: 44.5133, name: 'Mashtots Branch', addr: 'Mashtots 7/6, Yerevan', phone: '+374 44 060 608' },
+        { lat: 40.1699, lng: 44.5068, name: 'Yerevan Mall Branch', addr: 'Arshakunyats 34, 2nd Floor', phone: '+374 33 060 609' }
+    ];
+
+    branches.forEach(function(b) {
+        L.marker([b.lat, b.lng], { icon: icon })
+            .addTo(map)
+            .bindPopup('<div class="map-popup"><h4>' + b.name + '</h4><p>' + b.addr + '</p><p><a href="tel:' + b.phone.replace(/\s/g,'') + '">' + b.phone + '</a></p></div>');
+    });
+
+    var group = L.featureGroup(branches.map(function(b) { return L.marker([b.lat, b.lng]); }));
+    map.fitBounds(group.getBounds().pad(0.3));
+});
+</script>
+@endpush

@@ -17,6 +17,8 @@ class Destination extends Model
         'image_url',
         'color',
         'emoji',
+        'latitude',
+        'longitude',
         'featured',
         'status',
     ];
