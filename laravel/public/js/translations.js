@@ -152,17 +152,12 @@ var TRANSLATIONS = {
 
 (function() {
     var currentLang = localStorage.getItem('touristik_lang') || 'en';
-    var originals = {};
 
-    function setLang(lang) {
-        currentLang = lang;
-        localStorage.setItem('touristik_lang', lang);
+    function applyLang(lang) {
         var dict = TRANSLATIONS[lang] || {};
         document.querySelectorAll('[data-t]').forEach(function(el) {
             var key = el.getAttribute('data-t');
-            if (lang === 'en') {
-                if (originals[key] !== undefined) el.innerHTML = originals[key];
-            } else if (dict[key]) {
+            if (dict[key]) {
                 el.innerHTML = dict[key];
             }
         });
@@ -171,27 +166,33 @@ var TRANSLATIONS = {
         document.documentElement.lang = lang;
     }
 
+    function switchLang(lang) {
+        localStorage.setItem('touristik_lang', lang);
+        // Reload page to cleanly apply language (avoids animation/DOM conflicts)
+        window.location.reload();
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
-        // Always save English originals FIRST (server renders in English)
-        document.querySelectorAll('[data-t]').forEach(function(el) {
-            originals[el.getAttribute('data-t')] = el.innerHTML;
-        });
+        // Apply saved language on load (EN is already rendered by server, so only apply non-EN)
+        if (currentLang !== 'en') {
+            applyLang(currentLang);
+        }
 
-        // Then apply saved language
-        if (currentLang !== 'en') setLang(currentLang);
-
-        // Update lang display on load
+        // Update lang display
         var langCurrent = document.getElementById('langCurrent');
         if (langCurrent) langCurrent.textContent = currentLang.toUpperCase();
 
-        // Click handlers
+        // Click handlers — switch language and reload
         document.querySelectorAll('.lang-option[data-lang]').forEach(function(el) {
             el.addEventListener('click', function(e) {
                 e.preventDefault();
-                setLang(this.getAttribute('data-lang'));
+                var newLang = this.getAttribute('data-lang');
+                if (newLang !== currentLang) {
+                    switchLang(newLang);
+                }
             });
         });
     });
 
-    window.setTouristikLang = setLang;
+    window.setTouristikLang = switchLang;
 })();
