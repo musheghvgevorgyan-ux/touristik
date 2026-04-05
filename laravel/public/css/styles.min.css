@@ -211,6 +211,9 @@ nav {
     margin-left: 2px;
     opacity: 0.7;
 }
+.submenu-toggle {
+    display: none;
+}
 .nav-submenu {
     display: none;
     position: absolute;
@@ -1275,6 +1278,26 @@ body.dark .city-dropdown .city-group-label {
         border-bottom: 1px solid rgba(255,255,255,0.1);
     }
 
+    .nav-dropdown {
+        position: relative;
+    }
+    .nav-dropdown > a {
+        display: inline-block !important;
+    }
+    .submenu-toggle {
+        display: inline-block;
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 1rem;
+        padding: 0.8rem 0.8rem;
+        cursor: pointer;
+        opacity: 0.7;
+        vertical-align: middle;
+    }
+    .submenu-toggle.open {
+        transform: rotate(180deg);
+    }
     .nav-dropdown:hover .nav-submenu,
     .nav-dropdown:focus-within .nav-submenu {
         display: none;
