@@ -389,4 +389,55 @@
         </div>
     </div>
 </section>
+
+@verbatim
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {
+            "@type": "Question",
+            "name": "How do I book a flight or tour package?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Simply use our search form on the homepage to find flights or packages. Select your dates, passengers, and destination, then click Search. You can also contact us directly by phone or email for personalized assistance."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Do you provide visa support?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes! We offer full visa support including invitation letters, e-visa assistance, and consultation. Standard processing takes 5-7 business days, with an express option in 2-3 days. Citizens of 60+ countries can enter Armenia visa-free."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "What payment methods do you accept?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "We accept cash (AMD, USD, EUR, RUB), bank transfers, and major credit/debit cards (Visa, MasterCard). Payment can be made at any of our three branches in Yerevan or online via bank transfer."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Can I cancel or modify my booking?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Cancellation and modification policies depend on the airline and hotel. Most bookings can be modified up to 48 hours before departure. Contact our 24/7 support team for assistance with changes to your reservation."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Do you offer group or corporate travel?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Absolutely! We specialize in group tours, corporate travel, and MICE (Meetings, Incentives, Conferences, Events). Contact us for customized group rates and tailored itineraries for your team or organization."
+            }
+        }
+    ]
+}
+</script>
+@endverbatim
 @endsection

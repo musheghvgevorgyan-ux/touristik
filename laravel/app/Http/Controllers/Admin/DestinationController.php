@@ -20,19 +20,51 @@ class DestinationController extends Controller
     {
         $validated = $request->validate([
             'name'        => 'required|string|max:200',
+            'slug'        => 'nullable|string|max:200',
             'description' => 'nullable|string|max:5000',
-            'image'       => 'nullable|image|max:2048',
-            'featured'    => 'boolean',
+            'country'     => 'nullable|string|max:100',
+            'price_from'  => 'nullable|numeric|min:0',
+            'image_url'   => 'nullable|url|max:500',
+            'color'       => 'nullable|string|max:20',
+            'emoji'       => 'nullable|string|max:10',
+            'status'      => 'nullable|string|in:active,inactive,draft',
+            'featured'    => 'nullable',
         ]);
 
-        $validated['slug'] = Str::slug($validated['name']);
-
-        if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('destinations', 'public');
-        }
+        $validated['slug'] = $validated['slug'] ?: Str::slug($validated['name']);
+        $validated['featured'] = $request->has('featured');
 
         Destination::create($validated);
 
-        return redirect('/admin/destinations')->with('success', 'Destination created successfully.');
+        return redirect('/admin/destinations')->with('success', 'Destination created.');
+    }
+
+    public function update(Request $request, $id)
+    {
+        $dest = Destination::findOrFail($id);
+
+        $validated = $request->validate([
+            'name'        => 'required|string|max:200',
+            'slug'        => 'nullable|string|max:200',
+            'description' => 'nullable|string|max:5000',
+            'country'     => 'nullable|string|max:100',
+            'price_from'  => 'nullable|numeric|min:0',
+            'image_url'   => 'nullable|url|max:500',
+            'color'       => 'nullable|string|max:20',
+            'emoji'       => 'nullable|string|max:10',
+            'status'      => 'nullable|string|in:active,inactive,draft',
+            'featured'    => 'nullable',
+        ]);
+
+        $validated['featured'] = $request->has('featured');
+        $dest->update($validated);
+
+        return redirect('/admin/destinations')->with('success', 'Destination updated.');
+    }
+
+    public function delete($id)
+    {
+        Destination::findOrFail($id)->delete();
+        return redirect('/admin/destinations')->with('success', 'Destination deleted.');
     }
 }

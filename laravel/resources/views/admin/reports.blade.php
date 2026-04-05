@@ -1,171 +1,167 @@
 @extends('layouts.main')
 
-@section('title', 'Reports - Touristik')
+@section('title', 'Analytics & Reports - Admin')
 
 @push('styles')
 <style>
-    .admin-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; }
-    .admin-header h1 { font-size: 1.8rem; color: var(--text-heading, #1a1a2e); margin: 0; }
-    .admin-header p { color: #6c757d; margin: 0.3rem 0 0; font-size: 0.95rem; }
+    .reports-page { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+    .admin-header { margin-bottom: 2rem; }
+    .admin-header h1 { font-size: 1.8rem; color: var(--text-heading); margin-bottom: 0.3rem; }
+    .admin-header p { color: #6c757d; }
 
-    /* Revenue Cards */
-    .revenue-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.2rem; margin-bottom: 2rem; }
-    .revenue-card { background: #fff; padding: 1.5rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
-    .revenue-card .card-label { font-size: 0.82rem; font-weight: 600; color: #6c757d; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.4rem; }
-    .revenue-card .card-value { font-size: 1.8rem; font-weight: 700; color: #FF6B35; }
-    .revenue-card .card-sub { font-size: 0.82rem; color: #6c757d; margin-top: 0.3rem; }
+    .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+    .stat-card { background: #fff; padding: 1.2rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); text-align: center; }
+    .stat-card .stat-icon { font-size: 1.5rem; margin-bottom: 0.3rem; }
+    .stat-card .stat-val { font-size: 1.6rem; font-weight: 700; color: #FF6B35; }
+    .stat-card .stat-label { font-size: 0.8rem; color: #6c757d; margin-top: 0.2rem; }
+    .stat-card .stat-sub { font-size: 0.75rem; color: #28a745; margin-top: 0.2rem; }
 
-    /* Booking Status Cards */
-    .section-title { font-size: 1.15rem; font-weight: 700; color: var(--text-heading, #1a1a2e); margin: 0 0 1rem; }
-    .status-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
-    .status-card { padding: 1.2rem; border-radius: 10px; text-align: center; }
-    .status-card .status-count { font-size: 2rem; font-weight: 700; }
-    .status-card .status-label { font-size: 0.85rem; font-weight: 600; margin-top: 0.2rem; }
-    .status-confirmed { background: #d4edda; }
-    .status-confirmed .status-count { color: #155724; }
-    .status-confirmed .status-label { color: #155724; }
-    .status-pending { background: #fff3cd; }
-    .status-pending .status-count { color: #856404; }
-    .status-pending .status-label { color: #856404; }
-    .status-cancelled { background: #f8d7da; }
-    .status-cancelled .status-count { color: #721c24; }
-    .status-cancelled .status-label { color: #721c24; }
-    .status-completed { background: #d1ecf1; }
-    .status-completed .status-count { color: #0c5460; }
-    .status-completed .status-label { color: #0c5460; }
+    .reports-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+    .report-card { background: #fff; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); overflow: hidden; }
+    .report-card h3 { padding: 1rem 1.5rem; margin: 0; font-size: 1.1rem; color: var(--text-heading); border-bottom: 1px solid #f0f0f0; }
 
-    /* Tables and Cards Section */
-    .reports-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
-    .report-card { background: #fff; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); padding: 1.5rem; }
-    .report-card h3 { margin: 0 0 1rem; font-size: 1.05rem; color: var(--text-heading, #1a1a2e); padding-bottom: 0.6rem; border-bottom: 2px solid #f0f0f0; }
-    .admin-table { width: 100%; border-collapse: collapse; }
-    .admin-table th { text-align: left; padding: 0.6rem 0.8rem; border-bottom: 2px solid #eee; color: #6c757d; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; }
-    .admin-table td { padding: 0.6rem 0.8rem; border-bottom: 1px solid #f0f0f0; font-size: 0.9rem; }
-    .admin-table tr:hover td { background: #f8f9fa; }
-    .rank-num { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; background: #FF6B35; color: #fff; border-radius: 50%; font-size: 0.75rem; font-weight: 700; }
+    .chart-area { padding: 1.5rem; height: 250px; display: flex; align-items: flex-end; gap: 6px; }
+    .chart-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+    .chart-stack { display: flex; flex-direction: column; gap: 2px; align-items: center; width: 100%; height: 200px; justify-content: flex-end; }
+    .chart-bar { width: 80%; border-radius: 3px 3px 0 0; min-height: 2px; transition: height 0.5s; position: relative; }
+    .chart-bar:hover { opacity: 0.8; }
+    .chart-bar.bar-users { background: #20c997; }
+    .chart-bar.bar-contacts { background: #FF6B35; }
+    .chart-bar.bar-bookings { background: #0d6efd; }
+    .chart-lbl { font-size: 0.65rem; color: #999; margin-top: 2px; }
+    .chart-legend { display: flex; gap: 1rem; padding: 0 1.5rem 1rem; flex-wrap: wrap; }
+    .chart-legend span { font-size: 0.8rem; color: #666; display: flex; align-items: center; gap: 4px; }
+    .chart-legend .dot { width: 10px; height: 10px; border-radius: 50%; }
 
-    /* User Stats */
-    .user-stat-row { display: flex; justify-content: space-between; padding: 0.55rem 0; border-bottom: 1px solid #f0f0f0; }
-    .user-stat-row:last-child { border-bottom: none; }
-    .user-stat-label { color: #6c757d; font-size: 0.88rem; font-weight: 600; }
-    .user-stat-value { color: #333; font-size: 0.92rem; font-weight: 700; }
-    .user-stat-value.highlight { color: #FF6B35; }
+    .type-bars { padding: 1.5rem; }
+    .type-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+    .type-label { width: 80px; font-size: 0.9rem; font-weight: 600; color: #333; text-transform: capitalize; }
+    .type-bar-wrap { flex: 1; background: #f0f0f0; border-radius: 20px; height: 28px; overflow: hidden; }
+    .type-bar-fill { height: 100%; border-radius: 20px; display: flex; align-items: center; padding: 0 10px; color: #fff; font-weight: 600; font-size: 0.8rem; transition: width 0.5s; }
+    .type-bar-fill.ingoing { background: linear-gradient(90deg, #FF6B35, #f7a072); }
+    .type-bar-fill.outgoing { background: linear-gradient(90deg, #0d6efd, #6ea8fe); }
+    .type-bar-fill.transfer { background: linear-gradient(90deg, #20c997, #6edbb5); }
 
-    .empty-state { text-align: center; padding: 2rem 1rem; color: #6c757d; font-size: 0.95rem; }
+    .contacts-list { max-height: 350px; overflow-y: auto; }
+    .contact-item { padding: 0.8rem 1.5rem; border-bottom: 1px solid #f0f0f0; display: flex; gap: 0.8rem; align-items: flex-start; }
+    .contact-item:last-child { border-bottom: none; }
+    .contact-avatar { width: 32px; height: 32px; border-radius: 50%; background: #FFF3ED; color: #FF6B35; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; flex-shrink: 0; }
+    .contact-info { flex: 1; min-width: 0; }
+    .contact-info strong { font-size: 0.85rem; color: #333; }
+    .contact-info p { margin: 0.2rem 0 0; font-size: 0.78rem; color: #999; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .contact-info .contact-date { font-size: 0.72rem; color: #bbb; }
+    .badge-new { background: #FF6B35; color: #fff; padding: 0.15rem 0.5rem; border-radius: 3px; font-size: 0.7rem; font-weight: 600; }
 
-    @media (max-width: 768px) {
-        .reports-grid { grid-template-columns: 1fr; }
-        .revenue-grid { grid-template-columns: 1fr 1fr; }
-    }
-    @media (max-width: 480px) {
-        .revenue-grid { grid-template-columns: 1fr; }
-    }
+    .back-link { margin-top: 1.5rem; }
+    .back-link a { color: #FF6B35; text-decoration: none; font-weight: 600; }
+
+    @media (max-width: 768px) { .reports-grid { grid-template-columns: 1fr; } }
 </style>
 @endpush
 
 @section('content')
-<div class="admin-header">
-    <div>
-        <h1>{{ $title }}</h1>
-        <p>Platform performance overview and analytics.</p>
-    </div>
-</div>
-
-<!-- Revenue Overview -->
-<div class="revenue-grid">
-    <div class="revenue-card">
-        <div class="card-label">Total Revenue</div>
-        <div class="card-value">${!! number_format($revenue['total'] ?? 0, 2) !!}</div>
-        <div class="card-sub">All time</div>
-    </div>
-    <div class="revenue-card">
-        <div class="card-label">This Month</div>
-        <div class="card-value">${!! number_format($revenue['this_month'] ?? 0, 2) !!}</div>
-        <div class="card-sub">{!! date('F Y') !!}</div>
-    </div>
-    <div class="revenue-card">
-        <div class="card-label">Last Month</div>
-        <div class="card-value">${!! number_format($revenue['last_month'] ?? 0, 2) !!}</div>
-        <div class="card-sub">{!! date('F Y', strtotime('first day of last month')) !!}</div>
-    </div>
-    <div class="revenue-card">
-        <div class="card-label">Avg Booking Value</div>
-        <div class="card-value">${!! number_format($revenue['average'] ?? 0, 2) !!}</div>
-        <div class="card-sub">Per booking</div>
-    </div>
-</div>
-
-<!-- Booking Stats by Status -->
-<h2 class="section-title">Bookings by Status</h2>
-<div class="status-grid">
-    <div class="status-card status-confirmed">
-        <div class="status-count">{!! (int)($bookingStats['confirmed'] ?? 0) !!}</div>
-        <div class="status-label">Confirmed</div>
-    </div>
-    <div class="status-card status-pending">
-        <div class="status-count">{!! (int)($bookingStats['pending'] ?? 0) !!}</div>
-        <div class="status-label">Pending</div>
-    </div>
-    <div class="status-card status-cancelled">
-        <div class="status-count">{!! (int)($bookingStats['cancelled'] ?? 0) !!}</div>
-        <div class="status-label">Cancelled</div>
-    </div>
-    <div class="status-card status-completed">
-        <div class="status-count">{!! (int)($bookingStats['completed'] ?? 0) !!}</div>
-        <div class="status-label">Completed</div>
-    </div>
-</div>
-
-<!-- Top Destinations & User Stats -->
-<div class="reports-grid">
-    <!-- Top Destinations -->
-    <div class="report-card">
-        <h3>Top Destinations</h3>
-        @if(empty($topDestinations))
-            <div class="empty-state">No booking data available yet.</div>
-        @else
-            <table class="admin-table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Destination</th>
-                        <th>Bookings</th>
-                        <th>Revenue</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($topDestinations as $i => $dest)
-                    <tr>
-                        <td><span class="rank-num">{!! $i + 1 !!}</span></td>
-                        <td><strong>{{ $dest['name'] ?? '-' }}</strong></td>
-                        <td>{!! (int)($dest['booking_count'] ?? 0) !!}</td>
-                        <td><strong>${!! number_format($dest['total_revenue'] ?? 0, 2) !!}</strong></td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        @endif
+<div class="reports-page">
+    <div class="admin-header">
+        <h1>Analytics & Reports</h1>
+        <p>Platform performance overview — {{ now()->format('F Y') }}</p>
     </div>
 
-    <!-- User Stats -->
-    <div class="report-card">
-        <h3>User Statistics</h3>
-        <div class="user-stat-row">
-            <span class="user-stat-label">Total Users</span>
-            <span class="user-stat-value highlight">{!! (int)($userStats['total'] ?? 0) !!}</span>
+    <div class="stats-row">
+        <div class="stat-card">
+            <div class="stat-icon">&#128101;</div>
+            <div class="stat-val">{{ $stats['total_users'] }}</div>
+            <div class="stat-label">Total Users</div>
+            @if($stats['new_users_month'] > 0)<div class="stat-sub">+{{ $stats['new_users_month'] }} this month</div>@endif
         </div>
-        <div class="user-stat-row">
-            <span class="user-stat-label">New This Month</span>
-            <span class="user-stat-value">{!! (int)($userStats['new_this_month'] ?? 0) !!}</span>
+        <div class="stat-card">
+            <div class="stat-icon">&#128203;</div>
+            <div class="stat-val">{{ $stats['total_bookings'] }}</div>
+            <div class="stat-label">Bookings</div>
+            @if($stats['bookings_month'] > 0)<div class="stat-sub">+{{ $stats['bookings_month'] }} this month</div>@endif
         </div>
-        @if(!empty($userStats['by_role']))
-            @foreach($userStats['by_role'] as $role => $count)
-            <div class="user-stat-row">
-                <span class="user-stat-label">{{ ucfirst($role) }}s</span>
-                <span class="user-stat-value">{!! (int)$count !!}</span>
+        <div class="stat-card">
+            <div class="stat-icon">&#9993;</div>
+            <div class="stat-val">{{ $stats['total_contacts'] }}</div>
+            <div class="stat-label">Messages</div>
+            @if($stats['contacts_month'] > 0)<div class="stat-sub">+{{ $stats['contacts_month'] }} this month</div>@endif
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">&#127960;</div>
+            <div class="stat-val">{{ $stats['total_tours'] }}</div>
+            <div class="stat-label">Tours</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">&#127758;</div>
+            <div class="stat-val">{{ $stats['total_destinations'] }}</div>
+            <div class="stat-label">Destinations</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">&#128221;</div>
+            <div class="stat-val">{{ $stats['total_posts'] }}</div>
+            <div class="stat-label">Blog Posts</div>
+        </div>
+    </div>
+
+    <div class="reports-grid">
+        <div class="report-card">
+            <h3>Activity — Last 12 Months</h3>
+            <div class="chart-area">
+                @php
+                    $maxVal = max(1, max(array_column($monthly, 'users')), max(array_column($monthly, 'contacts')), max(array_column($monthly, 'bookings')));
+                @endphp
+                @foreach($monthly as $m)
+                <div class="chart-col">
+                    <div class="chart-stack">
+                        <div class="chart-bar bar-bookings" style="height: {{ max(2, ($m['bookings'] / $maxVal) * 180) }}px;" title="{{ $m['bookings'] }} bookings"></div>
+                        <div class="chart-bar bar-contacts" style="height: {{ max(2, ($m['contacts'] / $maxVal) * 180) }}px;" title="{{ $m['contacts'] }} messages"></div>
+                        <div class="chart-bar bar-users" style="height: {{ max(2, ($m['users'] / $maxVal) * 180) }}px;" title="{{ $m['users'] }} users"></div>
+                    </div>
+                    <span class="chart-lbl">{{ $m['short'] }}</span>
+                </div>
+                @endforeach
             </div>
-            @endforeach
-        @endif
+            <div class="chart-legend">
+                <span><span class="dot" style="background:#0d6efd;"></span> Bookings</span>
+                <span><span class="dot" style="background:#FF6B35;"></span> Messages</span>
+                <span><span class="dot" style="background:#20c997;"></span> Users</span>
+            </div>
+        </div>
+
+        <div class="report-card">
+            <h3>Tours by Type</h3>
+            <div class="type-bars">
+                @php $maxTours = max(1, max($toursByType)); @endphp
+                @foreach($toursByType as $type => $count)
+                <div class="type-row">
+                    <span class="type-label">{{ $type }}</span>
+                    <div class="type-bar-wrap">
+                        <div class="type-bar-fill {{ $type }}" style="width: {{ max(5, ($count / $maxTours) * 100) }}%;">{{ $count }}</div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+
+            <h3 style="margin-top:1rem;">Recent Messages</h3>
+            <div class="contacts-list">
+                @forelse($recentContacts as $c)
+                <div class="contact-item">
+                    <div class="contact-avatar">{{ strtoupper(substr($c->name, 0, 1)) }}</div>
+                    <div class="contact-info">
+                        <strong>{{ $c->name }}</strong>
+                        @if($c->status === 'new') <span class="badge-new">NEW</span> @endif
+                        <p>{{ $c->message }}</p>
+                        <span class="contact-date">{{ $c->created_at ? $c->created_at->diffForHumans() : '' }}</span>
+                    </div>
+                </div>
+                @empty
+                <div style="padding:2rem;text-align:center;color:#999;">No messages yet</div>
+                @endforelse
+            </div>
+        </div>
+    </div>
+
+    <div class="back-link">
+        <a href="/admin">&larr; Back to Dashboard</a>
     </div>
 </div>
 @endsection

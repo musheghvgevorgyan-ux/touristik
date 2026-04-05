@@ -135,6 +135,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::post('/users/{id}', [AdminUserController::class, 'update']);
     Route::get('/destinations', [AdminDestinationController::class, 'index']);
     Route::post('/destinations', [AdminDestinationController::class, 'store']);
+    Route::post('/destinations/{id}', [AdminDestinationController::class, 'update']);
+    Route::post('/destinations/{id}/delete', [AdminDestinationController::class, 'delete']);
     Route::get('/settings', [AdminSettingsController::class, 'index']);
     Route::post('/settings', [AdminSettingsController::class, 'update']);
     Route::get('/promos', [AdminPromoController::class, 'index']);
