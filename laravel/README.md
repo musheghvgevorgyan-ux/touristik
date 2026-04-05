@@ -15,36 +15,57 @@ Official website for **Touristik LLC**, a travel agency based in Yerevan, Armeni
 ## Features
 
 ### Public Pages
-- **Homepage** - Hero with flight search, destinations, FAQ, testimonials, partners
-- **Ingoing Tours** - Interactive SVG map of Armenia (11 provinces + Lake Sevan), click region to filter tours, region info panel with cities/sights/stats
-- **Outgoing Tours** - Interactive Leaflet world map with destination markers, flight lines from Yerevan, 8 destinations (Greece, Egypt, UAE, Georgia, Turkey, Thailand, Italy, Maldives)
-- **Tour Detail Pages** - Photo gallery, day-by-day itinerary, what's included/excluded, sticky sidebar with inline booking form, related tours
-- **Destinations** - World map with markers, destination cards
-- **Blog** - Posts with admin CRUD
-- **Contact** - Form with styled HTML emails, branch maps (Leaflet)
-- **About** - Company story, team, branch locations with maps
-- **Transfer** - Airport pickup, city transfers, intercity routes
+- **Homepage** — Hero with flight search, destinations, FAQ, testimonials, partners
+- **Ingoing Tours** — Interactive SVG map of Armenia (11 provinces), click region to filter tours
+- **Outgoing Tours** — Interactive Leaflet world map with destination markers
+- **Tour Detail Pages** — Photo gallery, day-by-day itinerary, includes/excludes, inline booking form, related tours
+- **Destinations** — World map with markers, destination cards with prices
+- **Blog** — Travel articles with admin CRUD
+- **Contact** — Form with styled HTML emails, branch maps
+- **About** — Company story, team, branch locations
+- **Transfer** — Airport pickup, city transfers, intercity routes
 
-### Admin Panel (/admin)
+### Admin Panel (`/admin`)
 - Dashboard with charts and recent messages
-- Tour management (full CRUD: create, edit, delete with gallery, itinerary, includes/excludes, region)
+- Tour management (full CRUD: gallery, itinerary, includes/excludes, region)
 - Blog post management
 - Contact messages
-- User management
 - Destination management
 - Settings (site name, GA tracking, etc.)
-- Profile/password change
+- User management, profile/password change
 
 ### Integrations
 - Google Analytics 4 (G-JHCDZH0E3T)
-- Google Search Console (sitemap.xml)
+- Google Search Console (`/sitemap.xml`)
 - SMTP email (mail.touristik.am)
 - Request-a-Call floating button
 
-### i18n
-- 3 languages: English, Russian, Armenian
-- Client-side translation system via `translations.js`
-- Language switcher in navbar
+### Internationalisation (i18n)
+
+Server-side, URL-prefix-based i18n supporting **3 languages: English, Russian, Armenian**.
+
+| Locale | URL prefix | Example |
+|--------|-----------|---------|
+| English (default) | none | `touristik.am/tours` |
+| Russian | `/ru` | `touristik.am/ru/tours` |
+| Armenian | `/hy` | `touristik.am/hy/tours` |
+
+**How it works:**
+
+- `SetLocale` middleware reads the first URL segment (`ru`/`hy`) and calls `app()->setLocale()` on every request.
+- A second route group with `Route::prefix('{locale}')->where(['locale' => 'ru|hy'])` mirrors all public routes.
+- `app/helpers.php` provides a global `lurl(string $path)` helper that auto-prefixes paths based on the active locale.
+- All views use `{{ __('site.key') }}` for translated strings and `lurl('/path')` for internal links.
+- Translation files live in `lang/en/site.php`, `lang/ru/site.php`, `lang/hy/site.php`.
+- The main layout computes `$enUrl / $ruUrl / $hyUrl` and injects `hreflang` alternate tags in `<head>`.
+- The language switcher navigates directly to the locale-prefixed canonical URL.
+- `data-t` attributes are retained on elements as a JS fallback (no-op in current builds).
+- `/sitemap.xml` emits all three locale variants per URL with `xhtml:link` hreflang alternates.
+
+**Adding a new translation key:**
+
+1. Add the key to all three files: `lang/en/site.php`, `lang/ru/site.php`, `lang/hy/site.php`.
+2. Use `{{ __('site.your_key') }}` in the Blade view.
 
 ## Setup (Local Development)
 
@@ -61,15 +82,18 @@ php artisan serve
 
 ## Deployment (Production)
 
-SSH into server and run:
+SSH into the server (or use cPanel Terminal) and run:
+
 ```bash
 cd ~/touristik_laravel/laravel
-git pull
-php artisan migrate --force
+git pull origin laravel
+composer dump-autoload --no-dev
 php deploy.php
 ```
 
-`deploy.php` runs: migrate, config:cache, route:cache, view:cache.
+`deploy.php` runs: `migrate --force`, `config:cache`, `route:cache`, `view:cache`.
+
+> **Note:** `composer dump-autoload` is required whenever `autoload.files` changes (e.g. `app/helpers.php`).
 
 To seed tours:
 ```bash
@@ -79,42 +103,60 @@ php artisan db:seed --class=OutgoingToursSeeder --force
 
 ## Server Details
 
-- **Host:** internet.am, cPanel at ext48.host.am:2083
-- **Username:** TouristikLLC
-- **PHP:** 8.3 (via .htaccess AddHandler)
-- **Database:** touristi_laravel
-- **Domain:** touristik.am
+- **Host:** internet.am — cPanel at `ext48.host.am:2083` (auto-login via gear icon)
+- **cPanel user:** TouristikLLC
+- **PHP:** 8.3 (via `.htaccess` AddHandler ea-php83)
+- **Database:** `touristi_laravel` / user `touristi_TouristikLLC`
+- **Laravel path:** `/home/touristi/touristik_laravel/laravel/`
+- **public_html:** symlink → `laravel/public`
 
 ## Project Structure
 
 ```
 laravel/
   app/
-    Http/Controllers/       # Public + Admin controllers
-    Models/                 # Tour, Destination, User, Post, Setting, etc.
+    helpers.php                   # Global lurl() helper for locale-aware URLs
+    Http/
+      Controllers/                # Public + Admin controllers
+      Middleware/
+        SetLocale.php             # Reads /{locale}/ prefix, sets app locale
+    Models/                       # Tour, Destination, User, Post, Setting, etc.
+  lang/
+    en/site.php                   # English translations
+    ru/site.php                   # Russian translations
+    hy/site.php                   # Armenian translations
   database/
-    migrations/             # All table schemas
-    seeders/                # IngoingToursSeeder, OutgoingToursSeeder, DatabaseSeeder
+    migrations/                   # All table schemas
+    seeders/                      # IngoingToursSeeder, OutgoingToursSeeder
   resources/views/
-    layouts/main.blade.php  # Main layout (nav, footer, floating buttons)
-    home/index.blade.php    # Homepage
+    layouts/main.blade.php        # Main layout: nav, footer, hreflang, language switcher
+    home/index.blade.php          # Homepage
+    home/about.blade.php          # About page
+    contact/index.blade.php       # Contact page
     tours/
-      ingoing.blade.php     # Armenia map + tours
-      outgoing.blade.php    # World map + tours
-      show.blade.php        # Tour detail page
-    admin/                  # Admin panel views
+      ingoing.blade.php           # Armenia SVG map + tours
+      outgoing.blade.php          # World map + tours
+      transfer.blade.php          # Transfer services
+      show.blade.php              # Tour detail page
+    destinations/
+      index.blade.php             # Destinations listing + map
+      show.blade.php              # Destination detail page
+    blog/
+      index.blade.php             # Blog listing
+      show.blade.php              # Blog post
+    admin/                        # Admin panel views
+  routes/web.php                  # Routes: public, localized prefix group, admin, auth
   public/
-    css/styles.css          # Main stylesheet
-    js/app.js               # Main JS (animations, menu, search, etc.)
-    js/translations.js      # i18n translations (EN/RU/HY)
-    img/                    # Logo, hero, favicons
+    css/styles.css                # Main stylesheet
+    js/app.js                     # Main JS (animations, menu, lazy-load, etc.)
+    img/                          # Logo, hero, favicons
 ```
 
 ## Known Issues
 
-- Mobile nav submenu (Tours dropdown) has intermittent toggle issues on some devices - needs CSS/JS refactor for touch events
-- Tour images are Unsplash placeholders - need real Armenian landmark photos
+- Mobile nav Tours dropdown has intermittent toggle issues on some devices
+- Tour images are Unsplash placeholders — need real photos
 
 ## License
 
-Proprietary - Touristik LLC. All rights reserved.
+Proprietary — Touristik LLC. All rights reserved.
