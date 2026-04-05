@@ -1275,10 +1275,12 @@ body.dark .city-dropdown .city-group-label {
         border-bottom: 1px solid rgba(255,255,255,0.1);
     }
 
-    .nav-dropdown:hover .nav-submenu {
-        display: none !important;
+    .nav-dropdown:hover .nav-submenu,
+    .nav-dropdown:focus-within .nav-submenu {
+        display: none;
     }
     .nav-submenu {
+        display: none;
         position: static;
         transform: none;
         background: transparent;
@@ -1291,8 +1293,8 @@ body.dark .city-dropdown .city-group-label {
     .nav-submenu::before {
         display: none;
     }
-    .nav-dropdown .nav-submenu.open {
-        display: block !important;
+    .nav-submenu.open {
+        display: block;
     }
     .nav-submenu li a {
         padding: 0.5rem 0 0.5rem 1.2rem !important;
