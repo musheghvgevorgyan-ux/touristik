@@ -160,9 +160,8 @@ var TRANSLATIONS = {
         var dict = TRANSLATIONS[lang] || {};
         document.querySelectorAll('[data-t]').forEach(function(el) {
             var key = el.getAttribute('data-t');
-            if (!originals[key]) originals[key] = el.innerHTML;
             if (lang === 'en') {
-                if (originals[key]) el.innerHTML = originals[key];
+                if (originals[key] !== undefined) el.innerHTML = originals[key];
             } else if (dict[key]) {
                 el.innerHTML = dict[key];
             }
@@ -173,10 +172,19 @@ var TRANSLATIONS = {
     }
 
     document.addEventListener('DOMContentLoaded', function() {
+        // Always save English originals FIRST (server renders in English)
         document.querySelectorAll('[data-t]').forEach(function(el) {
             originals[el.getAttribute('data-t')] = el.innerHTML;
         });
+
+        // Then apply saved language
         if (currentLang !== 'en') setLang(currentLang);
+
+        // Update lang display on load
+        var langCurrent = document.getElementById('langCurrent');
+        if (langCurrent) langCurrent.textContent = currentLang.toUpperCase();
+
+        // Click handlers
         document.querySelectorAll('.lang-option[data-lang]').forEach(function(el) {
             el.addEventListener('click', function(e) {
                 e.preventDefault();
