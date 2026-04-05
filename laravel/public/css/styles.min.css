@@ -1317,7 +1317,7 @@ body.dark .city-dropdown .city-group-label {
         display: none;
     }
     .nav-submenu.open {
-        display: block;
+        display: block !important;
     }
     .nav-submenu li a {
         padding: 0.5rem 0 0.5rem 1.2rem !important;
