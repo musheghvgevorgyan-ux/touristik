@@ -1,5 +1,19 @@
+@php
+    $currentLocale = app()->getLocale();
+    $rawPath = '/' . request()->path();
+    $canonicalPath = preg_replace('#^/(ru|hy)(/|$)#', '/', $rawPath);
+    $canonicalPath = rtrim($canonicalPath, '/') ?: '/';
+    $enUrl  = $canonicalPath;
+    $ruUrl  = '/ru' . ($canonicalPath === '/' ? '' : $canonicalPath);
+    $hyUrl  = '/hy' . ($canonicalPath === '/' ? '' : $canonicalPath);
+    $isTours        = str_starts_with($canonicalPath, '/tours');
+    $isDestinations = str_starts_with($canonicalPath, '/destinations');
+    $isAbout        = $canonicalPath === '/about';
+    $isBlog         = str_starts_with($canonicalPath, '/blog');
+    $isContact      = $canonicalPath === '/contact';
+@endphp
 <!DOCTYPE html>
-<html lang="{{ auth()->check() ? auth()->user()->language ?? 'en' : 'en' }}">
+<html lang="{{ $currentLocale }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,6 +26,10 @@
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:url" content="https://touristik.am{{ request()->getRequestUri() }}">
+    <link rel="alternate" hreflang="en" href="https://touristik.am{{ $enUrl }}">
+    <link rel="alternate" hreflang="ru" href="https://touristik.am{{ $ruUrl }}">
+    <link rel="alternate" hreflang="hy" href="https://touristik.am{{ $hyUrl }}">
+    <link rel="alternate" hreflang="x-default" href="https://touristik.am{{ $enUrl }}">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content="@yield('og_image', 'https://touristik.am/img/og-image.jpg')">
     @if(config('services.google.analytics_id'))
@@ -71,31 +89,31 @@
             </button>
             <ul class="nav-links">
                 <li class="nav-dropdown">
-                    <a href="/tours" {{ request()->is('tours*') ? 'class=active' : '' }} data-t="tours_nav">Tours</a><button class="submenu-toggle" id="submenuToggle" aria-label="Toggle tours submenu">&#9662;</button>
+                    <a href="{{ lurl('/tours') }}" {{ $isTours ? 'class=active' : '' }} data-t="tours_nav">{{ __('site.tours') }}</a><button class="submenu-toggle" id="submenuToggle" aria-label="Toggle tours submenu">&#9662;</button>
                     <ul class="nav-submenu">
-                        <li><a href="/tours/ingoing" {{ request()->is('tours/ingoing') ? 'class=active' : '' }} data-t="tour_cat_ingoing">Ingoing Tours</a></li>
-                        <li><a href="/tours/outgoing" {{ request()->is('tours/outgoing') ? 'class=active' : '' }} data-t="tour_cat_outgoing">Outgoing Tours</a></li>
-                        <li><a href="/tours/transfer" {{ request()->is('tours/transfer') ? 'class=active' : '' }} data-t="tour_cat_transfer">Transfer</a></li>
+                        <li><a href="{{ lurl('/tours/ingoing') }}" {{ $canonicalPath === '/tours/ingoing' ? 'class=active' : '' }} data-t="tour_cat_ingoing">{{ __('site.ingoing_tours') }}</a></li>
+                        <li><a href="{{ lurl('/tours/outgoing') }}" {{ $canonicalPath === '/tours/outgoing' ? 'class=active' : '' }} data-t="tour_cat_outgoing">{{ __('site.outgoing_tours') }}</a></li>
+                        <li><a href="{{ lurl('/tours/transfer') }}" {{ $canonicalPath === '/tours/transfer' ? 'class=active' : '' }} data-t="tour_cat_transfer">{{ __('site.transfer') }}</a></li>
                     </ul>
                 </li>
-                <li><a href="/destinations" {{ request()->is('destinations*') ? 'class=active' : '' }} data-t="destinations">Destinations</a></li>
-                <li><a href="/about" {{ request()->is('about') ? 'class=active' : '' }} data-t="about">About</a></li>
-                <li><a href="/blog" {{ request()->is('blog*') ? 'class=active' : '' }}>Blog</a></li>
-                <li><a href="/contact" {{ request()->is('contact') ? 'class=active' : '' }} data-t="contact">Contact</a></li>
+                <li><a href="{{ lurl('/destinations') }}" {{ $isDestinations ? 'class=active' : '' }} data-t="destinations">{{ __('site.destinations') }}</a></li>
+                <li><a href="{{ lurl('/about') }}" {{ $isAbout ? 'class=active' : '' }} data-t="about">{{ __('site.about') }}</a></li>
+                <li><a href="{{ lurl('/blog') }}" {{ $isBlog ? 'class=active' : '' }}>{{ __('site.blog') }}</a></li>
+                <li><a href="{{ lurl('/contact') }}" {{ $isContact ? 'class=active' : '' }} data-t="contact">{{ __('site.contact') }}</a></li>
                 @auth
                     <li>@include('partials.notifications-dropdown')</li>
-                    <li><a href="/account" {{ request()->is('account*') ? 'class=active' : '' }} data-t="my_account">My Account</a></li>
+                    <li><a href="/account" {{ request()->is('account*') ? 'class=active' : '' }} data-t="my_account">{{ __('site.my_account') }}</a></li>
                     @if(in_array(auth()->user()->role, ['admin', 'superadmin']))
-                        <li><a href="/admin" {{ request()->is('admin*') ? 'class=active' : '' }} data-t="admin">Admin</a></li>
+                        <li><a href="/admin" {{ request()->is('admin*') ? 'class=active' : '' }} data-t="admin">{{ __('site.admin') }}</a></li>
                     @endif
                     @if(auth()->user()->role === 'agent')
                         <li><a href="/agent" {{ request()->is('agent*') ? 'class=active' : '' }}>Agent Portal</a></li>
                     @endif
-                    <li><a href="/logout" data-t="logout">Logout</a></li>
+                    <li><a href="/logout" data-t="logout">{{ __('site.logout') }}</a></li>
                 @endauth
                 @guest
-                    <li><a href="/login" {{ request()->is('login') ? 'class=active' : '' }} data-t="login">Login</a></li>
-                    <li><a href="/register" class="nav-register-btn" style="background:#FF6B35;color:#fff !important;padding:0.4rem 1rem;border-radius:6px;" data-t="register">Sign Up</a></li>
+                    <li><a href="/login" {{ request()->is('login') ? 'class=active' : '' }} data-t="login">{{ __('site.login') }}</a></li>
+                    <li><a href="/register" class="nav-register-btn" style="background:#FF6B35;color:#fff !important;padding:0.4rem 1rem;border-radius:6px;" data-t="register">{{ __('site.register') }}</a></li>
                 @endguest
             </ul>
             <div class="nav-controls">
@@ -114,13 +132,13 @@
                 </div>
                 <div class="lang-switcher">
                     <button class="lang-btn" id="langToggle">
-                        <span class="lang-current" id="langCurrent">EN</span>
+                        <span class="lang-current" id="langCurrent">{{ strtoupper($currentLocale) }}</span>
                         <span class="lang-arrow">&#9662;</span>
                     </button>
                     <div class="lang-dropdown" id="langDropdown">
-                        <a href="#" class="lang-option" data-lang="en">&#127468;&#127463; English</a>
-                        <a href="#" class="lang-option" data-lang="ru">&#127479;&#127482; Русский</a>
-                        <a href="#" class="lang-option" data-lang="hy">&#127462;&#127474; Հայերեն</a>
+                        <a href="{{ $enUrl }}" class="lang-option{{ $currentLocale === 'en' ? ' active' : '' }}">&#127468;&#127463; English</a>
+                        <a href="{{ $ruUrl }}" class="lang-option{{ $currentLocale === 'ru' ? ' active' : '' }}">&#127479;&#127482; Русский</a>
+                        <a href="{{ $hyUrl }}" class="lang-option{{ $currentLocale === 'hy' ? ' active' : '' }}">&#127462;&#127474; Հայերեն</a>
                     </div>
                 </div>
             </div>
@@ -156,22 +174,22 @@
     <footer>
         <div class="footer-grid">
             <div class="footer-col">
-                <h4 data-t="footer_branches_title">Our Branches</h4>
+                <h4 data-t="footer_branches_title">{{ __('site.footer_branches') }}</h4>
                 <ul class="footer-list">
-                    <li><span data-t="branch_1">Komitas 38</span></li>
-                    <li><span data-t="branch_2">Mashtots 7/6</span></li>
-                    <li><span data-t="branch_3">Arshakunyats 34 (Yerevan Mall, 2nd floor)</span></li>
+                    <li><span data-t="branch_1">{{ __('site.branch_1') }}</span></li>
+                    <li><span data-t="branch_2">{{ __('site.branch_2') }}</span></li>
+                    <li><span data-t="branch_3">{{ __('site.branch_3') }}</span></li>
                 </ul>
             </div>
             <div class="footer-col">
-                <h4 data-t="footer_hours_title">Working Hours</h4>
+                <h4 data-t="footer_hours_title">{{ __('site.footer_hours') }}</h4>
                 <ul class="footer-list">
-                    <li><span data-t="hours_weekday">Mon – Fri: 10:00 – 20:00</span></li>
-                    <li><span data-t="hours_weekend">Sat – Sun: 11:00 – 18:00</span></li>
+                    <li><span data-t="hours_weekday">{{ __('site.hours_weekday') }}</span></li>
+                    <li><span data-t="hours_weekend">{{ __('site.hours_weekend') }}</span></li>
                 </ul>
             </div>
             <div class="footer-col">
-                <h4 data-t="footer_contact_title">Contact Us</h4>
+                <h4 data-t="footer_contact_title">{{ __('site.footer_contact') }}</h4>
                 <ul class="footer-list">
                     <li><a href="tel:+37433060609">+374 33 060 609</a></li>
                     <li><a href="tel:+37455060609">+374 55 060 609</a></li>
@@ -182,7 +200,7 @@
             </div>
         </div>
         <div class="footer-social">
-            <h4 data-t="footer_follow_title">Follow Us</h4>
+            <h4 data-t="footer_follow_title">{{ __('site.footer_follow') }}</h4>
             <div class="social-links">
                 <a href="https://www.instagram.com/touristik.am/" target="_blank" rel="noopener" aria-label="Instagram">
                     <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.17.054 1.97.24 2.43.403a4.08 4.08 0 011.47.958c.453.453.78.898.958 1.47.163.46.35 1.26.403 2.43.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.054 1.17-.24 1.97-.403 2.43a4.08 4.08 0 01-.958 1.47 4.08 4.08 0 01-1.47.958c-.46.163-1.26.35-2.43.403-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.17-.054-1.97-.24-2.43-.403a4.08 4.08 0 01-1.47-.958 4.08 4.08 0 01-.958-1.47c-.163-.46-.35-1.26-.403-2.43C2.175 15.584 2.163 15.204 2.163 12s.012-3.584.07-4.85c.054-1.17.24-1.97.403-2.43a4.08 4.08 0 01.958-1.47 4.08 4.08 0 011.47-.958c.46-.163 1.26-.35 2.43-.403C8.416 2.175 8.796 2.163 12 2.163M12 0C8.741 0 8.333.014 7.053.072 5.775.13 4.902.333 4.14.63a5.88 5.88 0 00-2.126 1.384A5.88 5.88 0 00.63 4.14C.333 4.902.13 5.775.072 7.053.014 8.333 0 8.741 0 12s.014 3.667.072 4.947c.058 1.278.261 2.151.558 2.913a5.88 5.88 0 001.384 2.126 5.88 5.88 0 002.126 1.384c.762.297 1.635.5 2.913.558C8.333 23.986 8.741 24 12 24s3.667-.014 4.947-.072c1.278-.058 2.151-.261 2.913-.558a5.88 5.88 0 002.126-1.384 5.88 5.88 0 001.384-2.126c.297-.762.5-1.635.558-2.913.058-1.28.072-1.688.072-4.947s-.014-3.667-.072-4.947c-.058-1.278-.261-2.151-.558-2.913a5.88 5.88 0 00-1.384-2.126A5.88 5.88 0 0019.86.63C19.098.333 18.225.13 16.947.072 15.667.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
@@ -279,10 +297,10 @@
 
     <div class="cookie-banner" id="cookieBanner">
         <div class="cookie-content">
-            <p data-t="cookie_text">We use cookies to improve your experience. By continuing to browse, you agree to our use of cookies.</p>
+            <p data-t="cookie_text">{{ __('site.cookie_text') }}</p>
             <div class="cookie-actions">
-                <button class="cookie-btn cookie-accept" id="cookieAccept" data-t="cookie_accept">Accept</button>
-                <button class="cookie-btn cookie-decline" id="cookieDecline" data-t="cookie_decline">Decline</button>
+                <button class="cookie-btn cookie-accept" id="cookieAccept" data-t="cookie_accept">{{ __('site.cookie_accept') }}</button>
+                <button class="cookie-btn cookie-decline" id="cookieDecline" data-t="cookie_decline">{{ __('site.cookie_decline') }}</button>
             </div>
         </div>
     </div>

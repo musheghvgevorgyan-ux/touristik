@@ -57,21 +57,21 @@
     {!! $post->body !!}
 
     <div class="post-nav">
-        <a href="/blog" class="btn-back-blog">&larr; All Posts</a>
+        <a href="{{ lurl('/blog') }}" class="btn-back-blog" data-t="all_posts">{{ __('site.all_posts') }}</a>
     </div>
 </div>
 
 @if($related->count() > 0)
 <div class="related-section">
-    <h2>Related Articles</h2>
+    <h2 data-t="related_articles">{{ __('site.related_articles') }}</h2>
     <div class="related-grid">
         @foreach($related as $r)
         <div class="related-card">
             @if($r->image_url)
-            <a href="/blog/{{ $r->slug }}"><div class="related-card-img" style="background-image:url('{{ $r->image_url }}')"></div></a>
+            <a href="{{ lurl('/blog/' . $r->slug) }}"><div class="related-card-img" style="background-image:url('{{ $r->image_url }}')"></div></a>
             @endif
             <div class="related-card-body">
-                <h4><a href="/blog/{{ $r->slug }}">{{ $r->title }}</a></h4>
+                <h4><a href="{{ lurl('/blog/' . $r->slug) }}">{{ $r->title }}</a></h4>
                 <span>{{ $r->published_at->format('M d, Y') }}</span>
             </div>
         </div>

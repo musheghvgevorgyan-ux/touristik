@@ -51,8 +51,8 @@
 </div>
 <div class="destinations-page">
     <div class="section-header reveal">
-        <h1 data-t="destinations_title">Popular Destinations</h1>
-        <p data-t="destinations_subtitle">Explore the world's most breathtaking places with Touristik</p>
+        <h1 data-t="destinations_title">{{ __('site.destinations_title') }}</h1>
+        <p data-t="destinations_subtitle">{{ __('site.destinations_subtitle') }}</p>
     </div>
 
     @if(!empty($destinations))
@@ -63,11 +63,11 @@
                     </div>
                     <div class="card-body">
                         <span class="dest-country">{{ $dest['country'] ?? '' }}</span>
-                        <h3><a href="/destinations/{{ $dest['slug'] ?? '' }}">{{ $dest['name'] ?? '' }}</a></h3>
+                        <h3><a href="{{ lurl('/destinations/' . ($dest['slug'] ?? '')) }}">{{ $dest['name'] ?? '' }}</a></h3>
                         <p class="dest-desc">{{ $dest['description'] ?? '' }}</p>
                         <div class="card-footer">
                             <span class="price" data-t="from_price">From {!! "$" . number_format($dest['price_from'] ?? 0, 2) !!}</span>
-                            <a href="/destinations/{{ $dest['slug'] ?? '' }}" class="btn-explore" data-t="explore">Explore</a>
+                            <a href="{{ lurl('/destinations/' . ($dest['slug'] ?? '')) }}" class="btn-explore" data-t="explore">{{ __('site.explore') }}</a>
                         </div>
                     </div>
                 </div>
@@ -75,8 +75,8 @@
         </div>
     @else
         <div class="empty-state reveal">
-            <h2 data-t="no_destinations_title">Coming Soon</h2>
-            <p data-t="no_destinations_text">We're curating amazing destinations for you. Check back soon!</p>
+            <h2 data-t="no_destinations_title">{{ __('site.no_destinations_title') }}</h2>
+            <p data-t="no_destinations_text">{{ __('site.no_destinations_text') }}</p>
         </div>
     @endif
 </div>

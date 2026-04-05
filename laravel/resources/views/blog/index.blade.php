@@ -30,8 +30,8 @@
 @section('content')
 <div class="blog-page">
     <div class="blog-header reveal">
-        <h1>Travel Blog</h1>
-        <p>Tips, guides, and stories from our travel experts</p>
+        <h1 data-t="blog_title">{{ __('site.blog_title') }}</h1>
+        <p data-t="blog_subtitle">{{ __('site.blog_subtitle') }}</p>
     </div>
 
     @if($posts->count() > 0)
@@ -39,13 +39,13 @@
         @foreach($posts as $post)
         <article class="blog-card reveal">
             @if($post->image_url)
-            <a href="/blog/{{ $post->slug }}"><div class="blog-card-img" style="background-image:url('{{ $post->image_url }}')"></div></a>
+            <a href="{{ lurl('/blog/' . $post->slug) }}"><div class="blog-card-img" style="background-image:url('{{ $post->image_url }}')"></div></a>
             @endif
             <div class="blog-card-body">
                 <div class="blog-card-meta">{{ $post->published_at->format('M d, Y') }} &middot; by {{ $post->author->name ?? 'Touristik' }}</div>
-                <h3><a href="/blog/{{ $post->slug }}">{{ $post->title }}</a></h3>
+                <h3><a href="{{ lurl('/blog/' . $post->slug) }}">{{ $post->title }}</a></h3>
                 <p class="blog-card-excerpt">{{ $post->excerpt ?? Str::limit(strip_tags($post->body), 150) }}</p>
-                <a href="/blog/{{ $post->slug }}" class="blog-card-link">Read More &rarr;</a>
+                <a href="{{ lurl('/blog/' . $post->slug) }}" class="blog-card-link" data-t="read_more">{{ __('site.read_more') }} &rarr;</a>
             </div>
         </article>
         @endforeach
@@ -55,8 +55,8 @@
     @endif
     @else
     <div class="blog-empty reveal">
-        <h2>Coming Soon</h2>
-        <p>We're preparing exciting travel stories and guides. Check back soon!</p>
+        <h2 data-t="no_destinations_title">{{ __('site.no_destinations_title') }}</h2>
+        <p data-t="no_destinations_text">{{ __('site.no_destinations_text') }}</p>
     </div>
     @endif
 </div>

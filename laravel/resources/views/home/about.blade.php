@@ -52,14 +52,14 @@
 @section('content')
 <div class="about-page">
     <div class="section-header reveal">
-        <h1 data-t="about_title">About Touristik</h1>
-        <p data-t="about_subtitle">Your trusted travel partner in Armenia since day one</p>
+        <h1 data-t="about_title">{{ __('site.about_title') }}</h1>
+        <p data-t="about_subtitle">{{ __('site.about_subtitle') }}</p>
     </div>
 
     <div class="about-intro reveal">
         <div class="about-intro-img"></div>
         <div class="about-intro-text">
-            <h2 data-t="about_story_title">Our Story</h2>
+            <h2 data-t="about_story_title">{{ __('site.our_story') }}</h2>
             <p data-t="about_story_1">Touristik Travel Club was founded with a simple mission: to make travel accessible, enjoyable, and memorable for everyone. Based in Yerevan, Armenia, we have grown into a full-service travel agency with three branches across the city.</p>
             <p data-t="about_story_2">We specialize in both inbound tourism to Armenia and outbound travel worldwide. Whether you're exploring the ancient monasteries of Armenia or lounging on the beaches of Greece, our experienced team ensures every detail is taken care of.</p>
             <p data-t="about_story_3">With partnerships with leading hotel providers like Hotelbeds and Hotelston, we offer competitive prices on hotels worldwide, along with flights, visa support, transfers, and curated tour packages.</p>
@@ -85,7 +85,7 @@
     </div>
 
     <div class="branches-section">
-        <h2 data-t="our_branches">Our Branches</h2>
+        <h2 data-t="our_branches">{{ __('site.our_branches') }}</h2>
         <div class="branches-grid">
             <div class="branch-detail-card reveal">
                 <h3 data-t="branch_komitas">Komitas Branch</h3>
@@ -93,8 +93,8 @@
                     <p data-t="branch_komitas_addr">Komitas 38, Yerevan, Armenia</p>
                     <p><a href="tel:+37433060609">+374 33 060 609</a></p>
                     <p><a href="tel:+37455060609">+374 55 060 609</a></p>
-                    <p data-t="hours_weekday">Mon - Fri: 10:00 - 20:00</p>
-                    <p data-t="hours_weekend">Sat - Sun: 11:00 - 18:00</p>
+                    <p data-t="hours_weekday">{{ __('site.hours_weekday') }}</p>
+                    <p data-t="hours_weekend">{{ __('site.hours_weekend') }}</p>
                 </div>
             </div>
             <div class="branch-detail-card reveal">
@@ -103,8 +103,8 @@
                     <p data-t="branch_mashtots_addr">Mashtots 7/6, Yerevan, Armenia</p>
                     <p><a href="tel:+37444060608">+374 44 060 608</a></p>
                     <p><a href="tel:+37495060608">+374 95 060 608</a></p>
-                    <p data-t="hours_weekday">Mon - Fri: 10:00 - 20:00</p>
-                    <p data-t="hours_weekend">Sat - Sun: 11:00 - 18:00</p>
+                    <p data-t="hours_weekday">{{ __('site.hours_weekday') }}</p>
+                    <p data-t="hours_weekend">{{ __('site.hours_weekend') }}</p>
                 </div>
             </div>
             <div class="branch-detail-card reveal">
@@ -112,8 +112,8 @@
                 <div class="branch-info">
                     <p data-t="branch_mall_addr">Arshakunyats 34, Yerevan Mall, 2nd Floor</p>
                     <p><a href="tel:+37433060609">+374 33 060 609</a></p>
-                    <p data-t="hours_weekday">Mon - Fri: 10:00 - 20:00</p>
-                    <p data-t="hours_weekend">Sat - Sun: 11:00 - 18:00</p>
+                    <p data-t="hours_weekday">{{ __('site.hours_weekday') }}</p>
+                    <p data-t="hours_weekend">{{ __('site.hours_weekend') }}</p>
                 </div>
             </div>
         </div>
@@ -124,8 +124,8 @@
     </div>
 
     <div class="team-section">
-        <h2 data-t="team_title">Our Team</h2>
-        <p class="team-subtitle" data-t="team_subtitle">Dedicated professionals ready to make your travel dreams come true</p>
+        <h2 data-t="team_title">{{ __('site.our_team') }}</h2>
+        <p class="team-subtitle" data-t="team_subtitle">{{ __('site.our_team_subtitle') }}</p>
         <div class="team-grid">
             <div class="team-card reveal">
                 <div class="team-avatar">&#128100;</div>

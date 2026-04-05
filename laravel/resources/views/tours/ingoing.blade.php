@@ -343,7 +343,7 @@
 @section('content')
 <div class="tours-detail-page">
     <div class="section-header reveal">
-        <h1 data-t="ingoing_title">Discover Armenia</h1>
+        <h1 data-t="ingoing_title">{{ __('site.ingoing_title') }}</h1>
     </div>
 
     {{-- ─── Explorer: Map + Info Panel ───────────────────── --}}
@@ -400,17 +400,17 @@
                 <text class="region-label" x="438" y="300" style="fill:#1e5090; stroke:none; font-size:18px;">Lake Sevan</text>
 
                 {{-- Region Labels --}}
-                <text class="region-label" x="108" y="195" data-t="region_shirak">Shirak</text>
-                <text class="region-label" x="290" y="115" data-t="region_lori">Lori</text>
-                <text class="region-label" x="455" y="118" data-t="region_tavush">Tavush</text>
-                <text class="region-label" x="170" y="280" data-t="region_aragatsotn">Aragatsotn</text>
-                <text class="region-label" x="325" y="298" data-t="region_kotayk">Kotayk</text>
-                <text class="region-label" x="132" y="395" data-t="region_armavir">Armavir</text>
-                <text class="region-label label-sm" x="272" y="368" data-t="region_yerevan">Yerevan</text>
-                <text class="region-label" x="310" y="455" data-t="region_ararat">Ararat</text>
-                <text class="region-label" x="548" y="350" data-t="region_gegharkunik">Gegharkunik</text>
-                <text class="region-label" x="490" y="508"><tspan x="490" dy="0">Vayots</tspan><tspan x="490" dy="20">Dzor</tspan></text>
-                <text class="region-label" x="650" y="635" data-t="region_syunik">Syunik</text>
+                <text class="region-label" x="108" y="195" data-t="region_shirak">{{ __('site.region_shirak') }}</text>
+                <text class="region-label" x="290" y="115" data-t="region_lori">{{ __('site.region_lori') }}</text>
+                <text class="region-label" x="455" y="118" data-t="region_tavush">{{ __('site.region_tavush') }}</text>
+                <text class="region-label" x="170" y="280" data-t="region_aragatsotn">{{ __('site.region_aragatsotn') }}</text>
+                <text class="region-label" x="325" y="298" data-t="region_kotayk">{{ __('site.region_kotayk') }}</text>
+                <text class="region-label" x="132" y="395" data-t="region_armavir">{{ __('site.region_armavir') }}</text>
+                <text class="region-label label-sm" x="272" y="368" data-t="region_yerevan">{{ __('site.region_yerevan') }}</text>
+                <text class="region-label" x="310" y="455" data-t="region_ararat">{{ __('site.region_ararat') }}</text>
+                <text class="region-label" x="548" y="350" data-t="region_gegharkunik">{{ __('site.region_gegharkunik') }}</text>
+                <text class="region-label" x="490" y="508" data-t="region_vayots_dzor">{{ __('site.region_vayots_dzor') }}</text>
+                <text class="region-label" x="650" y="635" data-t="region_syunik">{{ __('site.region_syunik') }}</text>
             </svg>
         </div>
 
@@ -418,15 +418,15 @@
             <div class="info-panel">
                 {{-- Default state: Tour style picker --}}
                 <div class="info-default" id="infoDefault">
-                    <h3 class="tour-styles-title" data-t="choose_tour_style">Choose Your Tour Style</h3>
+                    <h3 class="tour-styles-title" data-t="choose_tour_style">{{ __('site.choose_tour_style') }}</h3>
                     <div class="tour-style-cards">
                         <div class="tour-style-card">
                             <div class="tour-style-icon">
                                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
                             </div>
                             <div class="tour-style-text">
-                                <strong data-t="group_tours">Group Tours</strong>
-                                <span data-t="group_tours_desc">Join small groups of 6-12 travelers. Shared experiences, new friendships.</span>
+                                <strong data-t="group_tours">{{ __('site.group_tours') }}</strong>
+                                <span data-t="group_tours_desc">{{ __('site.group_tours_desc') }}</span>
                             </div>
                         </div>
                         <div class="tour-style-card">
@@ -434,8 +434,8 @@
                                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                             </div>
                             <div class="tour-style-text">
-                                <strong data-t="private_tours">Private Tours</strong>
-                                <span data-t="private_tours_desc">Your own guide, your own pace. Fully customized itineraries.</span>
+                                <strong data-t="private_tours">{{ __('site.private_tours') }}</strong>
+                                <span data-t="private_tours_desc">{{ __('site.private_tours_desc') }}</span>
                             </div>
                         </div>
                         <div class="tour-style-card">
@@ -443,12 +443,12 @@
                                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a4 4 0 00-8 0v2"/><line x1="12" y1="11" x2="12" y2="15"/></svg>
                             </div>
                             <div class="tour-style-text">
-                                <strong data-t="tour_packages">Tour Packages</strong>
-                                <span data-t="tour_packages_desc">All-inclusive multi-day packages. Hotels, transport & meals included.</span>
+                                <strong data-t="tour_packages">{{ __('site.tour_packages') }}</strong>
+                                <span data-t="tour_packages_desc">{{ __('site.tour_packages_desc') }}</span>
                             </div>
                         </div>
                     </div>
-                    <p class="tour-styles-hint" data-t="explore_regions_desc">Click on any region on the map to explore</p>
+                    <p class="tour-styles-hint" data-t="explore_regions_desc">{{ __('site.explore_regions_desc') }}</p>
                 </div>
 
                 {{-- Region info panels --}}
@@ -540,7 +540,7 @@
                     </div>
                     <div class="info-tour-count">
                         <span>{{ $tourCounts[$slug] ?? 0 }} {{ ($tourCounts[$slug] ?? 0) === 1 ? 'tour' : 'tours' }} available</span>
-                        <button class="btn-view-tours" onclick="document.getElementById('tourGrid').scrollIntoView({behavior:'smooth'})" data-t="view_tours">View Tours</button>
+                        <button class="btn-view-tours" onclick="document.getElementById('tourGrid').scrollIntoView({behavior:'smooth'})" data-t="view_tours">{{ __('site.view_tours') }}</button>
                     </div>
                 </div>
                 @endforeach
@@ -550,15 +550,15 @@
 
     {{-- ─── Filter Bar ───────────────────────────────────── --}}
     <div class="map-filter-bar" id="mapFilterBar" style="display:none;">
-        <span class="filter-label" data-t="showing_tours_in">Showing tours in:</span>
+        <span class="filter-label" data-t="showing_tours_in">{{ __('site.showing_tours_in') }}</span>
         <span class="filter-active-region" id="activeRegionName"></span>
-        <button class="filter-clear" id="clearFilter" data-t="show_all">Show All</button>
+        <button class="filter-clear" id="clearFilter" data-t="show_all">{{ __('site.show_all') }}</button>
     </div>
 
     {{-- ─── Tour Cards Grid ──────────────────────────────── --}}
     <div class="card-grid" id="tourGrid">
         @foreach($tours as $tour)
-        <a href="/tours/{{ $tour->slug }}" class="tour-card reveal" data-region="{{ $tour->region }}">
+        <a href="{{ lurl('/tours/' . $tour->slug) }}" class="tour-card reveal" data-region="{{ $tour->region }}">
             <div class="tour-card-img lazy-bg" data-bg="{{ $tour->image_url }}">
                 <span class="tour-duration">{{ $tour->duration }}</span>
                 <span class="tour-region-badge" data-t="region_{{ $tour->region }}">{{ ucwords(str_replace('_', ' ', $tour->region)) }}</span>
@@ -568,17 +568,17 @@
                 <p class="tour-desc">{{ Str::limit($tour->description, 150) }}</p>
                 <div class="tour-card-footer">
                     <span class="price">From ${{ number_format($tour->price_from, 0) }}</span>
-                    <span class="btn-details" data-t="view_details">View Details</span>
+                    <span class="btn-details" data-t="view_details">{{ __('site.view_details') }}</span>
                 </div>
             </div>
         </a>
         @endforeach
     </div>
 
-    <div class="no-tours-msg" id="noToursMsg" data-t="no_tours_region">No tours available in this region yet. Contact us for a custom tour!</div>
+    <div class="no-tours-msg" id="noToursMsg" data-t="no_tours_region">{{ __('site.no_tours_region') }}</div>
 
     <div class="tours-back reveal">
-        <a href="/tours" data-t="back_to_tours">&larr; Back to Tours</a>
+        <a href="{{ lurl('/tours') }}" data-t="back_to_tours">{{ __('site.back_to_tours') }}</a>
     </div>
 </div>
 @endsection

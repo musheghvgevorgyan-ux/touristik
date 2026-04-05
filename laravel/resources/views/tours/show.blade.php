@@ -203,7 +203,7 @@
             <span class="price-label">Starting from</span>
             @endif
             <button class="btn-book" id="bookBtn">Book This Tour</button>
-            <a href="https://wa.me/37410123456?text={{ urlencode('Hi! I\'m interested in: ' . $tour->title) }}" class="btn-whatsapp" target="_blank">WhatsApp Us</a>
+            <a href="https://wa.me/37433060609?text={{ urlencode('Hi! I\'m interested in: ' . $tour->title) }}" class="btn-whatsapp" target="_blank">{{ __('site.whatsapp_us') }}</a>
 
             <div class="sidebar-details">
                 <div class="sidebar-detail"><span class="label">Duration</span><span class="value">{{ $tour->duration }}</span></div>

@@ -97,7 +97,7 @@ $destinations = [
 @section('content')
 <div class="outgoing-page">
     <div class="section-header reveal">
-        <h1 data-t="outgoing_title">Explore the World</h1>
+        <h1 data-t="outgoing_title">{{ __('site.outgoing_title') }}</h1>
     </div>
 
     <div class="world-explorer reveal">
@@ -107,8 +107,8 @@ $destinations = [
         <div class="world-info">
             <div class="dest-panel">
                 <div class="dest-default" id="destDefault">
-                    <h3 data-t="choose_destination">Choose a Destination</h3>
-                    <p data-t="choose_destination_desc">Click a marker on the map or pick a country below</p>
+                    <h3 data-t="choose_destination">{{ __('site.choose_destination') }}</h3>
+                    <p data-t="choose_destination_desc">{{ __('site.choose_destination_desc') }}</p>
                     <div class="dest-chips">
                         @foreach($destinations as $key => $d)
                         <span class="dest-chip" data-dest="{{ $key }}">{{ $d['flag'] }} {{ $d['name'] }}</span>
@@ -144,14 +144,14 @@ $destinations = [
     </div>
 
     <div class="filter-bar" id="filterBar" style="display:none;">
-        <span style="color:var(--text-secondary)">Showing tours in:</span>
+        <span style="color:var(--text-secondary)">{{ __('site.showing_tours_in') }}</span>
         <span class="filter-active" id="filterName"></span>
-        <button class="filter-clear" onclick="clearDestFilter()">Show All</button>
+        <button class="filter-clear" onclick="clearDestFilter()">{{ __('site.show_all') }}</button>
     </div>
 
     <div class="card-grid" id="tourGrid">
         @foreach($tours as $tour)
-        <a href="/tours/{{ $tour->slug }}" class="tour-card reveal" data-country="{{ $tour->region }}">
+        <a href="{{ lurl('/tours/' . $tour->slug) }}" class="tour-card reveal" data-country="{{ $tour->region }}">
             <div class="tour-card-img lazy-bg" data-bg="{{ $tour->image_url }}">
                 <span class="tour-duration">{{ $tour->duration }}</span>
                 <span class="tour-country-badge">{{ $destinations[$tour->region]['name'] ?? ucfirst($tour->region) }}</span>
@@ -161,17 +161,17 @@ $destinations = [
                 <p class="tour-desc">{{ Str::limit($tour->description, 150) }}</p>
                 <div class="tour-card-footer">
                     <span class="price">From ${{ number_format($tour->price_from, 0) }}</span>
-                    <span class="btn-details">View Details</span>
+                    <span class="btn-details">{{ __('site.view_details') }}</span>
                 </div>
             </div>
         </a>
         @endforeach
     </div>
 
-    <div class="no-tours-msg" id="noToursMsg">No tours for this destination yet. Contact us for a custom package!</div>
+    <div class="no-tours-msg" id="noToursMsg">{{ __('site.no_tours_country') }}</div>
 
     <div class="tours-back reveal">
-        <a href="/tours" data-t="back_to_tours">&larr; Back to Tours</a>
+        <a href="{{ lurl('/tours') }}" data-t="back_to_tours">{{ __('site.back_to_tours') }}</a>
     </div>
 </div>
 @endsection

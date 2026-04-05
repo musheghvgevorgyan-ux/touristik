@@ -52,38 +52,38 @@
     @endif
 
     <div class="section-header reveal">
-        <h1 data-t="contact_title">Contact Us</h1>
-        <p data-t="contact_subtitle">Get in touch with our team. We're here to help you plan your perfect trip.</p>
+        <h1 data-t="contact_title">{{ __('site.contact_title') }}</h1>
+        <p data-t="contact_subtitle">{{ __('site.contact_subtitle') }}</p>
     </div>
 
     <div class="contact-layout">
         <div class="contact-form-card reveal">
-            <h2 data-t="send_message">Send Us a Message</h2>
+            <h2 data-t="send_message">{{ __('site.send_message') }}</h2>
             <div id="contactResult" style="display:none;padding:1rem;border-radius:8px;margin-bottom:1rem;font-weight:600;text-align:center;"></div>
             <form id="contactForm" onsubmit="return submitContact(event)">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
                 <div class="form-group">
-                    <label for="name" data-t="form_name">Full Name</label>
+                    <label for="name" data-t="form_name">{{ __('site.form_name') }}</label>
                     <input type="text" id="name" name="name" value="{{ old('name') }}" placeholder="Your full name" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="email" data-t="form_email">Email Address</label>
+                    <label for="email" data-t="form_email">{{ __('site.form_email') }}</label>
                     <input type="email" id="email" name="email" value="{{ old('email') }}" placeholder="your@email.com" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="subject" data-t="form_subject">Subject</label>
+                    <label for="subject" data-t="form_subject">{{ __('site.form_subject') }}</label>
                     <input type="text" id="subject" name="subject" value="{{ old('subject') }}" placeholder="How can we help?">
                 </div>
 
                 <div class="form-group">
-                    <label for="message" data-t="form_message">Message</label>
+                    <label for="message" data-t="form_message">{{ __('site.form_message') }}</label>
                     <textarea id="message" name="message" placeholder="Tell us more about your inquiry..." required></textarea>
                 </div>
 
-                <button type="submit" class="btn-submit" style="background:#FF6B35 !important;color:#fff !important;display:block;width:100%;padding:0.9rem;border:none;border-radius:8px;font-size:1rem;font-weight:600;cursor:pointer;" data-t="send_btn">Send Message</button>
+                <button type="submit" class="btn-submit" style="background:#FF6B35 !important;color:#fff !important;display:block;width:100%;padding:0.9rem;border:none;border-radius:8px;font-size:1rem;font-weight:600;cursor:pointer;" data-t="send_btn">{{ __('site.send_btn') }}</button>
             </form>
             <script>
             function submitContact(e) {

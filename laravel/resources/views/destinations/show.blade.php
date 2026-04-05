@@ -49,18 +49,18 @@
     @if(!empty($destination['price_from']))
         <div class="detail-price reveal">
             <div>
-                <span class="price-label" data-t="starting_from">Starting from</span>
+                <span class="price-label" data-t="starting_from">{{ __('site.starting_from') }}</span>
                 <span class="price">{!! "$" . number_format($destination['price_from'], 2) !!}</span>
-                <span class="price-label" data-t="per_person">per person</span>
+                <span class="price-label" data-t="per_person">{{ __('site.per_person') }}</span>
             </div>
             <div class="dest-actions">
-                <a href="/contact" class="btn-book" data-t="book_now">Book Now</a>
+                <a href="{{ lurl('/contact') }}" class="btn-book" data-t="book_now">{{ __('site.book_now') }}</a>
             </div>
         </div>
     @endif
 
     <div class="dest-actions reveal" style="margin-top: 1.5rem;">
-        <a href="/destinations" class="btn-back" data-t="back_to_destinations">&larr; Back to Destinations</a>
+        <a href="{{ lurl('/destinations') }}" class="btn-back" data-t="back_to_destinations">{{ __('site.back_to_destinations') }}</a>
     </div>
 </div>
 @endsection

@@ -53,14 +53,25 @@ Route::get('/sitemap.xml', function () {
     foreach ($posts as $p) {
         $urls[] = ['loc' => '/blog/' . $p->slug, 'priority' => '0.6', 'changefreq' => 'weekly'];
     }
+    $base = 'https://touristik.am';
     $content = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
-    $content .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+    $content .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"' . "\n";
+    $content .= '        xmlns:xhtml="http://www.w3.org/1999/xhtml">' . "\n";
     foreach ($urls as $url) {
-        $content .= "  <url>\n";
-        $content .= "    <loc>https://touristik.am{$url['loc']}</loc>\n";
-        $content .= "    <changefreq>{$url['changefreq']}</changefreq>\n";
-        $content .= "    <priority>{$url['priority']}</priority>\n";
-        $content .= "  </url>\n";
+        $loc = $url['loc'];
+        $ruLoc  = '/ru' . ($loc === '/' ? '' : $loc);
+        $hyLoc  = '/hy' . ($loc === '/' ? '' : $loc);
+        foreach (['' => $loc, 'ru' => $ruLoc, 'hy' => $hyLoc] as $lang => $path) {
+            $content .= "  <url>\n";
+            $content .= "    <loc>{$base}{$path}</loc>\n";
+            $content .= "    <xhtml:link rel=\"alternate\" hreflang=\"en\" href=\"{$base}{$loc}\"/>\n";
+            $content .= "    <xhtml:link rel=\"alternate\" hreflang=\"ru\" href=\"{$base}{$ruLoc}\"/>\n";
+            $content .= "    <xhtml:link rel=\"alternate\" hreflang=\"hy\" href=\"{$base}{$hyLoc}\"/>\n";
+            $content .= "    <xhtml:link rel=\"alternate\" hreflang=\"x-default\" href=\"{$base}{$loc}\"/>\n";
+            $content .= "    <changefreq>{$url['changefreq']}</changefreq>\n";
+            $content .= "    <priority>{$url['priority']}</priority>\n";
+            $content .= "  </url>\n";
+        }
     }
     $content .= '</urlset>';
     return response($content, 200)->header('Content-Type', 'application/xml');
@@ -82,6 +93,27 @@ Route::get('/tours/ingoing', [TourController::class, 'ingoing']);
 Route::get('/tours/outgoing', [TourController::class, 'outgoing']);
 Route::get('/tours/transfer', [TourController::class, 'transfer']);
 Route::get('/tours/{slug}', [TourController::class, 'show']);
+
+// Localized public pages (ru, hy)
+Route::prefix('{locale}')
+    ->where(['locale' => 'ru|hy'])
+    ->group(function () {
+        Route::get('/', [HomeController::class, 'index']);
+        Route::get('/about', [HomeController::class, 'about']);
+        Route::get('/contact', [ContactController::class, 'index']);
+        Route::post('/contact', [ContactController::class, 'send']);
+        Route::post('/callback', [\App\Http\Controllers\CallbackController::class, 'store']);
+        Route::get('/blog', [\App\Http\Controllers\BlogController::class, 'index']);
+        Route::get('/blog/{slug}', [\App\Http\Controllers\BlogController::class, 'show']);
+        Route::get('/destinations', [DestinationController::class, 'index']);
+        Route::get('/destinations/{slug}', [DestinationController::class, 'show']);
+        Route::get('/hotels/search', [HotelController::class, 'search']);
+        Route::get('/tours', [TourController::class, 'index']);
+        Route::get('/tours/ingoing', [TourController::class, 'ingoing']);
+        Route::get('/tours/outgoing', [TourController::class, 'outgoing']);
+        Route::get('/tours/transfer', [TourController::class, 'transfer']);
+        Route::get('/tours/{slug}', [TourController::class, 'show']);
+    });
 
 // Auth (guest only)
 Route::middleware('guest')->group(function () {

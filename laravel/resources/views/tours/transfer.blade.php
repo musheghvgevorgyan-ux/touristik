@@ -38,18 +38,18 @@
 @section('content')
 <div class="transfer-page">
     <div class="section-header reveal">
-        <h1 data-t="transfer_title">Transfer Services</h1>
-        <p data-t="transfer_subtitle">Comfortable and reliable transportation for all your travel needs in Armenia</p>
+        <h1 data-t="transfer_title">{{ __('site.transfer_title') }}</h1>
+        <p data-t="transfer_subtitle">{{ __('site.transfer_subtitle') }}</p>
     </div>
 
     <div class="transfer-grid">
         <div class="transfer-card reveal">
             <div class="transfer-card-img lazy-bg" data-bg="https://images.unsplash.com/photo-1436491865332-7a61a109db05?w=600&q=80">
-                <span class="transfer-badge" data-t="most_popular">Most Popular</span>
+                <span class="transfer-badge" data-t="most_popular">{{ __('site.most_popular') }}</span>
             </div>
             <div class="transfer-card-content">
-                <h3 data-t="transfer_airport">Airport Transfer</h3>
-                <p data-t="transfer_airport_desc">Hassle-free pickup and drop-off at Zvartnots International Airport (EVN). Meet & greet service with professional drivers.</p>
+                <h3 data-t="transfer_airport">{{ __('site.transfer_airport') }}</h3>
+                <p data-t="transfer_airport_desc">{{ __('site.transfer_airport_desc') }}</p>
                 <ul class="transfer-features">
                     <li data-t="transfer_feat_meet">Meet & greet at arrivals</li>
                     <li data-t="transfer_feat_flight">Flight monitoring included</li>
@@ -58,7 +58,7 @@
                 </ul>
                 <div class="transfer-price-row">
                     <span class="price" data-t="transfer_airport_price">From $15</span>
-                    <a href="/contact" class="btn-book" data-t="book_now">Book Now</a>
+                    <a href="{{ lurl('/contact') }}" class="btn-book" data-t="book_now">{{ __('site.book_now') }}</a>
                 </div>
             </div>
         </div>
@@ -67,8 +67,8 @@
             <div class="transfer-card-img lazy-bg" data-bg="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=600&q=80">
             </div>
             <div class="transfer-card-content">
-                <h3 data-t="transfer_city">City Transfer</h3>
-                <p data-t="transfer_city_desc">Point-to-point transfers within Yerevan. Comfortable sedans and spacious minivans available for individuals and groups.</p>
+                <h3 data-t="transfer_city">{{ __('site.transfer_city') }}</h3>
+                <p data-t="transfer_city_desc">{{ __('site.transfer_city_desc') }}</p>
                 <ul class="transfer-features">
                     <li data-t="transfer_feat_sedan">Sedan (up to 3 passengers)</li>
                     <li data-t="transfer_feat_minivan">Minivan (up to 7 passengers)</li>
@@ -77,7 +77,7 @@
                 </ul>
                 <div class="transfer-price-row">
                     <span class="price" data-t="transfer_city_price">From $8</span>
-                    <a href="/contact" class="btn-book" data-t="book_now">Book Now</a>
+                    <a href="{{ lurl('/contact') }}" class="btn-book" data-t="book_now">{{ __('site.book_now') }}</a>
                 </div>
             </div>
         </div>
@@ -86,8 +86,8 @@
             <div class="transfer-card-img lazy-bg" data-bg="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=600&q=80">
             </div>
             <div class="transfer-card-content">
-                <h3 data-t="transfer_intercity">Intercity Transfer</h3>
-                <p data-t="transfer_intercity_desc">Travel between Armenian cities in comfort. Yerevan to Sevan, Dilijan, Gyumri, Tatev, and other destinations across the country.</p>
+                <h3 data-t="transfer_intercity">{{ __('site.transfer_intercity') }}</h3>
+                <p data-t="transfer_intercity_desc">{{ __('site.transfer_intercity_desc') }}</p>
                 <ul class="transfer-features">
                     <li data-t="transfer_feat_routes">All major routes covered</li>
                     <li data-t="transfer_feat_stops">Photo stops along the way</li>
@@ -96,20 +96,20 @@
                 </ul>
                 <div class="transfer-price-row">
                     <span class="price" data-t="transfer_intercity_price">From $40</span>
-                    <a href="/contact" class="btn-book" data-t="book_now">Book Now</a>
+                    <a href="{{ lurl('/contact') }}" class="btn-book" data-t="book_now">{{ __('site.book_now') }}</a>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="transfer-info reveal">
-        <h2 data-t="transfer_custom_title">Need a Custom Transfer?</h2>
-        <p data-t="transfer_custom_desc">For group transportation, multi-day driver hire, or special requests, contact our team directly. We'll arrange the perfect solution for your needs.</p>
-        <a href="/contact" class="btn-contact" data-t="contact_us">Contact Us</a>
+        <h2 data-t="transfer_custom_title">{{ __('site.transfer_custom_title') }}</h2>
+        <p data-t="transfer_custom_desc">{{ __('site.transfer_custom_desc') }}</p>
+        <a href="{{ lurl('/contact') }}" class="btn-contact" data-t="contact_us">{{ __('site.contact_us') }}</a>
     </div>
 
     <div class="tours-back reveal">
-        <a href="/tours" data-t="back_to_tours">&larr; Back to Tours</a>
+        <a href="{{ lurl('/tours') }}" data-t="back_to_tours">{{ __('site.back_to_tours') }}</a>
     </div>
 </div>
 @endsection

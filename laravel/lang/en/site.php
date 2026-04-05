@@ -44,6 +44,7 @@ return [
     'per_person' => 'per person',
     'starting_from' => 'Starting from',
     'back_to_tours' => '← Back to Tours',
+    'back_to_destinations' => '← Back to Destinations',
     'itinerary' => 'Itinerary',
     'included' => "What's Included",
     'excluded' => "What's Not Included",
@@ -60,6 +61,7 @@ return [
     'visa_feat3_desc' => 'Full guidance through the Armenian e-visa application process for eligible countries.',
     'visa_feat4_title' => '24/7 Consultation',
     'visa_feat4_desc' => 'Our visa specialists are available around the clock to answer your questions.',
+    'visa_info' => '&#128712; Citizens of 60+ countries can enter Armenia visa-free for up to 180 days. Not sure about your country? Contact us for a free consultation.',
     'visa_cta' => 'Request Visa Support',
 
     // Stats
@@ -84,6 +86,9 @@ return [
     'easy_booking_desc' => 'Simple and secure booking process with flexible cancellation policies.',
     'support_247' => '24/7 Support',
     'support_247_desc' => 'Our team is available around the clock to assist you.',
+
+    // Recently viewed
+    'recently_viewed' => 'Recently Viewed',
 
     // Partners
     'partners_title' => 'Our Partners',
@@ -149,6 +154,55 @@ return [
     'read_more' => 'Read More',
     'all_posts' => '← All Posts',
     'related_articles' => 'Related Articles',
+
+    // Tours pages
+    'ingoing_title' => 'Discover Armenia',
+    'ingoing_subtitle' => 'Explore ancient monasteries, stunning landscapes, and authentic culture across Armenia\'s 11 regions',
+    'outgoing_title' => 'Outgoing Tours',
+    'outgoing_subtitle' => 'Discover the world from Yerevan — all-inclusive packages to top destinations',
+    'transfer_title' => 'Transfer Services',
+    'transfer_subtitle' => 'Comfortable and reliable transportation for all your travel needs in Armenia',
+    'choose_destination' => 'Choose a Destination',
+    'choose_destination_desc' => 'Click a marker on the map or pick a country below',
+    'choose_tour_style' => 'Choose Your Tour Style',
+    'group_tours' => 'Group Tours',
+    'group_tours_desc' => 'Join small groups of 6-12 travelers. Shared experiences, new friendships.',
+    'private_tours' => 'Private Tours',
+    'private_tours_desc' => 'Your own guide, your own pace. Fully customized itineraries.',
+    'tour_packages' => 'Tour Packages',
+    'tour_packages_desc' => 'All-inclusive multi-day packages. Hotels, transport & meals included.',
+    'explore_regions_desc' => 'Click on any region on the map to explore',
+    'view_tours' => 'View Tours',
+    'view_details' => 'View Details',
+    'showing_tours_in' => 'Showing tours in:',
+    'show_all' => 'Show All',
+    'no_tours_region' => 'No tours available in this region yet. Contact us for a custom tour!',
+    'no_tours_country' => 'No tours for this destination yet. Contact us for a custom package!',
+    'contact_us' => 'Contact Us',
+    'most_popular' => 'Most Popular',
+    'transfer_airport' => 'Airport Transfer',
+    'transfer_airport_desc' => 'Hassle-free pickup and drop-off at Zvartnots Airport. Meet & greet with professional drivers.',
+    'transfer_city' => 'City Transfer',
+    'transfer_city_desc' => 'Point-to-point transfers within Yerevan. Sedans and minivans available.',
+    'transfer_intercity' => 'Intercity Transfer',
+    'transfer_intercity_desc' => 'Travel between Armenian cities in comfort. Yerevan to Sevan, Dilijan, Gyumri, and more.',
+    'transfer_custom_title' => 'Need a Custom Transfer?',
+    'transfer_custom_desc' => 'For group transport, multi-day driver hire, or special requests, contact our team directly.',
+    'no_destinations_title' => 'Coming Soon',
+    'no_destinations_text' => 'We\'re curating amazing destinations for you. Check back soon!',
+
+    // Armenia regions
+    'region_shirak' => 'Shirak',
+    'region_lori' => 'Lori',
+    'region_tavush' => 'Tavush',
+    'region_aragatsotn' => 'Aragatsotn',
+    'region_kotayk' => 'Kotayk',
+    'region_armavir' => 'Armavir',
+    'region_yerevan' => 'Yerevan',
+    'region_ararat' => 'Ararat',
+    'region_gegharkunik' => 'Gegharkunik',
+    'region_vayots_dzor' => 'Vayots Dzor',
+    'region_syunik' => 'Syunik',
 
     // Meta
     'meta_home' => 'Touristik Travel - Book flights, hotels, and tour packages from Yerevan to the world.',
