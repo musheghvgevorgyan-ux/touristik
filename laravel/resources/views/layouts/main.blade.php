@@ -31,6 +31,7 @@
     <meta name="apple-mobile-web-app-title" content="Touristik">
     <link rel="apple-touch-icon" href="/img/icon-192.svg">
     <link rel="preload" as="image" href="/img/hero-bg.webp" type="image/webp">
+    <link rel="preload" as="style" href="/css/styles.min.css">
     <link rel="stylesheet" href="/css/styles.min.css">
     @stack('styles')
     @verbatim
@@ -286,8 +287,8 @@
         </div>
     </div>
 
-    <script src="/js/app.min.js"></script>
-    <script src="/js/translations.js"></script>
+    <script src="/js/app.min.js" defer></script>
+    <script src="/js/translations.js" defer></script>
     <script>
     // Make all .reveal elements visible (fix for opacity:0 blocking interactions)
     document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('visible'); });
